@@ -1,0 +1,20 @@
+{
+  "parts": [
+    {
+      "implements": "part:@sanity/base/tool",
+      "path": "tool.js"
+    },
+    {
+      "implements": "part:@sanity/base/document-actions/resolver",
+      "path": "documentActions.js"
+    },
+    {
+      "implements": "part:@sanity/base/document-badges/resolver",
+      "path": "documentBadges.js"
+    }
+  ],
+  "paths": {
+    "source": "./src",
+    "compiled": "./lib"
+  }
+}
