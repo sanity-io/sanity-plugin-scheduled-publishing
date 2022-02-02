@@ -27,10 +27,9 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
 
   // Callbacks
   const handleScheduleDocument = useCallback(() => {
-    // Current time + 2 minutes
+    // Current time + 5 minutes
     const currentTime = new Date()
-    // const scheduleTime = new Date(currentTime.getTime() + 2 * 60000).toISOString()
-    const scheduleTime = new Date(currentTime.getTime() + 0.25 * 60000).toISOString()
+    const scheduleTime = new Date(currentTime.getTime() + 5 * 60000).toISOString()
 
     sanityClient
       .request({

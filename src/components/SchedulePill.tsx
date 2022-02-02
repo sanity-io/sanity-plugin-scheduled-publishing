@@ -1,9 +1,9 @@
+import {UserAvatar} from '@sanity/base/components'
 import {ClockIcon, TrashIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import {format} from 'date-fns'
 import React from 'react'
 import {DocumentSchedule} from '../types'
-import UserAvatar from './UserAvatar'
 
 interface Props {
   schedule: DocumentSchedule
@@ -27,7 +27,7 @@ const SchedulePill = (props: Props) => {
 
         <Box>
           <Inline space={2}>
-            <UserAvatar userId={author} />
+            <UserAvatar userId={author} withTooltip />
             <MenuButton
               button={<Button icon={TrashIcon} mode="bleed" tone="default" />}
               id="delete"

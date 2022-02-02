@@ -25,7 +25,7 @@ const DialogScheduleContent = (props: Props) => {
             <Text size={1}>
               <WarningOutlineIcon />
             </Text>
-            <Text size={1}>This will currently schedule the document 2 minutes in the future.</Text>
+            <Text size={1}>This will currently schedule the document 5 minutes in the future.</Text>
           </Inline>
         </Card>
       </Stack>
