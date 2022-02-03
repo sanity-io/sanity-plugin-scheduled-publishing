@@ -1,7 +1,6 @@
 import {UserAvatar} from '@sanity/base/components'
-import {Avatar, Box, Inline, Text} from '@sanity/ui'
+import {Box, Inline} from '@sanity/ui'
 import React from 'react'
-import nameToInitials from '../utils/nameToInitials'
 
 interface Props {
   userId: string
@@ -13,8 +12,8 @@ const User = (props: Props) => {
   return (
     <Box>
       <Inline space={2}>
-        <UserAvatar userId={author} withTooltip />
-        <Text size={1}>{user?.displayName}</Text>
+        <UserAvatar userId={userId} withTooltip />
+        {/* <Text size={1}>{user?.displayName}</Text> */}
       </Inline>
     </Box>
   )
