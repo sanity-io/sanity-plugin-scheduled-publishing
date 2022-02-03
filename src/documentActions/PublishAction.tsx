@@ -8,7 +8,7 @@ import DialogFooter from '../components/DialogFooter'
 import DialogPublishContent from '../components/DialogPublishContent'
 import DialogHeader from '../components/DialogHeader'
 import {debugWithName} from '../utils/debug'
-import {useSchedules} from '../hooks/schedule'
+import usePollSchedules from '../hooks/usePollSchedules'
 
 const debug = debugWithName('publish-action')
 
@@ -21,7 +21,7 @@ const PublishAction = (props: DocumentActionProps): DocumentActionDescription =>
   const [dialogOpen, setDialogOpen] = useState(false)
 
   // Poll for document schedules
-  const {error, isLoading, schedules} = useSchedules({documentId: id, state: 'scheduled'})
+  const {error, isLoading, schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
   const hasSchedules = schedules.length > 0

@@ -3,7 +3,7 @@ import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_STATES, TOOL_HEADER_HEIGHT} from '../constants'
-import {useSchedules} from '../hooks/schedule'
+import usePollSchedules from '../hooks/usePollSchedules'
 import {ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
 import Calendar from './Calendar'
@@ -27,7 +27,7 @@ function Tool(props: Props) {
   const {router} = props
 
   // Poll for document schedules
-  const {error, isLoading, schedules} = useSchedules()
+  const {error, isLoading, schedules} = usePollSchedules()
 
   const scheduleState: ScheduleState = router.state.state || 'scheduled'
   const scheduleStateTitle = SCHEDULE_FILTER_DICTIONARY[scheduleState]

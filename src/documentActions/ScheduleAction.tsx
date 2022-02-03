@@ -1,14 +1,12 @@
 import type {DocumentActionDescription, DocumentActionProps} from '@sanity/base'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
-import {useToast} from '@sanity/ui'
-import format from 'date-fns/format'
 import React, {useCallback, useState} from 'react'
 import {useForm} from 'react-hook-form'
-import {createSchedule} from '../actions/schedule'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
 import DialogScheduleContent from '../components/DialogScheduleContent'
-import {useSchedules} from '../hooks/schedule'
+import usePollSchedules from '../hooks/usePollSchedules'
+import useScheduleOperation from '../hooks/useScheduleOperation'
 import {ScheduleFormData} from '../types'
 import {debugWithName} from '../utils/debug'
 
@@ -19,13 +17,13 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
 
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const toast = useToast()
+  const {createSchedule} = useScheduleOperation()
 
   // react-hook-form
   const {errors, formState, handleSubmit, register, reset} = useForm<ScheduleFormData>()
 
   // Poll for document schedules
-  const {error, isLoading, schedules} = useSchedules({documentId: id, state: 'scheduled'})
+  const {error, isLoading, schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
   // Callbacks
@@ -37,26 +35,10 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
     createSchedule({
       date: scheduleDate,
       documentId: id,
+    }).then(() => {
+      // Close dialog
+      onComplete()
     })
-      .then((schedule) => {
-        debug('Schedule created', schedule)
-        // Close dialog
-        onComplete()
-        // Dispatch toast
-        toast.push({
-          closable: true,
-          description: format(
-            new Date(schedule.executeAt),
-            `'Publishing on' iiii d MMMM yyyy 'at' p`
-          ),
-          status: 'success',
-          title: 'Schedule created',
-        })
-      })
-      .catch((err) => {
-        // TODO: handle error
-        debug('Schedule error', err)
-      })
   }, [])
 
   return {

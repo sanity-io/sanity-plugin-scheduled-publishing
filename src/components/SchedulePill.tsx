@@ -1,20 +1,9 @@
 import {UserAvatar} from '@sanity/base/components'
 import {ClockIcon, TrashIcon} from '@sanity/icons'
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Inline,
-  Menu,
-  MenuButton,
-  MenuItem,
-  Text,
-  useToast,
-} from '@sanity/ui'
+import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import {format} from 'date-fns'
 import React from 'react'
-import {deleteSchedule} from '../actions/schedule'
+import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule} from '../types'
 
 interface Props {
@@ -25,28 +14,18 @@ interface Props {
 const SchedulePill = (props: Props) => {
   const {onComplete, schedule} = props
 
-  // Example: Fri 24 Dec 2021 6:00 AM
-  const formattedDateTime = format(new Date(props.schedule.executeAt), 'iii d MMM yyyy p')
+  // Example: Fri 24 Dec 2021 at 6:00 AM
+  const formattedDateTime = format(new Date(props.schedule.executeAt), `iii d MMM yyyy 'at' p`)
 
-  const toast = useToast()
+  const {deleteSchedule} = useScheduleOperation()
 
   const handleDelete = () => {
-    deleteSchedule({schedule})
-      .then(() => {
-        // Dispatch toast
-        toast.push({
-          closable: true,
-          status: 'success',
-          title: 'Schedule deleted',
-        })
-        // Close dialog
-        if (onComplete) {
-          onComplete()
-        }
-      })
-      .catch((err) => {
-        // TODO: handle error
-      })
+    deleteSchedule({schedule}).then(() => {
+      // Close dialog
+      if (onComplete) {
+        onComplete()
+      }
+    })
   }
 
   return (

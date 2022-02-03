@@ -2,12 +2,8 @@ import useSWR from 'swr'
 import client, {dataset, projectId} from '../client'
 import {Schedule, ScheduleState} from '../types'
 
-interface FetcherOptions {
-  query: Record<string, string>
-  uri: string
-}
-
-const fetcher = ({query, uri}: FetcherOptions) => client.request({query, uri})
+const fetcher = ({query, uri}: {query: Record<string, string>; uri: string}) =>
+  client.request({query, uri})
 
 const SWR_OPTIONS = {
   refreshInterval: 5000,
@@ -20,30 +16,9 @@ const SWR_OPTIONS = {
 // TODO: correctly type SWR errors
 
 /**
- * Poll for individual schedule
- */
-function useSchedule({scheduleId}: {scheduleId: string}): {
-  error: any
-  isLoading: boolean
-  schedule: Schedule | undefined
-} {
-  const queryKey = {
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
-  }
-
-  const {data, error} = useSWR<Schedule>(queryKey, fetcher, SWR_OPTIONS)
-
-  return {
-    error,
-    isLoading: !error && !data,
-    schedule: data,
-  }
-}
-
-/**
  * Poll for all schedules
  */
-function useSchedules({documentId, state}: {documentId?: string; state?: ScheduleState} = {}): {
+function usePollSchedules({documentId, state}: {documentId?: string; state?: ScheduleState} = {}): {
   error: any
   isLoading: boolean
   schedules: Schedule[]
@@ -65,4 +40,4 @@ function useSchedules({documentId, state}: {documentId?: string; state?: Schedul
   }
 }
 
-export {useSchedules}
+export default usePollSchedules

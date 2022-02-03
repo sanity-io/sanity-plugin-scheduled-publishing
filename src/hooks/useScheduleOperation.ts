@@ -1,67 +1,121 @@
 import {useToast} from '@sanity/ui'
+import {format} from 'date-fns'
+import client, {dataset, projectId} from '../client'
+import {Schedule} from '../types'
+import {debugWithName} from '../utils/debug'
+import getErrorMessage from '../utils/getErrorMessage'
 
-type OperationReturn = 'invalid-id' | 'success' | 'error'
+const debug = debugWithName('useScheduleOperation')
 
-/**
- * Mock function for centralizing schedule operations & their side effects under a single umbrella.
- */
+function _create({date, documentId}: {date: string; documentId: string}): Promise<Schedule> {
+  return client.request({
+    body: {
+      documents: [{documentId}],
+      executeAt: date, // ISO date
+      name: date,
+    },
+    method: 'POST',
+    uri: `/schedules/${projectId}/${dataset}`,
+  })
+}
+
+function _delete({scheduleId}: {scheduleId: string}) {
+  debug('_delete:', scheduleId)
+  return client.request({
+    method: 'DELETE',
+    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
+  })
+}
+
+function _update({
+  documentSchedule,
+  scheduleId,
+}: {
+  documentSchedule: Partial<Schedule>
+  scheduleId: string
+}): Promise<void> {
+  return client.request({
+    body: documentSchedule,
+    method: 'PATCH',
+    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
+  })
+}
+
 export default function useScheduleOperation() {
-  const {push} = useToast()
+  const toast = useToast()
 
-  async function deleteSchedule(docId: string, pushToast = true): OperationReturn {
-    // 1. Validate docId
-    if (typeof docId !== 'string' || !docId) {
-      return 'invalid-id'
-    }
+  async function createSchedule({
+    date,
+    displayToast = true,
+    documentId,
+  }: {
+    date: string
+    displayToast?: boolean
+    documentId: string
+  }) {
+    try {
+      const schedule = await _create({date, documentId})
 
-    // 2. Delete schedule from Penguim
-    const res = await (await fetch(`https://...`)).json()
-
-    // 3. Worked -> push success toast
-    if (res.ok) {
-      if (pushToast) {
-        push({
-          title: 'Schedule deleted',
-          // @Idea: potentially add the document preview title to the toast's description
-          description: `Document id: ${docId}`,
-          status: 'info',
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          description: format(
+            new Date(schedule.executeAt),
+            `'Publishing on' iiii d MMMM yyyy 'at' p`
+          ),
+          status: 'success',
+          title: 'Schedule created',
         })
       }
-      return 'success'
+    } catch (err) {
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          description: getErrorMessage(err),
+          status: 'error',
+          title: 'Unable to create schedule',
+        })
+      }
     }
+  }
 
-    // 4. Didn't work
-    if (pushToast) {
-      push({
-        title: 'Error',
-        status: 'error',
-      })
+  async function deleteSchedule({
+    displayToast = true,
+    schedule,
+  }: {
+    displayToast?: boolean
+    schedule: Schedule
+  }) {
+    try {
+      if (schedule.state === 'scheduled') {
+        await _update({
+          documentSchedule: {state: 'cancelled'},
+          scheduleId: schedule.id,
+        })
+      }
+      await _delete({scheduleId: schedule?.id})
+
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          status: 'success',
+          title: 'Schedule deleted',
+        })
+      }
+    } catch (err) {
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          description: getErrorMessage(err),
+          status: 'error',
+          title: 'Unable to delete schedule',
+        })
+      }
     }
-    return 'error'
-  }
-
-  async function bulkDelete(ids: string[]) {
-    // @TODO: some logic for getting schedules that didn't work
-    await Promise.allSettled(ids.map((id) => deleteSchedule(id, false)))
-    push({
-      title: `Deleted ${ids.length} schedules`,
-    })
-  }
-
-  async function createSchedule(docId: string, pushToast = true): OperationReturn {
-    // Same idea as deleteSchedule
-    return 'error'
-  }
-
-  async function editSchedule(docId: string, pushToast = true): OperationReturn {
-    // Same idea as deleteSchedule
-    return 'error'
   }
 
   return {
-    deleteSchedule,
     createSchedule,
-    editSchedule,
-    bulkDelete,
+    deleteSchedule,
   }
 }
