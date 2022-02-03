@@ -1,4 +1,4 @@
-import {sanityClient} from '../lib/client'
+import sanityClient from 'part:@sanity/base/client'
 import {DocumentSchedule} from '../types'
 import {debugWithName} from '../utils/debug'
 
