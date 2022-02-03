@@ -4,23 +4,16 @@ import type {DocumentActionDescription, DocumentActionProps} from '@sanity/base'
 import {PublishIcon} from '@sanity/icons'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import React, {useEffect, useState} from 'react'
-import useSWR from 'swr'
 import DialogFooter from '../components/DialogFooter'
 import DialogPublishContent from '../components/DialogPublishContent'
 import DialogHeader from '../components/DialogHeader'
-import {sanityClient} from '../lib/client'
 import {debugWithName} from '../utils/debug'
-import generateSwrQueryKey from '../utils/generateSwrQueryKey'
+import useDocumentSchedules from '../hooks/useDocumentSchedules'
 
 const debug = debugWithName('publish-action')
 
-const fetcher = (key: string) => {
-  const {query, uri} = JSON.parse(key)
-  return sanityClient.request({query, uri})
-}
-
 const PublishAction = (props: DocumentActionProps): DocumentActionDescription => {
-  const {draft, id, onComplete: onClose, type} = props
+  const {draft, id, onComplete, type} = props
 
   // @ts-ignore
   const {publish} = useDocumentOperation(id, type)
@@ -28,10 +21,7 @@ const PublishAction = (props: DocumentActionProps): DocumentActionDescription =>
   const [dialogOpen, setDialogOpen] = useState(false)
 
   // Poll for document schedules
-  const queryKey = generateSwrQueryKey({documentId: id})
-  const {data: schedules = [], error} = useSWR(queryKey, fetcher, {
-    refreshInterval: 5000,
-  })
+  const {error, isLoading, schedules} = useDocumentSchedules({documentId: id})
   debug('schedules', schedules)
 
   const hasSchedules = schedules.length > 0
@@ -43,7 +33,8 @@ const PublishAction = (props: DocumentActionProps): DocumentActionDescription =>
 
   const handlePublish = () => {
     publish.execute()
-    onClose()
+    // Close dialog
+    onComplete()
   }
 
   // Effects
@@ -63,11 +54,11 @@ const PublishAction = (props: DocumentActionProps): DocumentActionDescription =>
           disabled={!draft}
           icon={PublishIcon}
           onAction={handlePublish}
-          onClose={onClose}
+          onComplete={onComplete}
         />
       ),
       header: <DialogHeader title="Confirm publish" />,
-      onClose,
+      onClose: onComplete,
       type: 'modal',
     },
     disabled: !draft,

@@ -1,6 +1,6 @@
 import type {DocumentActionProps} from '@sanity/base'
 import {InfoOutlineIcon} from '@sanity/icons'
-import {Box, Card, Flex, Stack, Text} from '@sanity/ui'
+import {Card, Flex, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import {DocumentSchedule} from '../types'
 import SchedulePill from './SchedulePill'
@@ -10,21 +10,17 @@ interface Props extends DocumentActionProps {
 }
 
 const DialogPublishContent = (props: Props) => {
-  const {schedules} = props
+  const {onComplete, schedules} = props
 
   return (
     <div>
       <Stack space={4}>
-        <Box marginTop={3}>
-          <Text size={2} weight="medium">
-            Current schedule
-          </Text>
-        </Box>
-
-        {/* Existing schedules */}
+        <Text size={2} weight="medium">
+          Current schedule
+        </Text>
         <Stack space={2}>
           {schedules.map((schedule) => (
-            <SchedulePill key={schedule.id} schedule={schedule} />
+            <SchedulePill key={schedule.id} onComplete={onComplete} schedule={schedule} />
           ))}
         </Stack>
 

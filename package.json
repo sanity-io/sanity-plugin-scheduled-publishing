@@ -30,8 +30,6 @@
     "date-fns": "^2.27.0",
     "debug": "^4.3.3",
     "react-hook-form": "^7.25.3",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rxjs": "^7.5.2",
     "swr": "^1.2.0"
   },
   "devDependencies": {
@@ -77,6 +75,7 @@
     "react": "16.14.0",
     "react-dom": ">=16.14.0",
     "rollup": "^2.66.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-polyfill-node": "^0.8.0",
     "standard-version": "9.3.2",
     "tslib": "^2.3.1",

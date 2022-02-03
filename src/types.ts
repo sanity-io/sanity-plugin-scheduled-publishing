@@ -1,3 +1,4 @@
+export type DocumentScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
 export interface DocumentSchedule {
   author: string
   createdAt: string
@@ -11,7 +12,7 @@ export interface DocumentSchedule {
   id: string
   // name: string  // TODO: deprecate
   projectId: string
-  state: 'succeeded'
+  state: DocumentScheduleState
 }
 
 export interface ScheduleFormData {

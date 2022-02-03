@@ -6,16 +6,16 @@ interface Props {
   disabled?: boolean
   icon?: ComponentType | ReactNode
   onAction?: () => void
-  onClose: () => void
+  onComplete: () => void
   tone?: ButtonTone
 }
 
 const DialogFooter = (props: Props) => {
-  const {buttonText = 'Action', disabled, icon, onClose, onAction, tone = 'positive'} = props
+  const {buttonText = 'Action', disabled, icon, onAction, onComplete, tone = 'positive'} = props
   return (
     <Flex>
       <Card flex={1}>
-        <Button mode="bleed" onClick={onClose} style={{width: '100%'}} text="Cancel" />
+        <Button mode="bleed" onClick={onComplete} style={{width: '100%'}} text="Cancel" />
       </Card>
       {onAction && (
         <Card flex={1} marginLeft={3}>

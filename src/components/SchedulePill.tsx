@@ -1,19 +1,53 @@
 import {UserAvatar} from '@sanity/base/components'
 import {ClockIcon, TrashIcon} from '@sanity/icons'
-import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  Inline,
+  Menu,
+  MenuButton,
+  MenuItem,
+  Text,
+  useToast,
+} from '@sanity/ui'
 import {format} from 'date-fns'
 import React from 'react'
+import {deleteSchedule} from '../actions/schedule'
 import {DocumentSchedule} from '../types'
 
 interface Props {
+  onComplete?: () => void
   schedule: DocumentSchedule
 }
 
 const SchedulePill = (props: Props) => {
-  const author = props.schedule?.author
+  const {onComplete, schedule} = props
 
-  // Example: Fri 24 Dec 2021  6:00 AM
-  const formattedDateTime = format(new Date(props.schedule.executeAt), 'iii d MMM yyyy \u00a0 p')
+  // Example: Fri 24 Dec 2021 6:00 AM
+  const formattedDateTime = format(new Date(props.schedule.executeAt), 'iii d MMM yyyy p')
+
+  const toast = useToast()
+
+  const handleDelete = () => {
+    deleteSchedule({schedule})
+      .then(() => {
+        // Dispatch toast
+        toast.push({
+          closable: true,
+          status: 'success',
+          title: 'Schedule deleted',
+        })
+        // Close dialog
+        if (onComplete) {
+          onComplete()
+        }
+      })
+      .catch((err) => {
+        // TODO: handle error
+      })
+  }
 
   return (
     <Card paddingLeft={4} paddingRight={2} paddingY={2} radius={2} shadow={1}>
@@ -27,13 +61,13 @@ const SchedulePill = (props: Props) => {
 
         <Box>
           <Inline space={2}>
-            <UserAvatar userId={author} withTooltip />
+            <UserAvatar userId={schedule?.author} withTooltip />
             <MenuButton
               button={<Button icon={TrashIcon} mode="bleed" tone="default" />}
               id="delete"
               menu={
                 <Menu>
-                  <MenuItem text="Confirm delete" tone="critical" />
+                  <MenuItem onClick={handleDelete} text="Confirm delete" tone="critical" />
                 </Menu>
               }
               placement="left"

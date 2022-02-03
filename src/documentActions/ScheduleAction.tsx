@@ -1,51 +1,57 @@
 import type {DocumentActionDescription, DocumentActionProps} from '@sanity/base'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
+import {useToast} from '@sanity/ui'
+import format from 'date-fns/format'
 import React, {useCallback, useState} from 'react'
 import {useForm} from 'react-hook-form'
+import {createSchedule} from '../actions/schedule'
 import DialogFooter from '../components/DialogFooter'
-import DialogScheduleContent from '../components/DialogScheduleContent'
 import DialogHeader from '../components/DialogHeader'
-import {sanityClient} from '../lib/client'
+import DialogScheduleContent from '../components/DialogScheduleContent'
+import useDocumentSchedules from '../hooks/useDocumentSchedules'
 import {ScheduleFormData} from '../types'
 import {debugWithName} from '../utils/debug'
-import usePollCache from '../hooks/usePollCache'
 
 const debug = debugWithName('schedule-action')
 
-const {dataset, projectId} = sanityClient.config()
-
 const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
-  const {draft, id, onComplete: onClose, type} = props
+  const {draft, id, onComplete, type} = props
 
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const schedules = usePollCache({documentId: props.id})
-  debug('schedules', schedules)
+  const toast = useToast()
 
   // react-hook-form
   const {errors, formState, handleSubmit, register, reset} = useForm<ScheduleFormData>()
 
+  // Poll for document schedules
+  const {error, isLoading, schedules} = useDocumentSchedules({documentId: id})
+  debug('schedules', schedules)
+
   // Callbacks
   const handleScheduleDocument = useCallback(() => {
     // Current time + 5 minutes
-    const currentTime = new Date()
-    const scheduleTime = new Date(currentTime.getTime() + 5 * 60000).toISOString()
+    const currentDate = new Date()
+    const scheduleDate = new Date(currentDate.getTime() + 5 * 60000).toISOString()
 
-    sanityClient
-      .request({
-        body: {
-          documents: [{documentId: id}],
-          executeAt: scheduleTime, // ISO date
-          name: scheduleTime,
-        },
-        method: 'POST',
-        uri: `/schedules/${projectId}/${dataset}`,
-      })
-      .then((res) => {
-        debug('Schedule complete', res)
+    createSchedule({
+      date: scheduleDate,
+      documentId: id,
+    })
+      .then((schedule) => {
+        debug('Schedule created', schedule)
         // Close dialog
-        onClose()
-        // TODO: dispatch toast
+        onComplete()
+        // Dispatch toast
+        toast.push({
+          closable: true,
+          description: format(
+            new Date(schedule.executeAt),
+            `'Publishing on' iiii d MMMM yyyy 'at' p`
+          ),
+          status: 'success',
+          title: 'Schedule created',
+        })
       })
       .catch((err) => {
         // TODO: handle error
@@ -55,21 +61,28 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
 
   return {
     dialog: dialogOpen && {
-      content: <DialogScheduleContent onSubmit={handleSubmit} register={register} />,
+      content: (
+        <DialogScheduleContent
+          {...props}
+          onSubmit={handleSubmit}
+          register={register}
+          schedules={schedules}
+        />
+      ),
       footer: (
         <DialogFooter
           buttonText="Schedule"
           icon={ClockIcon}
-          onAction={handleScheduleDocument}
-          onClose={onClose}
+          onAction={schedules.length === 0 ? handleScheduleDocument : undefined}
+          onComplete={onComplete}
           tone="primary"
         />
       ),
       header: <DialogHeader title="Schedule" />,
-      onClose,
+      onClose: onComplete,
       type: 'modal',
     },
-    label: 'Schedule',
+    label: 'Edit Scheduling',
     icon: CalendarIcon,
     onHandle: () => setDialogOpen(true),
   }
