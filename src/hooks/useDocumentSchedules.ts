@@ -1,15 +1,13 @@
 import useSWR from 'swr'
-import sanityClient from 'part:@sanity/base/client'
+import client, {dataset, projectId} from '../client'
 import {DocumentSchedule} from '../types'
-
-const {dataset, projectId} = sanityClient.config()
 
 interface FetcherOptions {
   query: Record<string, string>
   uri: string
 }
 
-const fetcher = ({query, uri}: FetcherOptions) => sanityClient.request({query, uri})
+const fetcher = ({query, uri}: FetcherOptions) => client.request({query, uri})
 
 function useDocumentSchedules({documentId}: {documentId: string}): {
   error: any

@@ -1,8 +1,6 @@
-import sanityClient from 'part:@sanity/base/client'
+import client, {dataset, projectId} from '../client'
 import {DocumentSchedule} from '../types'
 import {debugWithName} from '../utils/debug'
-
-const {dataset, projectId} = sanityClient.config()
 
 const debug = debugWithName('actions:schedule')
 
@@ -15,7 +13,7 @@ export const createSchedule = ({
 }): Promise<DocumentSchedule> => {
   debug('createSchedule:', documentId)
 
-  return sanityClient.request({
+  return client.request({
     body: {
       documents: [{documentId}],
       executeAt: date, // ISO date
@@ -28,7 +26,7 @@ export const createSchedule = ({
 
 const _delete = ({scheduleId}: {scheduleId: string}) => {
   debug('delete:', scheduleId)
-  return sanityClient.request({
+  return client.request({
     method: 'DELETE',
     uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
   })
@@ -55,7 +53,7 @@ export const updateSchedule = ({
 }): Promise<void> => {
   debug(`updateSchedule ${scheduleId}:`, documentSchedule)
 
-  return sanityClient.request({
+  return client.request({
     body: documentSchedule,
     method: 'PATCH',
     uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
