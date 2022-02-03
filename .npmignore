@@ -1,0 +1,7 @@
+src
+node_modules
+.editorconfig
+.eslintignore
+.eslintrc.js
+commitlint.config.js
+tsconfig.json
