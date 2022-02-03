@@ -3,5 +3,6 @@
   "printWidth": 100,
   "bracketSpacing": false,
   "singleQuote": true,
-  "useTabs": false
+  "useTabs": false,
+  "endOfLine": "lf"
 }
