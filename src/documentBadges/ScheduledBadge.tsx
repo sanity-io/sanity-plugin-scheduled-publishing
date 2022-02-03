@@ -1,13 +1,13 @@
 import type {DocumentBadgeComponent} from '@sanity/base'
 import {format} from 'date-fns'
-import useDocumentSchedules from '../hooks/useDocumentSchedules'
+import {useSchedules} from '../hooks/schedule'
 import {debugWithName} from '../utils/debug'
 
 const debug = debugWithName('scheduled-badge')
 
 const ScheduledBadge: DocumentBadgeComponent = (props) => {
   // Poll for document schedules
-  const {schedules} = useDocumentSchedules({documentId: props.id})
+  const {schedules} = useSchedules({documentId: props.id, state: 'scheduled'})
   debug('schedules', schedules)
 
   const upcomingSchedule = schedules?.[0]

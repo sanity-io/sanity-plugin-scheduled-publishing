@@ -8,7 +8,7 @@ import {createSchedule} from '../actions/schedule'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
 import DialogScheduleContent from '../components/DialogScheduleContent'
-import useDocumentSchedules from '../hooks/useDocumentSchedules'
+import {useSchedules} from '../hooks/schedule'
 import {ScheduleFormData} from '../types'
 import {debugWithName} from '../utils/debug'
 
@@ -25,7 +25,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   const {errors, formState, handleSubmit, register, reset} = useForm<ScheduleFormData>()
 
   // Poll for document schedules
-  const {error, isLoading, schedules} = useDocumentSchedules({documentId: id})
+  const {error, isLoading, schedules} = useSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
   // Callbacks

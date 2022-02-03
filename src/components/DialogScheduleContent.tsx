@@ -3,14 +3,14 @@ import {WarningOutlineIcon} from '@sanity/icons'
 import {Card, Inline, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import {UseFormHandleSubmit, UseFormRegister} from 'react-hook-form'
-import {DocumentSchedule, ScheduleFormData} from '../types'
+import {Schedule, ScheduleFormData} from '../types'
 import ScheduleForm from './ScheduleForm'
 import SchedulePill from './SchedulePill'
 
 interface Props extends DocumentActionProps {
   onSubmit: UseFormHandleSubmit<ScheduleFormData>
   register: UseFormRegister<ScheduleFormData>
-  schedules: DocumentSchedule[]
+  schedules: Schedule[]
 }
 
 const DialogScheduleContent = (props: Props) => {

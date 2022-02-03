@@ -1,5 +1,10 @@
-export type DocumentScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
-export interface DocumentSchedule {
+export type ScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
+
+export interface ScheduleFilter {
+  state: ScheduleState
+  title: string
+}
+export interface Schedule {
   author: string
   createdAt: string
   dataset: string
@@ -12,7 +17,7 @@ export interface DocumentSchedule {
   id: string
   // name: string  // TODO: deprecate
   projectId: string
-  state: DocumentScheduleState
+  state: ScheduleState
 }
 
 export interface ScheduleFormData {

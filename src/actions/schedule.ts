@@ -1,5 +1,5 @@
 import client, {dataset, projectId} from '../client'
-import {DocumentSchedule} from '../types'
+import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
 
 const debug = debugWithName('actions:schedule')
@@ -10,7 +10,7 @@ export const createSchedule = ({
 }: {
   date: string
   documentId: string
-}): Promise<DocumentSchedule> => {
+}): Promise<Schedule> => {
   debug('createSchedule:', documentId)
 
   return client.request({
@@ -32,7 +32,7 @@ const _delete = ({scheduleId}: {scheduleId: string}) => {
   })
 }
 
-export const deleteSchedule = ({schedule}: {schedule: DocumentSchedule}): Promise<void> => {
+export const deleteSchedule = ({schedule}: {schedule: Schedule}): Promise<void> => {
   if (schedule.state === 'scheduled') {
     return updateSchedule({
       documentSchedule: {state: 'cancelled'},
@@ -48,7 +48,7 @@ export const updateSchedule = ({
   documentSchedule,
   scheduleId,
 }: {
-  documentSchedule: Partial<DocumentSchedule>
+  documentSchedule: Partial<Schedule>
   scheduleId: string
 }): Promise<void> => {
   debug(`updateSchedule ${scheduleId}:`, documentSchedule)

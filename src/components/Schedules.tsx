@@ -1,23 +1,28 @@
-import {Flex, Inline, Text} from '@sanity/ui'
+import {Box, Stack, Text} from '@sanity/ui'
 import React from 'react'
-import TimeZoneButton from './TimeZoneButton'
-import ToolHeader from './ToolHeader'
+import {Schedule} from '../types'
+import SchedulePill from './SchedulePill'
 
-const Schedules = () => {
+interface Props {
+  schedules: Schedule[]
+}
+
+const Schedules = (props: Props) => {
+  const {schedules} = props
+
   return (
     <>
-      <ToolHeader paddingX={4}>
-        <Flex align="center" flex={1} justify="space-between">
-          <Inline space={3}>
-            <Text weight="medium">Filter name</Text>
-            <Text muted>xx</Text>
-          </Inline>
-          <TimeZoneButton />
-        </Flex>
-      </ToolHeader>
-      <Flex align="center" flex={1} justify="center">
-        Schedules
-      </Flex>
+      {schedules.length === 0 ? (
+        <Box padding={2}>
+          <Text size={1}>No schedules</Text>
+        </Box>
+      ) : (
+        <Stack space={2}>
+          {schedules.map((schedule) => (
+            <SchedulePill key={schedule.id} schedule={schedule} />
+          ))}
+        </Stack>
+      )}
     </>
   )
 }

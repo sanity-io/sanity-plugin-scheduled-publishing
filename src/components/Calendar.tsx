@@ -2,7 +2,7 @@ import {ChevronLeftIcon, ChevronRightIcon} from '@sanity/icons'
 import {Box, Button, Flex, Text} from '@sanity/ui'
 import React from 'react'
 import styled from 'styled-components'
-import ToolHeader from './ToolHeader'
+import {TOOL_HEADER_HEIGHT} from '../constants'
 
 const ButtonContainer = styled(Flex)`
   border-bottom: 1px solid var(--card-border-color);
@@ -12,7 +12,16 @@ const ButtonContainer = styled(Flex)`
 const Calendar = () => {
   return (
     <Box>
-      <ToolHeader paddingLeft={4}>
+      <Flex
+        align="center"
+        paddingLeft={4}
+        style={{
+          borderBottom: '1px solid var(--card-border-color)',
+          minHeight: `${TOOL_HEADER_HEIGHT}px`,
+          position: 'sticky',
+          top: 0,
+        }}
+      >
         <Flex align="center" flex={1} justify="space-between">
           <Text weight="medium">Month Year</Text>
           <Flex>
@@ -30,7 +39,7 @@ const Calendar = () => {
             />
           </Flex>
         </Flex>
-      </ToolHeader>
+      </Flex>
       <Flex align="center" justify="center" padding={4} style={{aspectRatio: '350/280'}}>
         <Box>
           <Text>Calendar days</Text>

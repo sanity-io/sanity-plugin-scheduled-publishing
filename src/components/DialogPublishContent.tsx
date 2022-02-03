@@ -2,11 +2,11 @@ import type {DocumentActionProps} from '@sanity/base'
 import {InfoOutlineIcon} from '@sanity/icons'
 import {Card, Flex, Stack, Text} from '@sanity/ui'
 import React from 'react'
-import {DocumentSchedule} from '../types'
+import {Schedule} from '../types'
 import SchedulePill from './SchedulePill'
 
 interface Props extends DocumentActionProps {
-  schedules: DocumentSchedule[]
+  schedules: Schedule[]
 }
 
 const DialogPublishContent = (props: Props) => {

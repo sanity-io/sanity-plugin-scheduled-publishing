@@ -15,11 +15,11 @@ import {
 import {format} from 'date-fns'
 import React from 'react'
 import {deleteSchedule} from '../actions/schedule'
-import {DocumentSchedule} from '../types'
+import {Schedule} from '../types'
 
 interface Props {
   onComplete?: () => void
-  schedule: DocumentSchedule
+  schedule: Schedule
 }
 
 const SchedulePill = (props: Props) => {
