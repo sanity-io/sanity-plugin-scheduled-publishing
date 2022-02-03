@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import {sanityClient} from '../lib/client'
+import sanityClient from 'part:@sanity/base/client'
 import {DocumentSchedule} from '../types'
 
 const {dataset, projectId} = sanityClient.config()
