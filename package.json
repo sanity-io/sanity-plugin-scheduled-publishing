@@ -24,6 +24,7 @@
   "homepage": "https://github.com/sanity-io/sanity-plugin-scheduled-publishing#readme",
   "scripts": {
     "build": "rollup -c rollup.config.js",
+    "dev": "npm run watch",
     "lint": "eslint .",
     "prepare": "npm run build && husky install",
     "release": "standard-version",
