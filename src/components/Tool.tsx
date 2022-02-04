@@ -9,7 +9,7 @@ import {debugWithName} from '../utils/debug'
 import Calendar from './Calendar'
 import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
-import TimeZoneButton from './TimeZoneButton'
+import TimezoneInput from './TimezoneInput'
 
 const debug = debugWithName('Tool')
 
@@ -74,7 +74,7 @@ function Tool(props: Props) {
               <Text weight="medium">{scheduleStateTitle}</Text>
               <Text muted>{filteredSchedules.length}</Text>
             </Inline>
-            <TimeZoneButton />
+            <TimezoneInput />
           </Flex>
         </Flex>
         <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={3}>
