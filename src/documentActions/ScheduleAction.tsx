@@ -1,7 +1,6 @@
 import type {DocumentActionDescription, DocumentActionProps} from '@sanity/base'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
 import React, {useCallback, useState} from 'react'
-import {useForm} from 'react-hook-form'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
 import DialogScheduleContent from '../components/DialogScheduleContent'
@@ -10,50 +9,47 @@ import useScheduleOperation from '../hooks/useScheduleOperation'
 import {ScheduleFormData} from '../types'
 import {debugWithName} from '../utils/debug'
 
-const debug = debugWithName('schedule-action')
+const debug = debugWithName('ScheduleAction')
 
 const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
   const {draft, id, onComplete, type} = props
 
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [formData, setFormData] = useState<ScheduleFormData>()
 
   const {createSchedule} = useScheduleOperation()
-
-  // react-hook-form
-  const {errors, formState, handleSubmit, register, reset} = useForm<ScheduleFormData>()
 
   // Poll for document schedules
   const {error, isLoading, schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
   // Callbacks
+  const handleFormChange = useCallback((form: ScheduleFormData) => setFormData(form), [])
   const handleScheduleDocument = useCallback(() => {
-    // Current time + 5 minutes
-    const currentDate = new Date()
-    const scheduleDate = new Date(currentDate.getTime() + 5 * 60000).toISOString()
-
-    createSchedule({
-      date: scheduleDate,
-      documentId: id,
-    }).then(() => {
+    if (!formData?.date) {
+      return
+    }
+    createSchedule({date: formData.date, documentId: id}).then(() => {
       // Close dialog
       onComplete()
     })
-  }, [])
+  }, [formData?.date])
 
   return {
     dialog: dialogOpen && {
       content: (
         <DialogScheduleContent
           {...props}
-          onSubmit={handleSubmit}
-          register={register}
+          formData={formData}
+          onChange={handleFormChange}
+          // onSubmit={handleSubmit}
           schedules={schedules}
         />
       ),
       footer: (
         <DialogFooter
           buttonText="Schedule"
+          disabled={!formData?.date}
           icon={ClockIcon}
           onAction={schedules.length === 0 ? handleScheduleDocument : undefined}
           onComplete={onComplete}

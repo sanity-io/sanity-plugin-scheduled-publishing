@@ -11,7 +11,7 @@ import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
 import TimeZoneButton from './TimeZoneButton'
 
-const debug = debugWithName('tool')
+const debug = debugWithName('Tool')
 
 const Column = styled(Flex)`
   flex-direction: column;

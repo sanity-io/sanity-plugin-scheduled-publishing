@@ -3,7 +3,7 @@ import {format} from 'date-fns'
 import usePollSchedules from '../hooks/usePollSchedules'
 import {debugWithName} from '../utils/debug'
 
-const debug = debugWithName('scheduled-badge')
+const debug = debugWithName('ScheduledBadge')
 
 const ScheduledBadge: DocumentBadgeComponent = (props) => {
   // Poll for document schedules

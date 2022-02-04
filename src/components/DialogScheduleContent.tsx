@@ -1,23 +1,22 @@
 import type {DocumentActionProps} from '@sanity/base'
-import {WarningOutlineIcon} from '@sanity/icons'
-import {Card, Inline, Stack, Text} from '@sanity/ui'
+import {Stack, Text} from '@sanity/ui'
 import React from 'react'
-import {UseFormHandleSubmit, UseFormRegister} from 'react-hook-form'
 import {Schedule, ScheduleFormData} from '../types'
 import ScheduleForm from './ScheduleForm'
-import SchedulePill from './SchedulePill'
+import ScheduleItemMini from './ScheduleItemMini'
 
 interface Props extends DocumentActionProps {
-  onSubmit: UseFormHandleSubmit<ScheduleFormData>
-  register: UseFormRegister<ScheduleFormData>
+  formData?: ScheduleFormData
+  onChange?: (formData: ScheduleFormData) => void
+  onSubmit?: () => void
   schedules: Schedule[]
 }
 
 const DialogScheduleContent = (props: Props) => {
-  const {onComplete, onSubmit, register, schedules} = props
+  const {formData, onChange, onComplete, onSubmit, schedules} = props
 
   return (
-    <Stack space={5}>
+    <Stack space={4}>
       {/* Form */}
       {schedules.length === 0 ? (
         <>
@@ -26,18 +25,8 @@ const DialogScheduleContent = (props: Props) => {
               New schedule
             </Text>
             <Text size={1}>Schedule this document to be published at any time in the future.</Text>
-            <Card padding={3} radius={2} shadow={1} tone="caution">
-              <Inline space={3}>
-                <Text size={1}>
-                  <WarningOutlineIcon />
-                </Text>
-                <Text size={1}>
-                  This will currently schedule the document 5 minutes in the future.
-                </Text>
-              </Inline>
-            </Card>
           </Stack>
-          <ScheduleForm onSubmit={onSubmit} register={register} />
+          <ScheduleForm formData={formData} onChange={onChange} onSubmit={onSubmit} />
         </>
       ) : (
         <>
@@ -47,7 +36,7 @@ const DialogScheduleContent = (props: Props) => {
             </Text>
             <Stack space={2}>
               {schedules.map((schedule) => (
-                <SchedulePill key={schedule.id} onComplete={onComplete} schedule={schedule} />
+                <ScheduleItemMini key={schedule.id} onComplete={onComplete} schedule={schedule} />
               ))}
             </Stack>
           </Stack>

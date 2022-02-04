@@ -10,7 +10,7 @@ import DialogHeader from '../components/DialogHeader'
 import {debugWithName} from '../utils/debug'
 import usePollSchedules from '../hooks/usePollSchedules'
 
-const debug = debugWithName('publish-action')
+const debug = debugWithName('PublishAction')
 
 const PublishAction = (props: DocumentActionProps): DocumentActionDescription => {
   const {draft, id, onComplete, type} = props

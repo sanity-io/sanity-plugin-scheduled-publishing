@@ -22,5 +22,4 @@ export interface Schedule {
 
 export interface ScheduleFormData {
   date: string
-  time: string
 }
