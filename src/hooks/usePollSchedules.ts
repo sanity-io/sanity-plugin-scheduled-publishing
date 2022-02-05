@@ -1,9 +1,27 @@
+import axios from 'axios'
 import useSWR from 'swr'
-import client, {dataset, projectId} from '../client'
+import client from '../client'
 import {Schedule, ScheduleState} from '../types'
 
-const fetcher = ({query, uri}: {query: Record<string, string>; uri: string}) =>
-  client.request({query, uri})
+// @ts-expect-error
+const {dataset, projectId, url} = client.config()
+const scheduleBaseUrl = `${url}/schedules/${projectId}/${dataset}`
+
+type QueryKey = {
+  params?: {
+    documentIds?: string
+    state?: ScheduleState
+  }
+  url: string
+}
+
+const fetcher = (queryKey: QueryKey) =>
+  axios
+    .get<Schedule[]>(queryKey.url, {
+      params: queryKey.params,
+      withCredentials: true,
+    })
+    .then((response) => response.data)
 
 const SWR_OPTIONS = {
   refreshInterval: 5000,
@@ -23,15 +41,15 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   isLoading: boolean
   schedules: Schedule[]
 } {
-  const queryKey = {
-    query: {
+  const queryKey: QueryKey = {
+    params: {
       documentIds: documentId,
       state,
     },
-    uri: `/schedules/${projectId}/${dataset}`,
+    url: scheduleBaseUrl,
   }
 
-  const {data, error} = useSWR<Schedule[]>(queryKey, fetcher, SWR_OPTIONS)
+  const {data, error} = useSWR(queryKey, fetcher, SWR_OPTIONS)
 
   return {
     error,

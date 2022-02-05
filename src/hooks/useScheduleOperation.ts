@@ -1,30 +1,36 @@
 import {useToast} from '@sanity/ui'
+import axios from 'axios'
 import {format} from 'date-fns'
-import client, {dataset, projectId} from '../client'
+import client from '../client'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
-import getErrorMessage from '../utils/getErrorMessage'
+import getAxiosErrorMessage from '../utils/getAxiosErrorMessage'
 
 const debug = debugWithName('useScheduleOperation')
 
-function _create({date, documentId}: {date: string; documentId: string}): Promise<Schedule> {
-  return client.request({
-    body: {
+// @ts-expect-error
+const {dataset, projectId, url} = client.config()
+const scheduleBaseUrl = `${url}/schedules/${projectId}/${dataset}`
+
+function _create({date, documentId}: {date: string; documentId: string}) {
+  debug('_create:', documentId)
+  return axios.post<Schedule>(
+    scheduleBaseUrl,
+    {
       documents: [{documentId}],
-      executeAt: date, // ISO date
+      executeAt: date,
       name: date,
     },
-    method: 'POST',
-    uri: `/schedules/${projectId}/${dataset}`,
-  })
+    {withCredentials: true}
+  )
 }
 
 function _delete({scheduleId}: {scheduleId: string}) {
   debug('_delete:', scheduleId)
-  return client.request({
-    method: 'DELETE',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
-  })
+  return axios.delete<void>(
+    `${scheduleBaseUrl}/${scheduleId}`, //
+    {withCredentials: true}
+  )
 }
 
 function _update({
@@ -33,12 +39,13 @@ function _update({
 }: {
   documentSchedule: Partial<Schedule>
   scheduleId: string
-}): Promise<void> {
-  return client.request({
-    body: documentSchedule,
-    method: 'PATCH',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
-  })
+}) {
+  debug('_update:', scheduleId, documentSchedule)
+  return axios.patch<void>(
+    `${scheduleBaseUrl}/${scheduleId}`, //
+    documentSchedule,
+    {withCredentials: true}
+  )
 }
 
 export default function useScheduleOperation() {
@@ -54,15 +61,12 @@ export default function useScheduleOperation() {
     documentId: string
   }) {
     try {
-      const schedule = await _create({date, documentId})
+      const {data} = await _create({date, documentId})
 
       if (displayToast) {
         toast.push({
           closable: true,
-          description: format(
-            new Date(schedule.executeAt),
-            `'Publishing on' iiii d MMMM yyyy 'at' p`
-          ),
+          description: format(new Date(data.executeAt), `'Publishing on' iiii d MMMM yyyy 'at' p`),
           status: 'success',
           title: 'Schedule created',
         })
@@ -71,7 +75,7 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: getErrorMessage(err),
+          description: getAxiosErrorMessage(err),
           status: 'error',
           title: 'Unable to create schedule',
         })
@@ -106,7 +110,7 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: getErrorMessage(err),
+          description: getAxiosErrorMessage(err),
           status: 'error',
           title: 'Unable to delete schedule',
         })
