@@ -5,10 +5,10 @@ import {PublishIcon} from '@sanity/icons'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import React, {useEffect, useState} from 'react'
 import DialogFooter from '../components/DialogFooter'
-import DialogPublishContent from '../components/DialogPublishContent'
 import DialogHeader from '../components/DialogHeader'
-import {debugWithName} from '../utils/debug'
+import DialogPublishContent from '../components/DialogPublishContent'
 import usePollSchedules from '../hooks/usePollSchedules'
+import {debugWithName} from '../utils/debug'
 
 const debug = debugWithName('PublishAction')
 

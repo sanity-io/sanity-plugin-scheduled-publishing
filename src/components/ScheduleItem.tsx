@@ -67,12 +67,7 @@ const ScheduleItem = (props: Props) => {
               id="contextMenu"
               menu={
                 <Menu>
-                  <MenuItem
-                    icon={EditIcon}
-                    onClick={handleEdit}
-                    text="Edit schedule"
-                    tone="default"
-                  />
+                  <MenuItem icon={EditIcon} onClick={handleEdit} text="Edit" tone="default" />
                   <MenuItem
                     icon={PublishIcon}
                     onClick={handlePublishImmediately}

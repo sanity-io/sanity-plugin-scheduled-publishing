@@ -1,8 +1,9 @@
 import type {DocumentActionProps} from '@sanity/base'
 import {InfoOutlineIcon} from '@sanity/icons'
-import {Box, Card, Flex, Stack, Text} from '@sanity/ui'
+import {Box, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import {Schedule} from '../types'
+import Callout from './Callout'
 import ScheduleItemMini from './ScheduleItemMini'
 
 interface Props extends DocumentActionProps {
@@ -18,7 +19,7 @@ const DialogPublishContent = (props: Props) => {
         Current schedule
       </Text>
       {schedules.length === 0 ? (
-        <Box padding={2}>
+        <Box>
           <Text size={1}>No schedules</Text>
         </Box>
       ) : (
@@ -29,19 +30,12 @@ const DialogPublishContent = (props: Props) => {
         </Stack>
       )}
 
-      <Card padding={4} radius={2} shadow={1} tone="caution">
-        <Flex>
-          <Text size={2}>
-            <InfoOutlineIcon />
-          </Text>
-          <Stack marginLeft={3} space={2}>
-            <Text size={1} weight="semibold">
-              This document has been scheduled for publishing.
-            </Text>
-            <Text size={1}>Publishing this document may conflict with the above schedules.</Text>
-          </Stack>
-        </Flex>
-      </Card>
+      <Callout
+        description="Publishing this document may conflict with the above schedules."
+        icon={InfoOutlineIcon}
+        title="This document has been scheduled for publishing."
+        tone="caution"
+      />
     </Stack>
   )
 }
