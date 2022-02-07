@@ -12,7 +12,7 @@ import {debugWithName} from '../utils/debug'
 const debug = debugWithName('ScheduleAction')
 
 const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
-  const {draft, id, onComplete, type} = props
+  const {id, onComplete} = props
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [formData, setFormData] = useState<ScheduleFormData>()
@@ -20,7 +20,8 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   const {createSchedule} = useScheduleOperation()
 
   // Poll for document schedules
-  const {error, isLoading, schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
+  // TODO: handle error + isLoading states
+  const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
   // Callbacks
@@ -42,7 +43,6 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
           {...props}
           formData={formData}
           onChange={handleFormChange}
-          // onSubmit={handleSubmit}
           schedules={schedules}
         />
       ),

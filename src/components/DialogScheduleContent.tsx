@@ -8,12 +8,11 @@ import ScheduleItemMini from './ScheduleItemMini'
 interface Props extends DocumentActionProps {
   formData?: ScheduleFormData
   onChange?: (formData: ScheduleFormData) => void
-  onSubmit?: () => void
   schedules: Schedule[]
 }
 
 const DialogScheduleContent = (props: Props) => {
-  const {formData, onChange, onComplete, onSubmit, schedules} = props
+  const {formData, onChange, onComplete, schedules} = props
 
   return (
     <Stack space={4}>
@@ -26,7 +25,7 @@ const DialogScheduleContent = (props: Props) => {
             </Text>
             <Text size={1}>Schedule this document to be published at any time in the future.</Text>
           </Stack>
-          <ScheduleForm formData={formData} onChange={onChange} onSubmit={onSubmit} />
+          <ScheduleForm formData={formData} onChange={onChange} />
         </>
       ) : (
         <>

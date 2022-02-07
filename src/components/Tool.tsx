@@ -27,7 +27,8 @@ function Tool(props: Props) {
   const {router} = props
 
   // Poll for document schedules
-  const {error, isLoading, schedules} = usePollSchedules()
+  // TODO: handle error + isLoading states
+  const {schedules} = usePollSchedules()
 
   const scheduleState: ScheduleState = router.state.state || 'scheduled'
   const scheduleStateTitle = SCHEDULE_FILTER_DICTIONARY[scheduleState]

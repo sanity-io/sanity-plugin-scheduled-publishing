@@ -21,7 +21,8 @@ const PublishAction = (props: DocumentActionProps): DocumentActionDescription =>
   const [dialogOpen, setDialogOpen] = useState(false)
 
   // Poll for document schedules
-  const {error, isLoading, schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
+  // TODO: handle error + isLoading states
+  const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
   const hasSchedules = schedules.length > 0

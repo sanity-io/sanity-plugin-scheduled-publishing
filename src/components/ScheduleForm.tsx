@@ -6,7 +6,6 @@ import {DateTimeInput} from './DateInputs'
 interface Props {
   formData?: ScheduleFormData
   onChange?: (formData: ScheduleFormData) => void
-  onSubmit?: () => void
 }
 
 const getCurrentTimeOffset = (minuteOffset: number) => {
@@ -15,7 +14,7 @@ const getCurrentTimeOffset = (minuteOffset: number) => {
 }
 
 const ScheduleForm = (props: Props) => {
-  const {formData, onChange, onSubmit} = props
+  const {formData, onChange} = props
 
   const handleChange = (date: string | null) => {
     if (date && onChange) {
