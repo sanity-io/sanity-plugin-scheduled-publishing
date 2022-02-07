@@ -10,7 +10,6 @@ const debug = debugWithName('useScheduleOperation')
 
 // @ts-expect-error
 const {dataset, projectId, url} = client.config()
-const scheduleBaseUrl = `${url}/schedules/${projectId}/${dataset}`
 
 function _create({date, documentId}: {date: string; documentId: string}) {
   debug('_create:', documentId)
@@ -21,7 +20,7 @@ function _create({date, documentId}: {date: string; documentId: string}) {
   roundedDate.setMilliseconds(0)
 
   return axios.post<Schedule>(
-    scheduleBaseUrl,
+    `${url}/schedules/${projectId}/${dataset}`,
     {
       documents: [{documentId}],
       executeAt: roundedDate,
@@ -34,7 +33,17 @@ function _create({date, documentId}: {date: string; documentId: string}) {
 function _delete({scheduleId}: {scheduleId: string}) {
   debug('_delete:', scheduleId)
   return axios.delete<void>(
-    `${scheduleBaseUrl}/${scheduleId}`, //
+    `${url}/schedules/${projectId}/${dataset}/${scheduleId}`, //
+    {withCredentials: true}
+  )
+}
+
+function _publish({documentIds}: {documentIds: string[]}) {
+  debug('_publish:', documentIds)
+
+  return axios.post<{transactionId: string}>(
+    `${url}/publish/${projectId}/${dataset}`,
+    documentIds.map((documentId) => ({documentId})),
     {withCredentials: true}
   )
 }
@@ -48,7 +57,7 @@ function _update({
 }) {
   debug('_update:', scheduleId, documentSchedule)
   return axios.patch<void>(
-    `${scheduleBaseUrl}/${scheduleId}`, //
+    `${url}/schedules/${projectId}/${dataset}/${scheduleId}`,
     documentSchedule,
     {withCredentials: true}
   )
@@ -124,6 +133,38 @@ export default function useScheduleOperation() {
     }
   }
 
+  // TODO: this currently deletes the previous schedule, since it's not yet possible to update a schedule's state
+  // from 'scheduled' to 'succeeded'. Update this endpoint when the above has been rectified by CL.
+  async function publishSchedule({
+    displayToast = true,
+    schedule,
+  }: {
+    displayToast?: boolean
+    schedule: Schedule
+  }) {
+    try {
+      await _publish({documentIds: schedule?.documents?.map((document) => document.documentId)})
+      await deleteSchedule({displayToast: false, schedule})
+
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          status: 'success',
+          title: 'Schedule executed',
+        })
+      }
+    } catch (err) {
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          description: getAxiosErrorMessage(err),
+          status: 'error',
+          title: 'Unable to publish schedule',
+        })
+      }
+    }
+  }
+
   async function updateSchedule({
     date,
     displayToast = true,
@@ -159,6 +200,7 @@ export default function useScheduleOperation() {
   return {
     createSchedule,
     deleteSchedule,
+    publishSchedule,
     updateSchedule,
   }
 }

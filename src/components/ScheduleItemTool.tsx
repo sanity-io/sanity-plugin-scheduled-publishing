@@ -17,7 +17,7 @@ const debug = debugWithName('ScheduleItemTool')
 const ScheduleItemTool = (props: Props) => {
   const {schedule} = props
 
-  const {deleteSchedule} = useScheduleOperation()
+  const {deleteSchedule, publishSchedule} = useScheduleOperation()
   const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
 
   // Example: Fri 24 Dec 2021 at 6:00 AM
@@ -25,9 +25,9 @@ const ScheduleItemTool = (props: Props) => {
 
   const firstDocument = schedule.documents?.[0]
 
-  // TODO: publish immediately with `useScheduleOperation`
-  const handlePublishImmediately = () => {
-    debug('handlePublishImmediately')
+  const handlePublish = () => {
+    debug('handlePublish')
+    publishSchedule({schedule})
   }
 
   const handleDelete = () => {
@@ -71,7 +71,7 @@ const ScheduleItemTool = (props: Props) => {
                         />
                         <MenuItem
                           icon={PublishIcon}
-                          onClick={handlePublishImmediately}
+                          onClick={handlePublish}
                           text="Publish now"
                           tone="default"
                         />
