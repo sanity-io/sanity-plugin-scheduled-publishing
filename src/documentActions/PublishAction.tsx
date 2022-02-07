@@ -6,7 +6,8 @@ import {useDocumentOperation} from '@sanity/react-hooks'
 import React, {useEffect, useState} from 'react'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
-import DialogPublishContent from '../components/DialogPublishContent'
+import DialogScheduleListContent from '../components/DialogScheduleListContent'
+import {DocumentActionPropsProvider} from '../contexts/documentActionProps'
 import usePollSchedules from '../hooks/usePollSchedules'
 import {debugWithName} from '../utils/debug'
 
@@ -48,7 +49,11 @@ const PublishAction = (props: DocumentActionProps): DocumentActionDescription =>
   return {
     color: 'success',
     dialog: dialogOpen && {
-      content: <DialogPublishContent {...props} schedules={schedules} />,
+      content: (
+        <DocumentActionPropsProvider value={props}>
+          <DialogScheduleListContent schedules={schedules} />
+        </DocumentActionPropsProvider>
+      ),
       footer: (
         <DialogFooter
           buttonText="Publish"

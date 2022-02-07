@@ -14,12 +14,18 @@ const scheduleBaseUrl = `${url}/schedules/${projectId}/${dataset}`
 
 function _create({date, documentId}: {date: string; documentId: string}) {
   debug('_create:', documentId)
+
+  // Round date to nearest second (mutate)
+  const roundedDate = new Date(date)
+  roundedDate.setSeconds(0)
+  roundedDate.setMilliseconds(0)
+
   return axios.post<Schedule>(
     scheduleBaseUrl,
     {
       documents: [{documentId}],
-      executeAt: date,
-      name: date,
+      executeAt: roundedDate,
+      name: roundedDate,
     },
     {withCredentials: true}
   )
@@ -118,8 +124,41 @@ export default function useScheduleOperation() {
     }
   }
 
+  async function updateSchedule({
+    date,
+    displayToast = true,
+    scheduleId,
+  }: {
+    date: string
+    displayToast?: boolean
+    scheduleId: string
+  }) {
+    try {
+      await _update({documentSchedule: {executeAt: date}, scheduleId})
+
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          description: format(new Date(date), `'Publishing on' iiii d MMMM yyyy 'at' p`),
+          status: 'success',
+          title: 'Schedule updated',
+        })
+      }
+    } catch (err) {
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          description: getAxiosErrorMessage(err),
+          status: 'error',
+          title: 'Unable to update schedule',
+        })
+      }
+    }
+  }
+
   return {
     createSchedule,
     deleteSchedule,
+    updateSchedule,
   }
 }

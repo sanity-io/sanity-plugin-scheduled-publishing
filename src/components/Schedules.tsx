@@ -1,7 +1,7 @@
 import {Box, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import {Schedule} from '../types'
-import ScheduleItem from './ScheduleItem'
+import ScheduleItemTool from './ScheduleItemTool'
 
 interface Props {
   schedules: Schedule[]
@@ -19,7 +19,7 @@ const Schedules = (props: Props) => {
       ) : (
         <Stack space={2}>
           {schedules.map((schedule) => (
-            <ScheduleItem key={schedule.id} schedule={schedule} />
+            <ScheduleItemTool key={schedule.id} schedule={schedule} />
           ))}
         </Stack>
       )}

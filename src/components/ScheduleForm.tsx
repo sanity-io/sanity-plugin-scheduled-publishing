@@ -4,8 +4,8 @@ import {ScheduleFormData} from '../types'
 import {DateTimeInput} from './DateInputs'
 
 interface Props {
-  formData?: ScheduleFormData
   onChange?: (formData: ScheduleFormData) => void
+  value?: ScheduleFormData | null
 }
 
 const getCurrentTimeOffset = (minuteOffset: number) => {
@@ -14,7 +14,7 @@ const getCurrentTimeOffset = (minuteOffset: number) => {
 }
 
 const ScheduleForm = (props: Props) => {
-  const {formData, onChange} = props
+  const {onChange, value} = props
 
   const handleChange = (date: string | null) => {
     if (date && onChange) {
@@ -23,7 +23,7 @@ const ScheduleForm = (props: Props) => {
   }
 
   return (
-    <Flex as="form">
+    <Flex>
       <Stack space={4}>
         <DateTimeInput
           level={0}
@@ -33,7 +33,7 @@ const ScheduleForm = (props: Props) => {
             name: 'date',
             title: 'Date',
           }}
-          value={formData?.date}
+          value={value?.date}
         />
 
         {/* Debug buttons */}
@@ -61,6 +61,14 @@ const ScheduleForm = (props: Props) => {
               <Button
                 onClick={handleChange.bind(undefined, getCurrentTimeOffset(10))}
                 text="+10m"
+              />
+              <Button
+                onClick={handleChange.bind(undefined, getCurrentTimeOffset(30))}
+                text="+30m"
+              />
+              <Button
+                onClick={handleChange.bind(undefined, getCurrentTimeOffset(60))}
+                text="+60m"
               />
             </Inline>
           </Stack>

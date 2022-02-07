@@ -11,12 +11,7 @@ const DialogHeader = (props: Props) => {
   return (
     <Flex align="center">
       {title}
-      <Box
-        style={{
-          position: 'absolute',
-          right: '-1.25em', // TODO: bit cheeky, consider alternative
-        }}
-      >
+      <Box style={{position: 'absolute', right: '-1.5em'}}>
         <TimeZoneButton />
       </Box>
     </Flex>

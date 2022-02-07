@@ -6,7 +6,7 @@ interface Props {
   disabled?: boolean
   icon?: ComponentType | ReactNode
   onAction?: () => void
-  onComplete: () => void
+  onComplete?: () => void
   tone?: ButtonTone
 }
 
