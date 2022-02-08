@@ -1,5 +1,5 @@
-import React from 'react'
-import {TimeZone, getTimeZones} from '@vvo/tzdb'
+import {getTimeZones, TimeZone} from '@vvo/tzdb'
+import {useEffect, useReducer} from 'react'
 
 interface UseTimeZoneReturn {
   timeZone: TimeZone
@@ -33,11 +33,11 @@ function getStoredTimeZone(): TimeZone {
   return getLocalTimeZone()
 }
 
-type ACTIONTYPE =
+type ACTION_TYPE =
   | {type: 'UPDATED_ELSEWHERE'}
   | {type: 'SET_TIMEZONE'; value: UseTimeZoneReturn['timeZone'] | null}
 
-const timeZoneReducer = (state: UseTimeZoneReturn['timeZone'], action: ACTIONTYPE) => {
+const timeZoneReducer = (state: UseTimeZoneReturn['timeZone'], action: ACTION_TYPE) => {
   switch (action.type) {
     case 'SET_TIMEZONE':
       // Clear selection if no value is given
@@ -63,9 +63,12 @@ const timeZoneReducer = (state: UseTimeZoneReturn['timeZone'], action: ACTIONTYP
 }
 
 const useTimeZone = (): UseTimeZoneReturn => {
-  const [timeZone, dispatch] = React.useReducer(timeZoneReducer, getStoredTimeZone())
+  // We can't `useState` here because we need to access the previous `timeZone` value
+  // to only dispatch events to other instances when the value was updated.
+  // If we dispatched at every change, we'd be triggering an infinite loop whenever there were multiple instances.
+  const [timeZone, dispatch] = useReducer(timeZoneReducer, getStoredTimeZone())
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handler = () => {
       dispatch({type: 'UPDATED_ELSEWHERE'})
     }

@@ -19,12 +19,6 @@ const DialogTimeZone = (props: Props) => {
   )
 
   const {onClose} = props
-  x
-  React.useEffect(() => {
-    if (selectedTz !== timeZone.currentTimeFormat) {
-      setTimeZone(selectedTz)
-    }
-  }, [selectedTz])
   return (
     <Dialog header="Select time zone" id="time-zone" onClose={onClose} width={0}>
       <Stack padding={4} space={3}>
