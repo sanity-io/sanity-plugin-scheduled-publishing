@@ -12,6 +12,19 @@ interface Props {
   onClose?: () => void
 }
 
+/**
+ * Removes cities from timezone format for cleaner UI.
+ * "-11:00 Samoa Time - Pago Pago, ..." => "Samoa Time (GMT -11:00)"
+ */
+function formatValue(value: TimeZone['currentTimeFormat']) {
+  const offsetAndName = value?.split(' - ')[0]
+
+  if (!offsetAndName) return ''
+
+  const [offset, ...nameParts] = offsetAndName.split(' ')
+  return `${nameParts.join(' ')} (GMT ${offset})`
+}
+
 const DialogTimeZone = (props: Props) => {
   const {timeZone, timeIsLocal, setTimeZone} = useTimeZone()
   const [selectedTz, setSelectedTz] = React.useState<TimeZone['currentTimeFormat'] | undefined>(
@@ -30,9 +43,7 @@ const DialogTimeZone = (props: Props) => {
           placeholder="Timezone"
           onChange={(value) => setSelectedTz(value)}
           value={selectedTz}
-          // Remove cities from timezone format for cleaner UI
-          // "-11:00 Samoa Time - Pago Pago" => "-11:00 Samoa Time"
-          renderValue={(value) => value?.split(' - ')[0]}
+          renderValue={formatValue}
           tabIndex={-1}
           fontSize={1}
           popover={{
