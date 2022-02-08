@@ -1,8 +1,7 @@
-import {ChevronLeftIcon, ChevronRightIcon} from '@sanity/icons'
-import {Box, Button, Flex, Text} from '@sanity/ui'
+import {Box, Button, Flex} from '@sanity/ui'
 import React from 'react'
 import styled from 'styled-components'
-import {TOOL_HEADER_HEIGHT} from '../constants'
+import {DatePicker} from './DatePicker'
 
 const ButtonContainer = styled(Flex)`
   border-bottom: 1px solid var(--card-border-color);
@@ -10,41 +9,10 @@ const ButtonContainer = styled(Flex)`
 `
 
 const Calendar = () => {
+  const [date, setDate] = React.useState<Date>(new Date())
   return (
     <Box>
-      <Flex
-        align="center"
-        paddingLeft={4}
-        style={{
-          borderBottom: '1px solid var(--card-border-color)',
-          minHeight: `${TOOL_HEADER_HEIGHT}px`,
-          position: 'sticky',
-          top: 0,
-        }}
-      >
-        <Flex align="center" flex={1} justify="space-between">
-          <Text weight="medium">Month Year</Text>
-          <Flex>
-            <Button
-              icon={ChevronLeftIcon}
-              mode="bleed"
-              radius={0}
-              style={{height: '55px', width: '55px'}}
-            />
-            <Button
-              icon={ChevronRightIcon}
-              mode="bleed"
-              radius={0}
-              style={{height: '55px', width: '55px'}}
-            />
-          </Flex>
-        </Flex>
-      </Flex>
-      <Flex align="center" justify="center" padding={4} style={{aspectRatio: '350/280'}}>
-        <Box>
-          <Text>Calendar days</Text>
-        </Box>
-      </Flex>
+      <DatePicker onChange={setDate} value={date} />
       <ButtonContainer flex={1}>
         <Button
           fontSize={1}
@@ -53,6 +21,7 @@ const Calendar = () => {
           radius={0}
           style={{width: '100%'}}
           text="Today"
+          onClick={() => setDate(new Date())}
         />
       </ButtonContainer>
     </Box>
