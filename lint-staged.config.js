@@ -1,4 +1,4 @@
 module.exports = {
-  '**/*.{js,jsx}': ['npm run lint'],
-  '**/*.{ts,tsx}': ['npm run lint', () => 'tsc --noEmit'],
+  '**/*.{js,jsx}': ['eslint'],
+  '**/*.{ts,tsx}': ['eslint', () => 'tsc --noEmit'],
 }
