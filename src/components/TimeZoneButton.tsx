@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
 import {EarthAmericasIcon} from '@sanity/icons'
 import {Box, Button, Text, Tooltip} from '@sanity/ui'
-import DialogTimeZone from './DialogTimeZone'
+import React, {useState} from 'react'
 import useTimeZone from '../hooks/useTimeZone'
+import DialogTimeZone from './DialogTimeZone'
 
 const TimeZoneButton = () => {
-  const {timeIsLocal, timeZone} = useTimeZone()
+  const {timeZone} = useTimeZone()
   const [dialogVisible, setDialogVisible] = useState(false)
 
   const handleDialogHide = () => {
@@ -25,12 +25,7 @@ const TimeZoneButton = () => {
         content={
           <Box padding={2}>
             <Text muted size={1}>
-              {timeIsLocal
-                ? 'View dates in another time zone'
-                : `All dates shown in ${timeZone.alternativeName} (GMT ${
-                    // "-03:00 Brasilia Time - São Paulo..." => "-03:00"
-                    timeZone.currentTimeFormat.split(' ')[0]
-                  })`}
+              Displaying schedules in {timeZone.alternativeName} (GMT{timeZone.offset})
             </Text>
           </Box>
         }
@@ -39,10 +34,9 @@ const TimeZoneButton = () => {
         <Button
           fontSize={1}
           icon={EarthAmericasIcon}
-          // mode="ghost"
           mode="bleed"
           onClick={handleDialogShow}
-          text={timeIsLocal ? 'Select time zone' : timeZone.alternativeName}
+          text={`${timeZone.alternativeName} (${timeZone.namePretty})`}
         />
       </Tooltip>
     </>

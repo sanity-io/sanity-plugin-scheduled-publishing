@@ -1,78 +1,112 @@
-import {EarthAmericasIcon} from '@sanity/icons'
-import {Autocomplete, Button, Dialog, Inline, Stack, Text} from '@sanity/ui'
-import {TimeZone} from '@vvo/tzdb'
-import React from 'react'
+import {SearchIcon} from '@sanity/icons'
+import {Autocomplete, Box, Card, Dialog, Flex, Inline, Stack, Text} from '@sanity/ui'
+import React, {useState} from 'react'
 import useTimeZone, {allTimeZones, getLocalTimeZone} from '../hooks/useTimeZone'
-
-const options = allTimeZones.map((tz) => ({
-  value: tz.currentTimeFormat,
-}))
+import {TimeZone} from '../types'
+import DialogFooter from './DialogFooter'
 
 interface Props {
   onClose?: () => void
 }
 
-/**
- * Removes cities from timezone format for cleaner UI.
- * "-11:00 Samoa Time - Pago Pago, ..." => "Samoa Time (GMT -11:00)"
- */
-function formatValue(value: TimeZone['currentTimeFormat']) {
-  const offsetAndName = value?.split(' - ')[0]
-
-  if (!offsetAndName) return ''
-
-  const [offset, ...nameParts] = offsetAndName.split(' ')
-  return `${nameParts.join(' ')} (GMT ${offset})`
-}
-
 const DialogTimeZone = (props: Props) => {
-  const {timeZone, timeIsLocal, setTimeZone} = useTimeZone()
-  const [selectedTz, setSelectedTz] = React.useState<TimeZone['currentTimeFormat'] | undefined>(
-    timeZone.currentTimeFormat
-  )
-
   const {onClose} = props
+
+  const {setTimeZone, timeZone} = useTimeZone()
+  const [selectedTz, setSelectedTz] = useState<TimeZone | undefined>(timeZone)
+
+  // Callbacks
+  const handleTimeZoneChange = (value: string) => {
+    const tz = allTimeZones.find((v) => v.value === value)
+    setSelectedTz(tz)
+  }
+
+  const handleTimeZoneSelectLocal = () => {
+    setSelectedTz(getLocalTimeZone())
+  }
+
+  const handleTimeZoneUpdate = () => {
+    setTimeZone(selectedTz)
+    onClose?.()
+  }
+
+  const isDirty = selectedTz?.name !== timeZone.name
+
   return (
-    <Dialog header="Select time zone" id="time-zone" onClose={onClose} width={0}>
-      <Stack padding={4} space={3}>
-        <Text>The selected timezone will change how dates are represented in schedules</Text>
-        <Autocomplete
-          icon={EarthAmericasIcon}
-          id="timezone"
-          options={options}
-          placeholder="Timezone"
-          onChange={(value) => setSelectedTz(value)}
-          value={selectedTz}
-          renderValue={formatValue}
-          tabIndex={-1}
-          fontSize={1}
-          popover={{
-            constrainSize: true,
-            placement: 'bottom-start',
-          }}
-        />
-        <Inline space={2}>
-          <Button
-            fontSize={1}
-            onClick={() => {
-              setTimeZone()
-              onClose?.()
-            }}
-            text={`Use local time (${getLocalTimeZone().alternativeName})`}
-            disabled={timeIsLocal}
-            mode="ghost"
-          />
-          <Button
-            fontSize={1}
-            onClick={() => {
-              setTimeZone(selectedTz)
-              onClose?.()
-            }}
-            text={`Save timezone`}
-            disabled={!selectedTz}
+    <Dialog
+      footer={
+        <Box paddingX={4} paddingY={3}>
+          <DialogFooter
+            buttonText="Update time zone"
+            disabled={!isDirty || !selectedTz}
+            onAction={handleTimeZoneUpdate}
+            onComplete={onClose}
             tone="primary"
           />
-        </Inline>
+        </Box>
+      }
+      header="Select time zone"
+      id="time-zone"
+      onClose={onClose}
+      width={1}
+    >
+      <Stack padding={4} space={5}>
+        <Text size={1}>
+          The selected time zone will change how dates are represented in schedules.
+        </Text>
+
+        <Stack space={3}>
+          <Flex align="center" justify="space-between">
+            <Text size={1} weight="semibold">
+              Time zone
+            </Text>
+            {selectedTz?.name !== getLocalTimeZone().name && (
+              <Text size={1} weight="medium">
+                <a href="#" onClick={handleTimeZoneSelectLocal}>
+                  Select local time zone
+                </a>
+              </Text>
+            )}
+          </Flex>
+
+          <Autocomplete
+            fontSize={2}
+            icon={SearchIcon}
+            id="timezone"
+            onChange={handleTimeZoneChange}
+            openButton
+            options={allTimeZones}
+            padding={4}
+            placeholder="Search for a city or time zone"
+            popover={{
+              constrainSize: true,
+              placement: 'bottom-start',
+            }}
+            renderOption={(option) => {
+              return (
+                <Card as="button" padding={3}>
+                  <Inline space={3}>
+                    <Text align="center" muted size={1}>
+                      GMT{option.offset}
+                    </Text>
+                    <Text size={1} weight="medium">
+                      {option.alternativeName}
+                    </Text>
+                    <Text muted size={1}>
+                      {option.mainCities}
+                    </Text>
+                  </Inline>
+                </Card>
+              )
+            }}
+            renderValue={(_, option) => {
+              if (!option) return ''
+              return `${option.alternativeName} (${option.namePretty})`
+            }}
+            tabIndex={-1}
+            value={selectedTz?.value}
+          />
+        </Stack>
       </Stack>
     </Dialog>
   )
