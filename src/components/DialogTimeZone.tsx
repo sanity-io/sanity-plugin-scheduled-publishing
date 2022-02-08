@@ -62,7 +62,7 @@ const DialogTimeZone = (props: Props) => {
             </Text>
             {selectedTz?.name !== getLocalTimeZone().name && (
               <Text size={1} weight="medium">
-                <a href="#" onClick={handleTimeZoneSelectLocal}>
+                <a onClick={handleTimeZoneSelectLocal} style={{cursor: 'pointer'}}>
                   Select local time zone
                 </a>
               </Text>
