@@ -42,18 +42,30 @@ const ScheduleItemDocument = (props: Props) => {
 
       <Card paddingLeft={4} paddingRight={2} paddingY={2} radius={2} shadow={1}>
         <Flex align="center" justify="space-between">
-          <Inline space={4}>
-            <Text size={2}>
-              <ClockIcon />
-            </Text>
-            <Text size={1}>{formattedDateTime}</Text>
-          </Inline>
-
+          {/* Schedule date */}
           <Box>
+            <Inline space={4}>
+              <Text size={2}>
+                <ClockIcon />
+              </Text>
+              <Text size={1}>{formattedDateTime}</Text>
+            </Inline>
+          </Box>
+
+          {/* Avatar + Context menu */}
+          <Box marginLeft={2} style={{flexShrink: 0}}>
             <Inline space={2}>
               <UserAvatar userId={schedule?.author} withTooltip />
               <MenuButton
-                button={<Button icon={EllipsisVerticalIcon} mode="bleed" tone="default" />}
+                button={
+                  <Button
+                    icon={EllipsisVerticalIcon}
+                    mode="bleed"
+                    paddingX={2}
+                    paddingY={3}
+                    tone="default"
+                  />
+                }
                 id="delete"
                 menu={
                   <Menu>

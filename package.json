@@ -35,6 +35,7 @@
     "date-fns": "^2.27.0",
     "debug": "^4.3.3",
     "react-focus-lock": "^2.7.1",
+    "rxjs": "^7.5.2",
     "swr": "^1.2.0"
   },
   "devDependencies": {
