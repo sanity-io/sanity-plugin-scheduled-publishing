@@ -1,5 +1,5 @@
 import {getTimeZones, TimeZone} from '@vvo/tzdb'
-import {useEffect, useReducer} from 'react'
+import {useEffect, useState} from 'react'
 
 interface UseTimeZoneReturn {
   timeZone: TimeZone
@@ -33,44 +33,13 @@ function getStoredTimeZone(): TimeZone {
   return getLocalTimeZone()
 }
 
-type ACTION_TYPE =
-  | {type: 'UPDATED_ELSEWHERE'}
-  | {type: 'SET_TIMEZONE'; value: UseTimeZoneReturn['timeZone'] | null}
-
-const timeZoneReducer = (state: UseTimeZoneReturn['timeZone'], action: ACTION_TYPE) => {
-  switch (action.type) {
-    case 'SET_TIMEZONE':
-      // Clear selection if no value is given
-      if (!action.value?.name) {
-        localStorage.removeItem(STORAGE_KEY)
-        window.dispatchEvent(new Event(STORAGE_KEY)) // notify other instances
-
-        return getStoredTimeZone()
-      }
-
-      // If different from current state, update localStorage & notify other instances
-      if (action.value?.name && state.name !== action.value.name) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(action.value))
-        window.dispatchEvent(new Event(STORAGE_KEY))
-      }
-
-      return action.value
-    case 'UPDATED_ELSEWHERE':
-      return getStoredTimeZone() // No need to notify others
-    default:
-      return state
-  }
-}
-
 const useTimeZone = (): UseTimeZoneReturn => {
-  // We can't `useState` here because we need to access the previous `timeZone` value
-  // to only dispatch events to other instances when the value was updated.
-  // If we dispatched at every change, we'd be triggering an infinite loop whenever there were multiple instances.
-  const [timeZone, dispatch] = useReducer(timeZoneReducer, getStoredTimeZone())
+  const [timeZone, setTimeZone] = useState<TimeZone>(getStoredTimeZone())
 
   useEffect(() => {
     const handler = () => {
-      dispatch({type: 'UPDATED_ELSEWHERE'})
+      // When updated in another hook instance, just fetch from localStorage
+      setTimeZone(getStoredTimeZone())
     }
 
     window.addEventListener(STORAGE_KEY, handler)
@@ -79,16 +48,31 @@ const useTimeZone = (): UseTimeZoneReturn => {
     }
   }, [])
 
-  return {
-    timeZone,
-    setTimeZone: (value) => {
-      if (!value) {
-        dispatch({type: 'SET_TIMEZONE', value: null})
+  const handleNewValue: UseTimeZoneReturn['setTimeZone'] = (value) => {
+    setTimeZone((prevTz) => {
+      const expanded = value ? allTimeZones.find((tz) => tz.currentTimeFormat === value) : undefined
+
+      // Clear selection if no value is given
+      if (!expanded?.name) {
+        localStorage.removeItem(STORAGE_KEY)
+        window.dispatchEvent(new Event(STORAGE_KEY)) // notify other instances
+
+        return getStoredTimeZone()
       }
 
-      const expanded = allTimeZones.find((tz) => tz.currentTimeFormat === value)
-      dispatch({type: 'SET_TIMEZONE', value: expanded || null})
-    },
+      // If different from current state, update localStorage & notify other instances
+      if (expanded?.name && prevTz.name !== expanded.name) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(expanded))
+        window.dispatchEvent(new Event(STORAGE_KEY))
+      }
+
+      return expanded
+    })
+  }
+
+  return {
+    timeZone,
+    setTimeZone: handleNewValue,
     timeIsLocal: getLocalTimeZone().name === timeZone.name,
   }
 }
