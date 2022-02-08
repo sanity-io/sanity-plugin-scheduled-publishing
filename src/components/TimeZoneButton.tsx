@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {EarthAmericasIcon} from '@sanity/icons'
 import {Box, Button, Text, Tooltip} from '@sanity/ui'
 import DialogTimeZone from './DialogTimeZone'
-import useTimeZone from '../hooks/useTz'
+import useTimeZone from '../hooks/useTimeZone'
 
 const TimeZoneButton = () => {
   const {timeIsLocal, timeZone} = useTimeZone()

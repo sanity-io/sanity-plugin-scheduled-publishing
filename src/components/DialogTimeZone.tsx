@@ -2,7 +2,7 @@ import {EarthAmericasIcon} from '@sanity/icons'
 import {Autocomplete, Button, Dialog, Inline, Stack, Text} from '@sanity/ui'
 import {TimeZone} from '@vvo/tzdb'
 import React from 'react'
-import useTimeZone, {allTimeZones, getLocalTimeZone} from '../hooks/useTz'
+import useTimeZone, {allTimeZones, getLocalTimeZone} from '../hooks/useTimeZone'
 
 const options = allTimeZones.map((tz) => ({
   value: tz.currentTimeFormat,
