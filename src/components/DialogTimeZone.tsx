@@ -27,7 +27,9 @@ const DialogTimeZone = (props: Props) => {
   }
 
   const handleTimeZoneUpdate = () => {
-    setTimeZone(selectedTz)
+    if (selectedTz) {
+      setTimeZone(selectedTz)
+    }
     onClose?.()
   }
 

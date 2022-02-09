@@ -1,6 +1,8 @@
 import {useToast} from '@sanity/ui'
 import axios from 'axios'
+import React from 'react'
 import client from '../client'
+import ToastDescription from '../components/ToastDescription'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
 import formatDateTz from '../utils/formatDateTz'
@@ -83,24 +85,29 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: formatDateTz({
-            date: data.executeAt,
-            includeTimeZone: true,
-            prefix: 'Publishing on ',
-            timeZone,
-          }),
-          duration: 30000, // 30s
+          description: (
+            <ToastDescription
+              body={formatDateTz({
+                date: data.executeAt,
+                includeTimeZone: true,
+                prefix: 'Publishing on ',
+                timeZone,
+              })}
+              title="Schedule created"
+            />
+          ),
+          duration: 15000, // 15s
           status: 'success',
-          title: 'Schedule created',
         })
       }
     } catch (err) {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: getAxiosErrorMessage(err),
+          description: (
+            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to create schedule" />
+          ),
           status: 'error',
-          title: 'Unable to create schedule',
         })
       }
     }
@@ -125,17 +132,18 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
+          description: <ToastDescription title="Schedule deleted" />,
           status: 'success',
-          title: 'Schedule deleted',
         })
       }
     } catch (err) {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: getAxiosErrorMessage(err),
+          description: (
+            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to delete schedule" />
+          ),
           status: 'error',
-          title: 'Unable to delete schedule',
         })
       }
     }
@@ -157,17 +165,18 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
+          description: <ToastDescription title="Schedule executed" />,
           status: 'success',
-          title: 'Schedule executed',
         })
       }
     } catch (err) {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: getAxiosErrorMessage(err),
+          description: (
+            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to publish schedule" />
+          ),
           status: 'error',
-          title: 'Unable to publish schedule',
         })
       }
     }
@@ -188,24 +197,29 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: formatDateTz({
-            date,
-            includeTimeZone: true,
-            prefix: 'Publishing on ',
-            timeZone,
-          }),
-          duration: 30000, // 30s
+          description: (
+            <ToastDescription
+              body={formatDateTz({
+                date,
+                includeTimeZone: true,
+                prefix: 'Publishing on ',
+                timeZone,
+              })}
+              title="Schedule updated"
+            />
+          ),
+          duration: 15000, // 15s
           status: 'success',
-          title: 'Schedule updated',
         })
       }
     } catch (err) {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: getAxiosErrorMessage(err),
+          description: (
+            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to update schedule" />
+          ),
           status: 'error',
-          title: 'Unable to update schedule',
         })
       }
     }

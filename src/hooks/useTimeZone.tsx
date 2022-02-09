@@ -1,11 +1,18 @@
+import {useToast} from '@sanity/ui'
 import {getTimeZones} from '@vvo/tzdb'
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import ToastDescription from '../components/ToastDescription'
 import {NormalizedTimeZone} from '../types'
+import {debugWithName} from '../utils/debug'
+import getErrorMessage from '../utils/getErrorMessage'
+
 interface UseTimeZoneReturn {
-  setTimeZone: (timeZone?: NormalizedTimeZone) => void
+  setTimeZone: (timeZone: NormalizedTimeZone) => void
   timeIsLocal: boolean
   timeZone: NormalizedTimeZone
 }
+
+const debug = debugWithName('useScheduleOperation')
 
 const STORAGE_KEY = 'sp-timeZone'
 
@@ -50,6 +57,7 @@ function getStoredTimeZone(): NormalizedTimeZone {
 
 const useTimeZone = (): UseTimeZoneReturn => {
   const [timeZone, setTimeZone] = useState<NormalizedTimeZone>(getStoredTimeZone())
+  const toast = useToast()
 
   useEffect(() => {
     const handler = () => {
@@ -64,19 +72,37 @@ const useTimeZone = (): UseTimeZoneReturn => {
   }, [])
 
   const handleNewValue: UseTimeZoneReturn['setTimeZone'] = (tz) => {
+    debug('handleNewValue:', tz)
+
     setTimeZone((prevTz) => {
-      // Clear selection if no value is given
-      if (!tz?.name) {
-        localStorage.removeItem(STORAGE_KEY)
-        window.dispatchEvent(new Event(STORAGE_KEY)) // notify other instances
+      try {
+        // If different from current state, update localStorage & notify other instances
+        if (prevTz.name !== tz.name) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(tz))
+          window.dispatchEvent(new Event(STORAGE_KEY))
+        }
 
-        return getStoredTimeZone()
-      }
+        toast.push({
+          closable: true,
+          description: (
+            <ToastDescription
+              body={`${tz.alternativeName} (${tz.namePretty})`}
+              title="Time zone updated"
+            />
+          ),
+          duration: 15000, // 15s
+          status: 'info',
+        })
+      } catch (err) {
+        console.error(err)
 
-      // If different from current state, update localStorage & notify other instances
-      if (tz?.name && prevTz.name !== tz.name) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(tz))
-        window.dispatchEvent(new Event(STORAGE_KEY))
+        toast.push({
+          closable: true,
+          description: (
+            <ToastDescription body={getErrorMessage(err)} title="Unable to update time zone" />
+          ),
+          status: 'error',
+        })
       }
 
       return tz
