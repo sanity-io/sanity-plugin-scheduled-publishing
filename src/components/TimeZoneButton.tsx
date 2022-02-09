@@ -1,25 +1,17 @@
 import {SelectIcon} from '@sanity/icons'
 import {Box, Button, Text, Tooltip} from '@sanity/ui'
-import React, {useState} from 'react'
+import React from 'react'
+import useDialogTimeZone from '../hooks/useDialogTimeZone'
 import useTimeZone from '../hooks/useTimeZone'
-import DialogTimeZone from './DialogTimeZone'
 
 const TimeZoneButton = () => {
   const {timeZone} = useTimeZone()
-  const [dialogVisible, setDialogVisible] = useState(false)
-
-  const handleDialogHide = () => {
-    setDialogVisible(false)
-  }
-
-  const handleDialogShow = () => {
-    setDialogVisible(true)
-  }
+  const {DialogTimeZone, dialogProps, dialogTimeZoneShow} = useDialogTimeZone()
 
   return (
     <>
       {/* Dialog */}
-      {dialogVisible && <DialogTimeZone onClose={handleDialogHide} />}
+      {DialogTimeZone && <DialogTimeZone {...dialogProps} />}
 
       <Tooltip
         content={
@@ -35,7 +27,7 @@ const TimeZoneButton = () => {
           fontSize={1}
           iconRight={SelectIcon}
           mode="bleed"
-          onClick={handleDialogShow}
+          onClick={dialogTimeZoneShow}
           text={`${timeZone.alternativeName} (${timeZone.namePretty})`}
         />
       </Tooltip>
