@@ -1,7 +1,7 @@
 import {Box, Button, Flex} from '@sanity/ui'
 import React from 'react'
 import styled from 'styled-components'
-import {DatePicker} from './DateInputs/base/DatePicker'
+import {DatePicker} from './DateInputs'
 
 const ButtonContainer = styled(Flex)`
   border-bottom: 1px solid var(--card-border-color);
