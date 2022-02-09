@@ -1,6 +1,6 @@
 import {utcToZonedTime} from 'date-fns-tz'
 import React from 'react'
-import useTimeZone from '../../../hooks/useTimeZone'
+import useTimeZone from '../../hooks/useTimeZone'
 import {Calendar as SanityCalendar} from '@sanity/form-builder/lib/inputs/DateInputs/base/calendar/Calendar'
 
 export const DatePicker = React.forwardRef(function DatePicker(
