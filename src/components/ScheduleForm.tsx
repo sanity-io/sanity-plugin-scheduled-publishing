@@ -1,5 +1,6 @@
-import {Button, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
+import {Card, Stack} from '@sanity/ui'
 import React from 'react'
+import useTimeZone from '../hooks/useTimeZone'
 import {ScheduleFormData} from '../types'
 import {DateTimeInput} from './DateInputs'
 
@@ -8,13 +9,17 @@ interface Props {
   value?: ScheduleFormData | null
 }
 
+/*
 const getCurrentTimeOffset = (minuteOffset: number) => {
   const currentDate = new Date()
   return new Date(currentDate.getTime() + minuteOffset * 60000).toISOString()
 }
+*/
 
 const ScheduleForm = (props: Props) => {
   const {onChange, value} = props
+
+  const {timeZone} = useTimeZone()
 
   const handleChange = (date: string | null) => {
     if (date && onChange) {
@@ -23,20 +28,27 @@ const ScheduleForm = (props: Props) => {
   }
 
   return (
-    <Flex>
-      <Stack space={4}>
+    <Stack space={4}>
+      <Card>
         <DateTimeInput
           level={0}
           markers={[]}
           onChange={handleChange}
+          timeZone={timeZone}
           type={{
             name: 'date',
-            title: 'Date',
+            options: {
+              dateFormat: `iii d MMM yyyy 'at'`,
+              timeFormat: 'p',
+            },
+            title: 'Date and time',
           }}
           value={value?.date}
         />
+      </Card>
 
-        {/* Debug buttons */}
+      {/* Debug buttons */}
+      {/*
         <Card padding={4} radius={2} shadow={1} tone="default">
           <Stack space={3}>
             <Text size={1} weight="semibold">
@@ -73,8 +85,8 @@ const ScheduleForm = (props: Props) => {
             </Inline>
           </Stack>
         </Card>
-      </Stack>
-    </Flex>
+        */}
+    </Stack>
   )
 }
 

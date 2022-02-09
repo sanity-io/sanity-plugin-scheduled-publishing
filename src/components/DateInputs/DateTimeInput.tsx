@@ -1,11 +1,10 @@
 import React, {useCallback} from 'react'
-import {getMinutes, setMinutes, parseISO} from 'date-fns'
-
-import {format, parse} from '@sanity/util/legacyDateFormat'
-// import PatchEvent, {set, unset} from '../../PatchEvent'
+import {getMinutes, setMinutes, parse, parseISO, isValid} from 'date-fns'
 import {CommonDateTimeInput} from './CommonDateTimeInput'
 import {CommonProps, ParseResult} from './types'
 import {isValidDate} from './utils'
+import {formatInTimeZone} from 'date-fns-tz'
+import {TimeZone} from '../../types'
 
 type ParsedOptions = {
   dateFormat: string
@@ -19,11 +18,12 @@ type SchemaOptions = {
   timeStep?: number
   calendarTodayLabel?: string
 }
-const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD'
+const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd'
 const DEFAULT_TIME_FORMAT = 'HH:mm'
 
 export type Props = CommonProps & {
   onChange: (date: string | null) => void
+  timeZone: TimeZone
   type: {
     name: string
     title: string
@@ -74,7 +74,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
   props: Props,
   forwardedRef: React.ForwardedRef<HTMLInputElement>
 ) {
-  const {type, onChange, ...rest} = props
+  const {timeZone, type, onChange, ...rest} = props
   const {title, description, placeholder} = type
 
   const {dateFormat, timeFormat, timeStep} = parseOptions(type.options)
@@ -92,12 +92,24 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
   )
 
   const formatInputValue = React.useCallback(
-    (date: Date) => format(date, `${dateFormat} ${timeFormat}`),
-    [dateFormat, timeFormat]
+    (date: Date) => formatInTimeZone(date, timeZone.name, `${dateFormat} ${timeFormat}`),
+    [dateFormat, timeFormat, timeZone.name]
   )
 
   const parseInputValue = React.useCallback(
-    (inputValue: string) => parse(inputValue, `${dateFormat} ${timeFormat}`),
+    (inputValue: string) => {
+      const parsed = parse(inputValue, `${dateFormat} ${timeFormat}`, new Date())
+      if (isValid(parsed)) {
+        return {
+          isValid: true,
+          date: parsed,
+        } as ParseResult
+      }
+      return {
+        isValid: false,
+        error: `Invalid date. Must be on the format "${dateFormat} ${timeFormat}"`,
+      } as ParseResult
+    },
     [dateFormat, timeFormat]
   )
 

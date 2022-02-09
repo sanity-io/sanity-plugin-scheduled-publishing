@@ -1,10 +1,11 @@
 import {useToast} from '@sanity/ui'
 import axios from 'axios'
-import {format} from 'date-fns'
 import client from '../client'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
+import formatDateTz from '../utils/formatDateTz'
 import getAxiosErrorMessage from '../utils/getAxiosErrorMessage'
+import useTimeZone from './useTimeZone'
 
 const debug = debugWithName('useScheduleOperation')
 
@@ -65,6 +66,7 @@ function _update({
 
 export default function useScheduleOperation() {
   const toast = useToast()
+  const {timeZone} = useTimeZone()
 
   async function createSchedule({
     date,
@@ -81,7 +83,13 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: format(new Date(data.executeAt), `'Publishing on' iiii d MMMM yyyy 'at' p`),
+          description: formatDateTz({
+            date: data.executeAt,
+            includeTimeZone: true,
+            prefix: 'Publishing on ',
+            timeZone,
+          }),
+          duration: 30000, // 30s
           status: 'success',
           title: 'Schedule created',
         })
@@ -180,7 +188,13 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: format(new Date(date), `'Publishing on' iiii d MMMM yyyy 'at' p`),
+          description: formatDateTz({
+            date,
+            includeTimeZone: true,
+            prefix: 'Publishing on ',
+            timeZone,
+          }),
+          duration: 30000, // 30s
           status: 'success',
           title: 'Schedule updated',
         })

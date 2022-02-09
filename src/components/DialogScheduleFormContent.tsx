@@ -13,7 +13,7 @@ const DialogScheduleFormContent = (props: Props) => {
   const {onChange, type, value} = props
 
   return (
-    <Stack space={4}>
+    <Stack space={5}>
       {type === 'new' && (
         <Stack space={4}>
           <Text size={2} weight="medium">

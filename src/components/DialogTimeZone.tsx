@@ -1,3 +1,4 @@
+import {black, hues} from '@sanity/color'
 import {SearchIcon} from '@sanity/icons'
 import {Autocomplete, Box, Card, Dialog, Flex, Inline, Stack, Text} from '@sanity/ui'
 import React, {useState} from 'react'
@@ -31,6 +32,7 @@ const DialogTimeZone = (props: Props) => {
   }
 
   const isDirty = selectedTz?.name !== timeZone.name
+  const isLocalTzSelected = selectedTz?.name === getLocalTimeZone().name
 
   return (
     <Dialog
@@ -57,10 +59,17 @@ const DialogTimeZone = (props: Props) => {
 
         <Stack space={3}>
           <Flex align="center" justify="space-between">
-            <Text size={1} weight="semibold">
-              Time zone
-            </Text>
-            {selectedTz?.name !== getLocalTimeZone().name && (
+            <Inline space={2}>
+              <Text size={1} weight="semibold">
+                Time zone
+              </Text>
+              {isLocalTzSelected && (
+                <Text muted size={1}>
+                  local time
+                </Text>
+              )}
+            </Inline>
+            {!isLocalTzSelected && (
               <Text size={1} weight="medium">
                 <a onClick={handleTimeZoneSelectLocal} style={{cursor: 'pointer'}}>
                   Select local time zone
@@ -85,17 +94,26 @@ const DialogTimeZone = (props: Props) => {
             renderOption={(option) => {
               return (
                 <Card as="button" padding={3}>
-                  <Inline space={3}>
-                    <Text align="center" muted size={1}>
-                      GMT{option.offset}
-                    </Text>
-                    <Text size={1} weight="medium">
+                  <Text size={1} textOverflow="ellipsis">
+                    <span>GMT{option.offset}</span>
+                    <span
+                      style={{
+                        color: black.hex,
+                        fontWeight: 500,
+                        marginLeft: '1em',
+                      }}
+                    >
                       {option.alternativeName}
-                    </Text>
-                    <Text muted size={1}>
+                    </span>
+                    <span
+                      style={{
+                        color: hues.gray[700].hex,
+                        marginLeft: '1em',
+                      }}
+                    >
                       {option.mainCities}
-                    </Text>
-                  </Inline>
+                    </span>
+                  </Text>
                 </Card>
               )
             }}

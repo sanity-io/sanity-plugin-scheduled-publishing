@@ -1,13 +1,14 @@
 import {UserAvatar} from '@sanity/base/components'
 import {ClockIcon, EditIcon, EllipsisVerticalIcon, TrashIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
-import {format} from 'date-fns'
 import React from 'react'
 import {useDocumentActionProps} from '../contexts/documentActionProps'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import useScheduleOperation from '../hooks/useScheduleOperation'
+import useTimeZone from '../hooks/useTimeZone'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
+import formatDateTz from '../utils/formatDateTz'
 
 interface Props {
   schedule: Schedule
@@ -21,9 +22,8 @@ const ScheduleItemDocument = (props: Props) => {
   const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
   const {onComplete} = useDocumentActionProps()
   const {deleteSchedule} = useScheduleOperation()
-
-  // Example: Fri 24 Dec 2021 at 6:00 AM
-  const formattedDateTime = format(new Date(props.schedule.executeAt), `iii d MMM yyyy 'at' p`)
+  const {timeZone} = useTimeZone()
+  const formattedDateTime = formatDateTz({date: props.schedule.executeAt, timeZone})
 
   const handleDelete = () => {
     debug('handleDelete')

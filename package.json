@@ -34,6 +34,7 @@
     "@vvo/tzdb": "^6.35.0",
     "axios": "^0.25.0",
     "date-fns": "^2.27.0",
+    "date-fns-tz": "^1.2.2",
     "debug": "^4.3.3",
     "react-focus-lock": "^2.7.1",
     "rxjs": "^7.5.2",

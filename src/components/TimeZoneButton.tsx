@@ -1,4 +1,4 @@
-import {EarthAmericasIcon} from '@sanity/icons'
+import {SelectIcon} from '@sanity/icons'
 import {Box, Button, Text, Tooltip} from '@sanity/ui'
 import React, {useState} from 'react'
 import useTimeZone from '../hooks/useTimeZone'
@@ -33,7 +33,7 @@ const TimeZoneButton = () => {
       >
         <Button
           fontSize={1}
-          icon={EarthAmericasIcon}
+          iconRight={SelectIcon}
           mode="bleed"
           onClick={handleDialogShow}
           text={`${timeZone.alternativeName} (${timeZone.namePretty})`}

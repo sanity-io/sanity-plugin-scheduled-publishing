@@ -5,6 +5,7 @@ import useScheduleForm from '../hooks/useScheduleForm'
 import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule} from '../types'
 import DialogFooter from './DialogFooter'
+import DialogHeader from './DialogHeader'
 import DialogScheduleFormContent from './DialogScheduleFormContent'
 
 interface Props {
@@ -44,10 +45,10 @@ const DialogScheduleEdit = (props: Props) => {
           />
         </Box>
       }
-      header="Edit schedule"
+      header={<DialogHeader title="Edit schedule" />}
       id="time-zone"
       onClose={onClose}
-      width={0}
+      width={1}
     >
       <Box padding={4}>
         <DialogScheduleFormContent onChange={onFormChange} type="edit" value={formData} />

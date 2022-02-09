@@ -1,14 +1,15 @@
 import {UserAvatar} from '@sanity/base/components'
 import {ClockIcon, EditIcon, EllipsisVerticalIcon, PublishIcon, TrashIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
-import {format} from 'date-fns'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React, {useEffect, useMemo, useState} from 'react'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import useScheduleOperation from '../hooks/useScheduleOperation'
+import useTimeZone from '../hooks/useTimeZone'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
+import formatDateTz from '../utils/formatDateTz'
 import {getPreviewStateObservable, PaneItemPreviewState} from '../utils/paneItemHelpers'
 
 interface Props {
@@ -24,9 +25,12 @@ const ScheduleItemTool = (props: Props) => {
   const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
   const [paneItemPreview, setPaneItemPreview] = useState<PaneItemPreviewState>({})
   const schemaType = useMemo(() => schema.get('article'), [])
+  const {timeZone} = useTimeZone()
 
-  // Example: Fri 24 Dec 2021 at 6:00 AM
-  const formattedDateTime = format(new Date(props.schedule.executeAt), `iii d MMM yyyy 'at' p`)
+  const formattedDateTime = formatDateTz({
+    date: props.schedule.executeAt,
+    timeZone,
+  })
 
   const firstDocument = schedule.documents?.[0]
 

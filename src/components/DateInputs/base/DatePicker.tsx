@@ -1,4 +1,6 @@
+import {utcToZonedTime} from 'date-fns-tz'
 import React from 'react'
+import useTimeZone from '../../../hooks/useTimeZone'
 import {Calendar} from './calendar/Calendar'
 
 export const DatePicker = React.forwardRef(function DatePicker(
@@ -10,7 +12,14 @@ export const DatePicker = React.forwardRef(function DatePicker(
   },
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
-  const {value = new Date(), onChange, ...rest} = props
+  const {timeZone} = useTimeZone()
+
+  const {
+    // Default to current date in selected time zone
+    value = utcToZonedTime(new Date(), timeZone.name),
+    onChange,
+    ...rest
+  } = props
   const [focusedDate, setFocusedDay] = React.useState<Date>()
 
   const handleSelect = React.useCallback(

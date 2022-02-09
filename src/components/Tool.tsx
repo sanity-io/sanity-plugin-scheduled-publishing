@@ -63,7 +63,7 @@ function Tool(props: Props) {
         <Flex
           align="center"
           paddingLeft={4}
-          paddingRight={2}
+          paddingRight={3}
           style={{
             borderBottom: '1px solid var(--card-border-color)',
             minHeight: `${TOOL_HEADER_HEIGHT}px`,
