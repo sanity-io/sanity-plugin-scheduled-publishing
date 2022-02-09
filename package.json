@@ -26,6 +26,7 @@
     "build": "rollup -c rollup.config.js",
     "dev": "npm run watch",
     "lint": "eslint .",
+    "format": "prettier src -w",
     "prepare": "npm run build && husky install",
     "release": "standard-version",
     "watch": "rollup -c rollup.config.js --watch"
