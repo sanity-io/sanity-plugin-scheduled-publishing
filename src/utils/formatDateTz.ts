@@ -1,5 +1,5 @@
 import {formatInTimeZone} from 'date-fns-tz'
-import {TimeZone} from '../types'
+import {NormalizedTimeZone} from '../types'
 
 /**
  * Return time-zone adjusted date in the format 'Fri 24 Dec 2021 at 6:00 AM'
@@ -13,7 +13,7 @@ export default function formatDateTz({
   date: string
   includeTimeZone?: boolean
   prefix?: string
-  timeZone: TimeZone
+  timeZone: NormalizedTimeZone
 }): string {
   let format = `iii d MMM yyyy 'at' p`
   if (prefix) {

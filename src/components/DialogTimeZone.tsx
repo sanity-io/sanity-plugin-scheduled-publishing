@@ -3,7 +3,7 @@ import {SearchIcon} from '@sanity/icons'
 import {Autocomplete, Box, Card, Dialog, Flex, Inline, Stack, Text} from '@sanity/ui'
 import React, {useState} from 'react'
 import useTimeZone, {allTimeZones, getLocalTimeZone} from '../hooks/useTimeZone'
-import {TimeZone} from '../types'
+import {NormalizedTimeZone} from '../types'
 import DialogFooter from './DialogFooter'
 
 interface Props {
@@ -14,7 +14,7 @@ const DialogTimeZone = (props: Props) => {
   const {onClose} = props
 
   const {setTimeZone, timeZone} = useTimeZone()
-  const [selectedTz, setSelectedTz] = useState<TimeZone | undefined>(timeZone)
+  const [selectedTz, setSelectedTz] = useState<NormalizedTimeZone | undefined>(timeZone)
 
   // Callbacks
   const handleTimeZoneChange = (value: string) => {

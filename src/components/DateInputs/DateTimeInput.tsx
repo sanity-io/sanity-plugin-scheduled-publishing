@@ -4,7 +4,7 @@ import {CommonDateTimeInput} from './CommonDateTimeInput'
 import {CommonProps, ParseResult} from './types'
 import {isValidDate} from './utils'
 import {formatInTimeZone} from 'date-fns-tz'
-import {TimeZone} from '../../types'
+import {NormalizedTimeZone} from '../../types'
 
 type ParsedOptions = {
   dateFormat: string
@@ -23,7 +23,7 @@ const DEFAULT_TIME_FORMAT = 'HH:mm'
 
 export type Props = CommonProps & {
   onChange: (date: string | null) => void
-  timeZone: TimeZone
+  timeZone: NormalizedTimeZone
   type: {
     name: string
     title: string

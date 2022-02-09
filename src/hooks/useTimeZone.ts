@@ -1,10 +1,10 @@
 import {getTimeZones} from '@vvo/tzdb'
 import {useEffect, useState} from 'react'
-import {TimeZone} from '../types'
+import {NormalizedTimeZone} from '../types'
 interface UseTimeZoneReturn {
-  setTimeZone: (timeZone?: TimeZone) => void
+  setTimeZone: (timeZone?: NormalizedTimeZone) => void
   timeIsLocal: boolean
-  timeZone: TimeZone
+  timeZone: NormalizedTimeZone
 }
 
 const STORAGE_KEY = 'sp-timeZone'
@@ -22,10 +22,10 @@ export const allTimeZones = getTimeZones().map((tz) => {
     offset: tz.currentTimeFormat.split(' ')[0],
     // all searchable text - this is transformed before being rendered in `<AutoComplete>`
     value: `${tz.currentTimeFormat} ${tz.abbreviation} ${tz.name}`,
-  } as TimeZone
+  } as NormalizedTimeZone
 })
 
-export function getLocalTimeZone(): TimeZone {
+export function getLocalTimeZone(): NormalizedTimeZone {
   return (
     allTimeZones.find((tz) => tz.name === Intl.DateTimeFormat().resolvedOptions().timeZone) ||
     // Default to GMT-0 if no user timeZone is found
@@ -35,7 +35,7 @@ export function getLocalTimeZone(): TimeZone {
   )
 }
 
-function getStoredTimeZone(): TimeZone {
+function getStoredTimeZone(): NormalizedTimeZone {
   const storedTimeZone = localStorage.getItem(STORAGE_KEY)
   try {
     if (storedTimeZone) {
@@ -49,7 +49,7 @@ function getStoredTimeZone(): TimeZone {
 }
 
 const useTimeZone = (): UseTimeZoneReturn => {
-  const [timeZone, setTimeZone] = useState<TimeZone>(getStoredTimeZone())
+  const [timeZone, setTimeZone] = useState<NormalizedTimeZone>(getStoredTimeZone())
 
   useEffect(() => {
     const handler = () => {

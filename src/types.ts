@@ -1,3 +1,13 @@
+export interface NormalizedTimeZone {
+  abbreviation: string
+  alternativeName: string
+  mainCities: string
+  name: string
+  namePretty: string
+  offset: string
+  value: string
+}
+
 export type ScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
 
 export interface ScheduleFilter {
@@ -22,14 +32,4 @@ export interface Schedule {
 
 export interface ScheduleFormData {
   date: string
-}
-
-export interface TimeZone {
-  abbreviation: string
-  alternativeName: string
-  mainCities: string
-  name: string
-  namePretty: string
-  offset: string
-  value: string
 }
