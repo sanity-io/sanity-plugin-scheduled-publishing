@@ -11,6 +11,8 @@ import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
 import formatDateTz from '../utils/formatDateTz'
 import {getPreviewStateObservable, PaneItemPreviewState} from '../utils/paneItemHelpers'
+import {DraftStatus} from './DocumentStatus/DraftStatus'
+import {PublishedStatus} from './DocumentStatus/PublishedStatus'
 
 interface Props {
   schedule: Schedule
@@ -72,7 +74,6 @@ const ScheduleItemTool = (props: Props) => {
           {/* Preview */}
           <Box
             style={{
-              // border: '1px solid lime',
               flexBasis: 'auto',
               flexGrow: 1,
             }}
@@ -83,6 +84,17 @@ const ScheduleItemTool = (props: Props) => {
               layout="default"
               value={draft || published}
             />
+          </Box>
+
+          {/* Document status */}
+          {/* TODO: add support for presence? */}
+          <Box marginX={5} style={{flexShrink: 0}}>
+            {!isLoading && (
+              <Inline space={4}>
+                <PublishedStatus document={published} />
+                <DraftStatus document={draft} />
+              </Inline>
+            )}
           </Box>
 
           {/* Schedule date */}

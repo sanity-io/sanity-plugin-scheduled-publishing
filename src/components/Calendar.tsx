@@ -40,10 +40,15 @@ const Calendar = () => {
           </Flex>
         </Flex>
       </Flex>
-      <Flex align="center" justify="center" padding={4} style={{aspectRatio: '350/280'}}>
-        <Box>
-          <Text>Calendar days</Text>
-        </Box>
+      <Flex
+        align="center"
+        justify="center"
+        padding={4}
+        style={{aspectRatio: '350/280', background: '#fafafa', position: 'relative'}}
+      >
+        <Text muted size={1}>
+          Calendar days
+        </Text>
       </Flex>
       <ButtonContainer flex={1}>
         <Button
