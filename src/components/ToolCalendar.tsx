@@ -9,7 +9,7 @@ const ButtonContainer = styled(Flex)`
   border-top: 1px solid var(--card-border-color);
 `
 
-const Calendar = () => {
+const ToolCalendar = () => {
   return (
     <Box>
       <Flex
@@ -64,4 +64,4 @@ const Calendar = () => {
   )
 }
 
-export default Calendar
+export default ToolCalendar

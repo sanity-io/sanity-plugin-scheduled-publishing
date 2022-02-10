@@ -6,7 +6,7 @@ import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_STATES, TOOL_HEADER_HEIGHT} from '.
 import usePollSchedules from '../hooks/usePollSchedules'
 import {ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
-import Calendar from './Calendar'
+import ToolCalendar from './ToolCalendar'
 import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
 import TimeZoneButton from './TimeZoneButton'
@@ -55,7 +55,7 @@ function Tool(props: Props) {
           width: '350px',
         }}
       >
-        <Calendar />
+        <ToolCalendar />
         <ScheduleFilters scheduleState={scheduleState} schedules={schedules} />
       </Column>
       <Column flex={1}>
