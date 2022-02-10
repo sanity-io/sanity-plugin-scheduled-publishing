@@ -1,8 +1,11 @@
 import {ChevronLeftIcon, ChevronRightIcon} from '@sanity/icons'
 import {Box, Button, Flex, Text} from '@sanity/ui'
-import React from 'react'
+import {zonedTimeToUtc} from 'date-fns-tz'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import {TOOL_HEADER_HEIGHT} from '../constants'
+import useTimeZone from '../hooks/useTimeZone'
+import {TimeZonedCalendar} from './DateInputs/base/calendar/TimeZonedCalendar'
 
 const ButtonContainer = styled(Flex)`
   border-bottom: 1px solid var(--card-border-color);
@@ -10,6 +13,8 @@ const ButtonContainer = styled(Flex)`
 `
 
 const ToolCalendar = () => {
+  const {timeZone} = useTimeZone()
+  const [date, setDate] = useState<Date>(zonedTimeToUtc(new Date(), timeZone.name))
   return (
     <Box>
       <Flex
@@ -40,16 +45,11 @@ const ToolCalendar = () => {
           </Flex>
         </Flex>
       </Flex>
-      <Flex
-        align="center"
-        justify="center"
-        padding={4}
-        style={{aspectRatio: '350/280', background: '#fafafa', position: 'relative'}}
-      >
-        <Text muted size={1}>
-          Calendar days
-        </Text>
-      </Flex>
+      <TimeZonedCalendar
+        selectTime // temporary for testing time zones
+        selectedDate={date}
+        onSelect={setDate}
+      />
       <ButtonContainer flex={1}>
         <Button
           fontSize={1}
@@ -58,6 +58,9 @@ const ToolCalendar = () => {
           radius={0}
           style={{width: '100%'}}
           text="Today"
+          onClick={() => {
+            setDate(zonedTimeToUtc(new Date(), timeZone.name))
+          }}
         />
       </ButtonContainer>
     </Box>

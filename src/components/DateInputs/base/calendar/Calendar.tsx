@@ -9,7 +9,7 @@ import {features} from './features'
 import {formatTime} from './utils'
 import {YearInput} from './YearInput'
 
-type CalendarProps = Omit<React.ComponentProps<'div'>, 'onSelect'> & {
+export type CalendarProps = Omit<React.ComponentProps<'div'>, 'onSelect'> & {
   selectTime?: boolean
   selectedDate?: Date
   timeStep?: number
