@@ -165,7 +165,7 @@ export default function useScheduleOperation() {
       if (displayToast) {
         toast.push({
           closable: true,
-          description: <ToastDescription title="Schedule executed" />,
+          description: <ToastDescription title="Document published" />,
           status: 'success',
         })
       }

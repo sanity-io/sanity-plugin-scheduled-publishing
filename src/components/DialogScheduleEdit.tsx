@@ -1,4 +1,3 @@
-import {PublishIcon} from '@sanity/icons'
 import {Box, Dialog} from '@sanity/ui'
 import React, {useCallback} from 'react'
 import useScheduleForm from '../hooks/useScheduleForm'
@@ -38,7 +37,6 @@ const DialogScheduleEdit = (props: Props) => {
           <DialogFooter
             buttonText="Update"
             disabled={!isDirty}
-            icon={PublishIcon}
             onAction={handleScheduleUpdate}
             onComplete={onClose}
             tone="primary"

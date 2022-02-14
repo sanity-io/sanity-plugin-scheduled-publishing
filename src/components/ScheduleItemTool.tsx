@@ -169,7 +169,12 @@ const ScheduleItemTool = (props: Props) => {
                       />
                     </>
                   )}
-                  <MenuItem icon={TrashIcon} onClick={handleDelete} text="Delete" tone="critical" />
+                  <MenuItem
+                    icon={TrashIcon}
+                    onClick={handleDelete}
+                    text="Delete schedule"
+                    tone="critical"
+                  />
                 </Menu>
               }
               placement="left"

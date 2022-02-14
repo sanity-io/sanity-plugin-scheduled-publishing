@@ -78,7 +78,7 @@ const ScheduleItemDocument = (props: Props) => {
                     <MenuItem
                       icon={TrashIcon}
                       onClick={handleDelete}
-                      text="Delete"
+                      text="Delete schedule"
                       tone="critical"
                     />
                   </Menu>
