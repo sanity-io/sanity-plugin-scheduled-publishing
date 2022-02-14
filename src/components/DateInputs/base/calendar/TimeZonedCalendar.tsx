@@ -3,11 +3,12 @@ import React from 'react'
 import useTimeZone from '../../../../hooks/useTimeZone'
 import {Calendar, CalendarProps} from './Calendar'
 
-function getLoggableDates(log: {[key: string]: Date | undefined}) {
+function getLoggableDates(log: Record<string, Date | undefined>) {
+  const dates: Record<string, string | undefined> = {}
   for (const key of Object.keys(log)) {
-    log[key] = log[key]?.toISOString()?.split('T')?.[1]
+    dates[key] = log[key]?.toISOString()?.split('T')?.[1]
   }
-  return log
+  return dates
 }
 
 export const TimeZonedCalendar = React.forwardRef(function TimeZonedCalendar(
@@ -20,6 +21,7 @@ export const TimeZonedCalendar = React.forwardRef(function TimeZonedCalendar(
   const {timeZone} = useTimeZone()
 
   function onSelect(date: Date) {
+    // eslint-disable-next-line
     console.table({
       ...getLoggableDates({
         newDate: date,
@@ -73,6 +75,7 @@ export const TimeZonedCalendar = React.forwardRef(function TimeZonedCalendar(
    * - Now, `Calendar` will convert 17h UTC to UTC-3 and display 14h
    */
   const selectedDate = utcToZonedTime(props.selectedDate || new Date(), timeZone.name)
+  // eslint-disable-next-line
   console.table({
     ...getLoggableDates({
       raw: props.selectedDate,
