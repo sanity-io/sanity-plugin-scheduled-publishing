@@ -14,7 +14,7 @@ import {debugWithName} from '../utils/debug'
 const debug = debugWithName('ScheduleAction')
 
 const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
-  const {id, onComplete} = props
+  const {draft, id, onComplete, published} = props
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const {createSchedule} = useScheduleOperation()
@@ -26,6 +26,11 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   debug('schedules', schedules)
 
   const showCreateForm = schedules.length === 0
+
+  // Check to see if the document 'exists' (has either been published OR has draft content).
+  // When creating a new document, despite having an ID assigned it won't exist in your dataset
+  // until the document has been edited / dirtied in any way.
+  const documentExists = draft !== null || published !== null
 
   // Callbacks
   const handleScheduleCreate = useCallback(() => {
@@ -61,9 +66,11 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
       onClose: onComplete,
       type: 'modal',
     },
+    disabled: !documentExists,
     label: 'Schedule',
     icon: CalendarIcon,
     onHandle: () => setDialogOpen(true),
+    title: documentExists ? '' : `This document doesn't exist yet`,
   }
 }
 
