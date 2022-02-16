@@ -1,14 +1,13 @@
-import {UserAvatar} from '@sanity/base/components'
 import {ClockIcon, EditIcon, EllipsisVerticalIcon, TrashIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import React from 'react'
 import {useDocumentActionProps} from '../contexts/documentActionProps'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import useScheduleOperation from '../hooks/useScheduleOperation'
-import useTimeZone from '../hooks/useTimeZone'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
-import formatDateTz from '../utils/formatDateTz'
+import DateWithTooltip from './DateWithTooltip'
+import User from './User'
 
 interface Props {
   schedule: Schedule
@@ -22,8 +21,6 @@ const ScheduleItemDocument = (props: Props) => {
   const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
   const {onComplete} = useDocumentActionProps()
   const {deleteSchedule} = useScheduleOperation()
-  const {timeZone} = useTimeZone()
-  const formattedDateTime = formatDateTz({date: props.schedule.executeAt, timeZone})
 
   const handleDelete = () => {
     debug('handleDelete')
@@ -48,14 +45,14 @@ const ScheduleItemDocument = (props: Props) => {
               <Text size={2}>
                 <ClockIcon />
               </Text>
-              <Text size={1}>{formattedDateTime}</Text>
+              <DateWithTooltip date={props.schedule.executeAt} />
             </Inline>
           </Box>
 
           {/* Avatar + Context menu */}
           <Box marginLeft={2} style={{flexShrink: 0}}>
             <Inline space={2}>
-              <UserAvatar userId={schedule?.author} withTooltip />
+              <User id={schedule?.author} />
               <MenuButton
                 button={
                   <Button

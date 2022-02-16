@@ -1,4 +1,4 @@
-import {IntentLink, UserAvatar} from '@sanity/base/components'
+import {IntentLink} from '@sanity/base/components'
 import {ClockIcon, EditIcon, EllipsisVerticalIcon, PublishIcon, TrashIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
@@ -6,13 +6,13 @@ import schema from 'part:@sanity/base/schema'
 import React, {forwardRef, useEffect, useMemo, useState} from 'react'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import useScheduleOperation from '../hooks/useScheduleOperation'
-import useTimeZone from '../hooks/useTimeZone'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
-import formatDateTz from '../utils/formatDateTz'
 import {getPreviewStateObservable, PaneItemPreviewState} from '../utils/paneItemHelpers'
+import DateWithTooltip from './DateWithTooltip'
 import {DraftStatus} from './DocumentStatus/DraftStatus'
 import {PublishedStatus} from './DocumentStatus/PublishedStatus'
+import User from './User'
 
 interface Props {
   schedule: Schedule
@@ -27,12 +27,6 @@ const ScheduleItemTool = (props: Props) => {
   const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
   const [paneItemPreview, setPaneItemPreview] = useState<PaneItemPreviewState>({})
   const schemaType = useMemo(() => schema.get('article'), [])
-  const {timeZone} = useTimeZone()
-
-  const formattedDateTime = formatDateTz({
-    date: props.schedule.executeAt,
-    timeZone,
-  })
 
   const firstDocument = schedule.documents?.[0]
 
@@ -114,13 +108,13 @@ const ScheduleItemTool = (props: Props) => {
                   <Text size={2}>
                     <ClockIcon />
                   </Text>
-                  <Text size={1}>{formattedDateTime}</Text>
+                  <DateWithTooltip date={props.schedule.executeAt} />
                 </Inline>
               </Box>
 
               {/* Avatar */}
               <Box marginX={3} style={{flexShrink: 0}}>
-                <UserAvatar userId={schedule?.author} withTooltip />
+                <User id={schedule?.author} />
               </Box>
 
               {/* Document status */}

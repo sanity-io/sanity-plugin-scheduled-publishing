@@ -2,13 +2,13 @@ import {UserAvatar} from '@sanity/base/components'
 import React from 'react'
 
 interface Props {
-  userId: string
+  id: string
 }
 
 const User = (props: Props) => {
-  const {userId} = props
+  const {id} = props
 
-  return <UserAvatar userId={userId} withTooltip />
+  return <UserAvatar userId={id} withTooltip />
 }
 
 export default User
