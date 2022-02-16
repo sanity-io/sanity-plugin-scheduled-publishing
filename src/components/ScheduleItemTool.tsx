@@ -81,7 +81,7 @@ const ScheduleItemTool = (props: Props) => {
 
       <Card padding={1} radius={2} shadow={1}>
         <Flex align="center" justify="space-between">
-          <Card //
+          <Card
             __unstable_focusRing
             as={LinkComponent}
             data-as="a"

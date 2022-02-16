@@ -37,53 +37,70 @@ const ScheduleItemDocument = (props: Props) => {
       {/* Dialogs */}
       {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
 
-      <Card paddingLeft={4} paddingRight={2} paddingY={2} radius={2} shadow={1}>
+      <Card padding={1} radius={2} shadow={1}>
         <Flex align="center" justify="space-between">
-          {/* Schedule date */}
-          <Box>
-            <Inline space={4}>
-              <Text size={2}>
-                <ClockIcon />
-              </Text>
-              <DateWithTooltip date={props.schedule.executeAt} />
-            </Inline>
-          </Box>
+          <Card
+            __unstable_focusRing
+            data-as="a"
+            flex={1}
+            onClick={dialogScheduleEditShow}
+            padding={1}
+            radius={2}
+            shadow={1}
+            tabIndex={0}
+          >
+            <Flex
+              align="center"
+              gap={2}
+              justify="space-between"
+              paddingX={2}
+              style={{height: '35px'}}
+            >
+              {/* Schedule date */}
+              <Inline space={3}>
+                <Text size={2}>
+                  <ClockIcon />
+                </Text>
+                <DateWithTooltip date={props.schedule.executeAt} />
+              </Inline>
 
-          {/* Avatar + Context menu */}
-          <Box marginLeft={2} style={{flexShrink: 0}}>
-            <Inline space={2}>
+              {/* Avatar */}
               <User id={schedule?.author} />
-              <MenuButton
-                button={
-                  <Button
-                    icon={EllipsisVerticalIcon}
-                    mode="bleed"
-                    paddingX={2}
-                    paddingY={3}
+            </Flex>
+          </Card>
+
+          {/* Context menu */}
+          <Box marginLeft={1} style={{flexShrink: 0}}>
+            <MenuButton
+              button={
+                <Button
+                  icon={EllipsisVerticalIcon}
+                  mode="bleed"
+                  paddingX={2}
+                  paddingY={3}
+                  tone="default"
+                />
+              }
+              id="delete"
+              menu={
+                <Menu>
+                  <MenuItem
+                    icon={EditIcon}
+                    onClick={dialogScheduleEditShow}
+                    text="Edit schedule"
                     tone="default"
                   />
-                }
-                id="delete"
-                menu={
-                  <Menu>
-                    <MenuItem
-                      icon={EditIcon}
-                      onClick={dialogScheduleEditShow}
-                      text="Edit schedule"
-                      tone="default"
-                    />
-                    <MenuItem
-                      icon={TrashIcon}
-                      onClick={handleDelete}
-                      text="Delete schedule"
-                      tone="critical"
-                    />
-                  </Menu>
-                }
-                placement="left"
-                popover={{portal: true}}
-              />
-            </Inline>
+                  <MenuItem
+                    icon={TrashIcon}
+                    onClick={handleDelete}
+                    text="Delete schedule"
+                    tone="critical"
+                  />
+                </Menu>
+              }
+              placement="left"
+              popover={{portal: true}}
+            />
           </Box>
         </Flex>
       </Card>
