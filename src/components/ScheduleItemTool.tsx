@@ -1,9 +1,9 @@
-import {UserAvatar} from '@sanity/base/components'
+import {IntentLink, UserAvatar} from '@sanity/base/components'
 import {ClockIcon, EditIcon, EllipsisVerticalIcon, PublishIcon, TrashIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {forwardRef, useEffect, useMemo, useState} from 'react'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import useScheduleOperation from '../hooks/useScheduleOperation'
 import useTimeZone from '../hooks/useTimeZone'
@@ -38,6 +38,22 @@ const ScheduleItemTool = (props: Props) => {
 
   const {draft, published, isLoading} = paneItemPreview
 
+  const LinkComponent = useMemo(
+    () =>
+      forwardRef((linkProps: any, ref: any) => (
+        <IntentLink
+          {...linkProps}
+          intent="edit"
+          params={{
+            type: 'article', // TODO: correctly infer document from schedule payload (when implemented)
+            id: firstDocument?.documentId,
+          }}
+          ref={ref}
+        />
+      )),
+    [IntentLink]
+  )
+
   // Callbacks
   const handlePublish = () => {
     debug('handlePublish')
@@ -54,7 +70,7 @@ const ScheduleItemTool = (props: Props) => {
     const subscription = getPreviewStateObservable(
       schemaType,
       firstDocument.documentId,
-      'Test'
+      ''
     ).subscribe((state) => {
       setPaneItemPreview(state)
     })
@@ -69,76 +85,58 @@ const ScheduleItemTool = (props: Props) => {
       {/* Dialogs */}
       {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
 
-      <Card padding={2} radius={2} shadow={1}>
+      <Card padding={1} radius={2} shadow={1}>
         <Flex align="center" justify="space-between">
-          {/* Preview */}
-          <Box
-            style={{
-              flexBasis: 'auto',
-              flexGrow: 1,
-            }}
+          <Card //
+            __unstable_focusRing
+            as={LinkComponent}
+            data-as="a"
+            flex={1}
+            padding={1}
+            radius={2}
+            shadow={1}
+            tabIndex={0}
           >
-            <SanityDefaultPreview
-              icon={schemaType?.icon}
-              isPlaceholder={isLoading}
-              layout="default"
-              value={draft || published}
-            />
-          </Box>
+            <Flex align="center" justify="space-between">
+              {/* Preview */}
+              <Box style={{flexBasis: 'auto', flexGrow: 1}}>
+                <SanityDefaultPreview
+                  icon={schemaType?.icon}
+                  isPlaceholder={isLoading}
+                  layout="default"
+                  value={draft || published}
+                />
+              </Box>
 
-          {/* Schedule date */}
-          <Box
-            marginLeft={4}
-            style={{
-              // border: '1px solid blue',
-              flexShrink: 0,
-              minWidth: '250px',
-            }}
-          >
-            <Inline space={3}>
-              <Text size={2}>
-                <ClockIcon />
-              </Text>
-              <Text size={1}>{formattedDateTime}</Text>
-            </Inline>
-          </Box>
+              {/* Schedule date */}
+              <Box marginLeft={4} style={{flexShrink: 0, minWidth: '250px'}}>
+                <Inline space={3}>
+                  <Text size={2}>
+                    <ClockIcon />
+                  </Text>
+                  <Text size={1}>{formattedDateTime}</Text>
+                </Inline>
+              </Box>
 
-          {/* Document last updated date */}
-          {/*
-          <Box
-            marginLeft={2}
-            style={{
-              border: '1px solid orange', //
-              flexShrink: 0,
-            }}
-          >
-            <Text size={1}>(last updated)</Text>
-          </Box>
-          */}
+              {/* Avatar */}
+              <Box marginX={3} style={{flexShrink: 0}}>
+                <UserAvatar userId={schedule?.author} withTooltip />
+              </Box>
 
-          {/* Avatar */}
-          <Box marginX={2} style={{flexShrink: 0}}>
-            <UserAvatar userId={schedule?.author} withTooltip />
-          </Box>
-
-          {/* Document status */}
-          {/* TODO: add support for presence? */}
-          <Box marginX={4} style={{flexShrink: 0}}>
-            {!isLoading && (
-              <Inline space={4}>
-                <PublishedStatus document={published} />
-                <DraftStatus document={draft} />
-              </Inline>
-            )}
-          </Box>
+              {/* Document status */}
+              <Box marginX={2} style={{flexShrink: 0}}>
+                {!isLoading && (
+                  <Inline space={4}>
+                    <PublishedStatus document={published} />
+                    <DraftStatus document={draft} />
+                  </Inline>
+                )}
+              </Box>
+            </Flex>
+          </Card>
 
           {/* Context menu */}
-          <Box
-            style={{
-              // border: '1px solid red',
-              flexShrink: 0,
-            }}
-          >
+          <Box marginLeft={1} style={{flexShrink: 0}}>
             <MenuButton
               button={
                 <Button
