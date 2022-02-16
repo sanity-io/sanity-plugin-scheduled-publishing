@@ -61,7 +61,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
       onClose: onComplete,
       type: 'modal',
     },
-    label: 'Edit Scheduling',
+    label: 'Schedule',
     icon: CalendarIcon,
     onHandle: () => setDialogOpen(true),
   }
