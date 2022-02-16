@@ -157,7 +157,7 @@ const ScheduleItemTool = (props: Props) => {
                       <MenuItem
                         icon={EditIcon}
                         onClick={dialogScheduleEditShow}
-                        text="Edit"
+                        text="Edit schedule"
                         tone="default"
                       />
                       <MenuItem
