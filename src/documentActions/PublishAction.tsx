@@ -51,7 +51,7 @@ const PublishAction = (props: DocumentActionProps): DocumentActionDescription =>
     dialog: dialogOpen && {
       content: (
         <DocumentActionPropsProvider value={props}>
-          <DialogScheduleListContent schedules={schedules} />
+          <DialogScheduleListContent publishWarning schedules={schedules} />
         </DocumentActionPropsProvider>
       ),
       footer: (
