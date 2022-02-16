@@ -19,7 +19,12 @@ const DialogScheduleFormContent = (props: Props) => {
           <Text size={2} weight="medium">
             New schedule
           </Text>
-          <Text size={1}>Schedule this document to be published at any time in the future.</Text>
+          <Text size={1}>
+            Schedule this document to be published at any time in the future.
+            <br />
+            Any edits in the meantime will be added to the scheduled document.
+          </Text>
+          <Text size={1}>Visit the Schedules page to get an overview of all schedules.</Text>
         </Stack>
       )}
       <ScheduleForm onChange={onChange} value={value} />
