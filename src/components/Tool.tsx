@@ -6,10 +6,10 @@ import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_STATES, TOOL_HEADER_HEIGHT} from '.
 import usePollSchedules from '../hooks/usePollSchedules'
 import {ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
-import ToolCalendar from './ToolCalendar'
 import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
 import TimeZoneButton from './TimeZoneButton'
+import ToolCalendar from './ToolCalendar'
 
 const debug = debugWithName('Tool')
 
@@ -33,8 +33,19 @@ function Tool(props: Props) {
   const scheduleState: ScheduleState = router.state.state || 'scheduled'
   const scheduleStateTitle = SCHEDULE_FILTER_DICTIONARY[scheduleState]
 
-  // TODO: consider memo-ising
-  const filteredSchedules = schedules.filter((schedule) => schedule.state === scheduleState)
+  // Filter schedules by selected router state + sort conditionally
+  const filteredSchedules = schedules
+    .filter((schedule) => schedule.state === scheduleState)
+    .sort((a, b) => {
+      switch (scheduleState) {
+        // Upcoming items are displayed in chronological order
+        case 'scheduled':
+          return a.executeAt >= b.executeAt ? 1 : -1
+        // Everything else should be displayed in reverse order
+        default:
+          return a.executeAt >= b.executeAt ? -1 : 1
+      }
+    })
 
   debug('scheduleState', scheduleState)
 
@@ -58,8 +69,8 @@ function Tool(props: Props) {
         <ToolCalendar />
         <ScheduleFilters scheduleState={scheduleState} schedules={schedules} />
       </Column>
+      {/* RHS Column */}
       <Column flex={1}>
-        {/* RHS Column */}
         <Flex
           align="center"
           paddingLeft={4}
@@ -77,7 +88,7 @@ function Tool(props: Props) {
             <TimeZoneButton />
           </Flex>
         </Flex>
-        <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={3}>
+        <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={4}>
           <Schedules schedules={filteredSchedules} />
         </Box>
       </Column>

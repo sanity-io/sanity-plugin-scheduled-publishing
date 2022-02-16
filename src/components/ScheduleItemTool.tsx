@@ -86,17 +86,6 @@ const ScheduleItemTool = (props: Props) => {
             />
           </Box>
 
-          {/* Document status */}
-          {/* TODO: add support for presence? */}
-          <Box marginX={5} style={{flexShrink: 0}}>
-            {!isLoading && (
-              <Inline space={4}>
-                <PublishedStatus document={published} />
-                <DraftStatus document={draft} />
-              </Inline>
-            )}
-          </Box>
-
           {/* Schedule date */}
           <Box
             marginLeft={4}
@@ -128,13 +117,23 @@ const ScheduleItemTool = (props: Props) => {
           */}
 
           {/* Avatar */}
-          <Box marginLeft={2} style={{flexShrink: 0}}>
+          <Box marginX={2} style={{flexShrink: 0}}>
             <UserAvatar userId={schedule?.author} withTooltip />
+          </Box>
+
+          {/* Document status */}
+          {/* TODO: add support for presence? */}
+          <Box marginX={4} style={{flexShrink: 0}}>
+            {!isLoading && (
+              <Inline space={4}>
+                <PublishedStatus document={published} />
+                <DraftStatus document={draft} />
+              </Inline>
+            )}
           </Box>
 
           {/* Context menu */}
           <Box
-            marginLeft={2}
             style={{
               // border: '1px solid red',
               flexShrink: 0,
