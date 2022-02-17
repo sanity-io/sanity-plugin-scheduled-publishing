@@ -15,9 +15,6 @@ const DialogScheduleListContent = (props: Props) => {
 
   return (
     <Stack space={4}>
-      <Text size={2} weight="medium">
-        Current schedule
-      </Text>
       {schedules.length === 0 ? (
         <Box>
           <Text size={1}>No schedules</Text>

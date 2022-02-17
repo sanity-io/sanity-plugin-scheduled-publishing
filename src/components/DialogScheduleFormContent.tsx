@@ -16,9 +16,6 @@ const DialogScheduleFormContent = (props: Props) => {
     <Stack space={5}>
       {type === 'new' && (
         <Stack space={4}>
-          <Text size={2} weight="medium">
-            New schedule
-          </Text>
           <Text size={1}>
             Schedule this document to be published at any time in the future.
             <br />

@@ -25,7 +25,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
-  const showCreateForm = schedules.length === 0
+  const hasExistingSchedules = schedules.length > 0
 
   // Check to see if the document 'exists' (has either been published OR has draft content).
   // When creating a new document, despite having an ID assigned it won't exist in your dataset
@@ -41,18 +41,20 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
     createSchedule({date: formData.date, documentId: id}).then(onComplete)
   }, [formData?.date])
 
+  const title = hasExistingSchedules ? 'Edit Schedule' : 'Schedule'
+
   return {
     dialog: dialogOpen && {
       content: (
         <DocumentActionPropsProvider value={props}>
-          {showCreateForm ? (
-            <DialogScheduleFormContent onChange={onFormChange} type="new" value={formData} />
-          ) : (
+          {hasExistingSchedules ? (
             <DialogScheduleListContent schedules={schedules} />
+          ) : (
+            <DialogScheduleFormContent onChange={onFormChange} type="new" value={formData} />
           )}
         </DocumentActionPropsProvider>
       ),
-      footer: showCreateForm && (
+      footer: !hasExistingSchedules && (
         <DialogFooter
           buttonText="Schedule"
           disabled={!formData?.date}
@@ -62,12 +64,12 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
           tone="primary"
         />
       ),
-      header: <DialogHeader title="Schedule" />,
+      header: <DialogHeader title={title} />,
       onClose: onComplete,
       type: 'modal',
     },
     disabled: !documentExists,
-    label: 'Schedule',
+    label: title,
     icon: CalendarIcon,
     onHandle: () => setDialogOpen(true),
     title: documentExists ? '' : `This document doesn't exist yet`,

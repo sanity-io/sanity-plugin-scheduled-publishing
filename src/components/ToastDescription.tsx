@@ -13,15 +13,12 @@ const ToastDescription = (props: Props) => {
     <Stack paddingY={1} space={3}>
       <Inline space={2}>
         <CalendarIcon />
-        <Text size={2} weight="semibold">
-          Scheduled Publishing
-        </Text>
+        {title && (
+          <Text size={2} weight="semibold">
+            {title}
+          </Text>
+        )}
       </Inline>
-      {title && (
-        <Text size={1} weight="medium">
-          {title}
-        </Text>
-      )}
       {body && <Text size={1}>{body}</Text>}
     </Stack>
   )
