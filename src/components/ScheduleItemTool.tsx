@@ -26,7 +26,7 @@ const ScheduleItemTool = (props: Props) => {
   // TODO: correctly infer type from schedule when exposed
   const schemaType = useMemo(() => schema.get('article'), [])
 
-  const {DialogScheduleEdit, dialogProps} = useDialogScheduleEdit(schedule)
+  const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
   const [paneItemPreview, setPaneItemPreview] = useState<PaneItemPreviewState>({})
 
   const {draft, published, isLoading} = paneItemPreview
@@ -133,10 +133,11 @@ const ScheduleItemTool = (props: Props) => {
           <Box marginLeft={1} style={{flexShrink: 0}}>
             <ScheduleContextMenu
               actions={{
-                delete: isScheduled,
+                delete: true,
                 edit: isScheduled,
-                execute: true,
+                execute: isScheduled,
               }}
+              onEdit={dialogScheduleEditShow}
               schedule={schedule}
             />
           </Box>

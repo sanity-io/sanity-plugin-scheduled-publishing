@@ -6,7 +6,6 @@ import {EditIcon, EllipsisVerticalIcon, PublishIcon, TrashIcon} from '@sanity/ic
 import {Button, Menu, MenuButton} from '@sanity/ui'
 import schema from 'part:@sanity/base/schema'
 import React, {useMemo} from 'react'
-import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule} from '../types'
 import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
@@ -18,11 +17,12 @@ interface Props {
     execute?: boolean
   }
   onDelete?: () => void
+  onEdit?: () => void
   schedule: Schedule
 }
 
 const ScheduleContextMenu = (props: Props) => {
-  const {actions, onDelete, schedule} = props
+  const {actions, onDelete, onEdit, schedule} = props
 
   // TODO: correctly infer type from schedule when exposed
   const schemaType = useMemo(() => schema.get('article'), [])
@@ -39,11 +39,14 @@ const ScheduleContextMenu = (props: Props) => {
   })
 
   const {deleteSchedule, publishSchedule} = useScheduleOperation()
-  const {dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
 
   const insufficientPermissions = !isPermissionsLoading && !permissions?.granted
 
   // Callbacks
+  const handleEdit = () => {
+    onEdit?.()
+  }
+
   const handlePublish = () => {
     publishSchedule({schedule})
   }
@@ -65,7 +68,7 @@ const ScheduleContextMenu = (props: Props) => {
               currentUser={currentUser}
               hasPermission={!insufficientPermissions}
               icon={EditIcon}
-              onClick={dialogScheduleEditShow}
+              onClick={handleEdit}
               permissionsOperationLabel="edit schedules"
               title="Edit schedule"
             />

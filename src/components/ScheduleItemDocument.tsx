@@ -63,6 +63,7 @@ const ScheduleItemDocument = (props: Props) => {
                 edit: true,
               }}
               onDelete={onComplete}
+              onEdit={dialogScheduleEditShow}
               schedule={schedule}
             />
           </Box>
