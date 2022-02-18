@@ -1,4 +1,9 @@
 import type {DocumentActionDescription, DocumentActionProps} from '@sanity/base'
+import {InsufficientPermissionsMessage} from '@sanity/base/components'
+import {
+  useCurrentUser,
+  unstable_useDocumentPairPermissions as useDocumentPairPermissions,
+} from '@sanity/base/hooks'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
 import React, {useCallback, useState} from 'react'
 import DialogFooter from '../components/DialogFooter'
@@ -14,12 +19,19 @@ import {debugWithName} from '../utils/debug'
 const debug = debugWithName('ScheduleAction')
 
 const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
-  const {draft, id, onComplete, published} = props
+  const {draft, id, onComplete, published, type} = props
+
+  // Studio hooks
+  const {value: currentUser} = useCurrentUser()
+  const [permissions, isPermissionsLoading] = useDocumentPairPermissions({
+    id,
+    type,
+    permission: 'publish',
+  })
+  const {createSchedule} = useScheduleOperation()
 
   const [dialogOpen, setDialogOpen] = useState(false)
-  const {createSchedule} = useScheduleOperation()
   const {formData, onFormChange} = useScheduleForm()
-
   // Poll for document schedules
   // TODO: handle error + isLoading states
   const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
@@ -32,6 +44,8 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   // until the document has been edited / dirtied in any way.
   const documentExists = draft !== null || published !== null
 
+  const insufficientPermissions = !isPermissionsLoading && !permissions?.granted
+
   // Callbacks
   const handleScheduleCreate = useCallback(() => {
     if (!formData?.date) {
@@ -42,6 +56,17 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   }, [formData?.date])
 
   const title = hasExistingSchedules ? 'Edit Schedule' : 'Schedule'
+
+  if (insufficientPermissions) {
+    return {
+      disabled: true,
+      icon: CalendarIcon,
+      label: title,
+      title: (
+        <InsufficientPermissionsMessage currentUser={currentUser} operationLabel="edit schedules" />
+      ),
+    }
+  }
 
   return {
     dialog: dialogOpen && {

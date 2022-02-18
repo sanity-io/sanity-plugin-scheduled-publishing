@@ -1,47 +1,39 @@
 import {IntentLink} from '@sanity/base/components'
-import {
-  ClockIcon,
-  EditIcon,
-  EllipsisVerticalIcon,
-  PublishIcon,
-  TrashIcon,
-  WarningOutlineIcon,
-} from '@sanity/icons'
-import {Box, Button, Card, Flex, Inline, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
+import {ClockIcon, WarningOutlineIcon} from '@sanity/icons'
+import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React, {forwardRef, useEffect, useMemo, useState} from 'react'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
-import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule} from '../types'
-import {debugWithName} from '../utils/debug'
 import {getPreviewStateObservable, PaneItemPreviewState} from '../utils/paneItemHelpers'
 import DateWithTooltip from './DateWithTooltip'
-import {DraftStatus} from './DocumentStatus/DraftStatus'
-import {PublishedStatus} from './DocumentStatus/PublishedStatus'
+import ScheduleContextMenu from './ScheduleContextMenu'
+import {DraftStatus} from './studio/DocumentStatus/DraftStatus'
+import {PublishedStatus} from './studio/DocumentStatus/PublishedStatus'
 import User from './User'
 
 interface Props {
   schedule: Schedule
 }
 
-const debug = debugWithName('ScheduleItemTool')
-
 const ScheduleItemTool = (props: Props) => {
   const {schedule} = props
 
-  const {deleteSchedule, publishSchedule} = useScheduleOperation()
-  const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
-  const [paneItemPreview, setPaneItemPreview] = useState<PaneItemPreviewState>({})
-  const schemaType = useMemo(() => schema.get('article'), [])
-
   // Whilst schedules can contain multiple documents, this plugin specifically limits schedules to one document only
   const firstDocument = schedule.documents?.[0]
+
+  // TODO: correctly infer type from schedule when exposed
+  const schemaType = useMemo(() => schema.get('article'), [])
+
+  const {DialogScheduleEdit, dialogProps} = useDialogScheduleEdit(schedule)
+  const [paneItemPreview, setPaneItemPreview] = useState<PaneItemPreviewState>({})
 
   const {draft, published, isLoading} = paneItemPreview
 
   const visibleDocument = draft || published
   const invalidDocument = !visibleDocument && !isLoading
+  const isScheduled = schedule.state === 'scheduled'
 
   const LinkComponent = useMemo(
     () =>
@@ -50,7 +42,7 @@ const ScheduleItemTool = (props: Props) => {
           {...linkProps}
           intent="edit"
           params={{
-            type: 'article', // TODO: correctly infer document from schedule payload (when implemented)
+            type: schemaType.name,
             id: firstDocument?.documentId,
           }}
           ref={ref}
@@ -58,17 +50,6 @@ const ScheduleItemTool = (props: Props) => {
       )),
     [IntentLink]
   )
-
-  // Callbacks
-  const handlePublish = () => {
-    debug('handlePublish')
-    publishSchedule({schedule})
-  }
-
-  const handleDelete = () => {
-    debug('handleDelete')
-    deleteSchedule({schedule})
-  }
 
   // Effects
   useEffect(() => {
@@ -150,45 +131,13 @@ const ScheduleItemTool = (props: Props) => {
 
           {/* Context menu */}
           <Box marginLeft={1} style={{flexShrink: 0}}>
-            <MenuButton
-              button={
-                <Button
-                  icon={EllipsisVerticalIcon}
-                  mode="bleed"
-                  paddingX={2}
-                  paddingY={3}
-                  tone="default"
-                />
-              }
-              id="contextMenu"
-              menu={
-                <Menu>
-                  {schedule.state === 'scheduled' && (
-                    <>
-                      <MenuItem
-                        icon={EditIcon}
-                        onClick={dialogScheduleEditShow}
-                        text="Edit schedule"
-                        tone="default"
-                      />
-                      <MenuItem
-                        icon={PublishIcon}
-                        onClick={handlePublish}
-                        text="Publish now"
-                        tone="default"
-                      />
-                    </>
-                  )}
-                  <MenuItem
-                    icon={TrashIcon}
-                    onClick={handleDelete}
-                    text="Delete schedule"
-                    tone="critical"
-                  />
-                </Menu>
-              }
-              placement="left"
-              popover={{portal: true}}
+            <ScheduleContextMenu
+              actions={{
+                delete: isScheduled,
+                edit: isScheduled,
+                execute: true,
+              }}
+              schedule={schedule}
             />
           </Box>
         </Flex>

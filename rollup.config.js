@@ -6,7 +6,7 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 
 export default {
   // supress warnings with sanity parts + config
-  external: (id) => !!(id.startsWith('config:') || id.startsWith('part:')),
+  external: (id) => Boolean(id.startsWith('config:') || id.startsWith('part:')),
   input: [
     'src/documentActions.ts', //
     'src/documentBadges.ts',
