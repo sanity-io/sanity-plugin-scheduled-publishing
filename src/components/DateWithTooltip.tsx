@@ -26,7 +26,6 @@ const DateWithTooltip = (props: Props) => {
       content={
         <Box padding={2}>
           <Text muted size={1}>
-            Publishing{' '}
             {formatDistance(targetDate, currentDate, {
               addSuffix: true,
             })}
