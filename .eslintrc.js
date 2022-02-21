@@ -23,6 +23,9 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/no-shadow': 'error',
+    '@typescript-eslint/no-unused-vars': 1,
+    'no-shadow': 'off',
     'react/display-name': 0,
     'react/jsx-no-bind': 0,
   },

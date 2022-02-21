@@ -14,6 +14,57 @@ const debug = debugWithName('useScheduleOperation')
 // @ts-expect-error
 const {dataset, projectId, url} = client.config()
 
+// Custom events
+export enum ScheduleEvents {
+  create = 'scheduleCreate',
+  delete = 'scheduleDelete',
+  execute = 'scheduleExecute',
+  update = 'scheduleUpdate',
+}
+
+export type ScheduleCreateEvent = {
+  date: string
+  documentId: string
+}
+
+export type ScheduleDeleteEvent = {
+  scheduleId: string
+}
+
+export type ScheduleExecuteEvent = {
+  schedule: Schedule
+}
+
+export type ScheduleUpdateEvent = {
+  date: string
+  scheduleId: string
+}
+
+// Add our custom events to `WindowEventMap`, providing typing when using `addEventListener`
+declare global {
+  interface WindowEventMap {
+    [ScheduleEvents.create]: CustomEvent<ScheduleCreateEvent>
+    [ScheduleEvents.delete]: CustomEvent<ScheduleDeleteEvent>
+    [ScheduleEvents.execute]: CustomEvent<ScheduleExecuteEvent>
+    [ScheduleEvents.update]: CustomEvent<ScheduleUpdateEvent>
+  }
+}
+
+type UnpackCustomEventPayload<T> = T extends CustomEvent<infer U> ? U : never
+
+// Proxy that generates type safe CustomEvents.
+// We infer our CustomEvent's `detail` using `UnpackCustomEventPayload`
+export const scheduleCustomEvent = <
+  T extends ScheduleEvents,
+  D extends UnpackCustomEventPayload<WindowEventMap[T]>
+>(
+  name: T,
+  // override `detail` in `CustomEventInit` with our own custom payload
+  payload: Omit<CustomEventInit<D>, 'detail'> & {
+    detail: D
+  }
+): CustomEvent<D> => new CustomEvent(name, payload)
+
 function _create({date, documentId}: {date: string; documentId: string}) {
   debug('_create:', documentId)
 
@@ -82,6 +133,15 @@ export default function useScheduleOperation() {
     try {
       const {data} = await _create({date, documentId})
 
+      window.dispatchEvent(
+        scheduleCustomEvent(ScheduleEvents.create, {
+          detail: {
+            date,
+            documentId,
+          },
+        })
+      )
+
       if (displayToast) {
         toast.push({
           closable: true,
@@ -129,6 +189,14 @@ export default function useScheduleOperation() {
       }
       await _delete({scheduleId: schedule?.id})
 
+      window.dispatchEvent(
+        scheduleCustomEvent(ScheduleEvents.delete, {
+          detail: {
+            scheduleId: schedule?.id,
+          },
+        })
+      )
+
       if (displayToast) {
         toast.push({
           closable: true,
@@ -151,7 +219,7 @@ export default function useScheduleOperation() {
 
   // TODO: this currently deletes the previous schedule, since it's not yet possible to update a schedule's state
   // from 'scheduled' to 'succeeded'. Update this endpoint when the above has been rectified by CL.
-  async function publishSchedule({
+  async function executeSchedule({
     displayToast = true,
     schedule,
   }: {
@@ -161,6 +229,8 @@ export default function useScheduleOperation() {
     try {
       await _publish({documentIds: schedule?.documents?.map((document) => document.documentId)})
       await deleteSchedule({displayToast: false, schedule})
+
+      window.dispatchEvent(scheduleCustomEvent(ScheduleEvents.execute, {detail: {schedule}}))
 
       if (displayToast) {
         toast.push({
@@ -193,6 +263,8 @@ export default function useScheduleOperation() {
   }) {
     try {
       await _update({documentSchedule: {executeAt: date}, scheduleId})
+
+      window.dispatchEvent(scheduleCustomEvent(ScheduleEvents.update, {detail: {date, scheduleId}}))
 
       if (displayToast) {
         toast.push({
@@ -228,7 +300,7 @@ export default function useScheduleOperation() {
   return {
     createSchedule,
     deleteSchedule,
-    publishSchedule,
+    executeSchedule,
     updateSchedule,
   }
 }

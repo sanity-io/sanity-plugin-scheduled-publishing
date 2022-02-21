@@ -1,8 +1,8 @@
 import type {DocumentActionDescription, DocumentActionProps} from '@sanity/base'
 import {InsufficientPermissionsMessage} from '@sanity/base/components'
 import {
-  useCurrentUser,
   unstable_useDocumentPairPermissions as useDocumentPairPermissions,
+  useCurrentUser,
 } from '@sanity/base/hooks'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
 import React, {useCallback, useState} from 'react'
@@ -17,6 +17,21 @@ import useScheduleOperation from '../hooks/useScheduleOperation'
 import {debugWithName} from '../utils/debug'
 
 const debug = debugWithName('ScheduleAction')
+
+/**
+ * NOTE: Document actions are re-run whenever `onComplete` is called.
+ *
+ * The `onComplete` callback prop is used to typically denote that an action is 'finished',
+ * and default behavior means that `useEffect` and other hooks are immediately re-run upon 'completion'.
+ *
+ * This particular custom action has a hook that polls an endpoint (`usePollSchedules`) and any
+ * triggered `onComplete` action (typically done when a dialog is closed) will automatically query
+ * this endpoint by virtue of the hook re-running and in turn, revalidate our data.
+ *
+ * In this case, this is exactly what we want (we want to revalidate once a schedule has been created,
+ * updated or deleted) - just be mindful that any hooks here can and will run multiple times, even with
+ * empty dependency arrays.
+ */
 
 const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
   const {draft, id, onComplete, published, type} = props
@@ -47,10 +62,15 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   const insufficientPermissions = !isPermissionsLoading && !permissions?.granted
 
   // Callbacks
+  const handleDialogOpen = useCallback(() => {
+    setDialogOpen(true)
+  }, [])
+
   const handleScheduleCreate = useCallback(() => {
     if (!formData?.date) {
       return
     }
+
     // Create schedule then close dialog
     createSchedule({date: formData.date, documentId: id}).then(onComplete)
   }, [formData?.date])
@@ -96,7 +116,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
     disabled: !documentExists,
     label: title,
     icon: CalendarIcon,
-    onHandle: () => setDialogOpen(true),
+    onHandle: handleDialogOpen,
     title: documentExists ? '' : `This document doesn't exist yet`,
   }
 }

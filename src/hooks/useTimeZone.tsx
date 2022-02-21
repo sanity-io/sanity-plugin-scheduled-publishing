@@ -2,10 +2,14 @@ import {useToast} from '@sanity/ui'
 import {getTimeZones} from '@vvo/tzdb'
 import React, {useEffect, useState} from 'react'
 import ToastDescription from '../components/ToastDescription'
+import {LOCAL_STORAGE_TZ_KEY} from '../constants'
 import {NormalizedTimeZone} from '../types'
 import {debugWithName} from '../utils/debug'
 import getErrorMessage from '../utils/getErrorMessage'
 
+enum TimeZoneEvents {
+  update = 'timeZoneEventUpdate',
+}
 interface UseTimeZoneReturn {
   setTimeZone: (timeZone: NormalizedTimeZone) => void
   timeIsLocal: boolean
@@ -13,8 +17,6 @@ interface UseTimeZoneReturn {
 }
 
 const debug = debugWithName('useScheduleOperation')
-
-const STORAGE_KEY = 'sp-timeZone'
 
 // Map through only the values we care about
 export const allTimeZones = getTimeZones().map((tz) => {
@@ -43,7 +45,7 @@ export function getLocalTimeZone(): NormalizedTimeZone {
 }
 
 function getStoredTimeZone(): NormalizedTimeZone {
-  const storedTimeZone = localStorage.getItem(STORAGE_KEY)
+  const storedTimeZone = localStorage.getItem(LOCAL_STORAGE_TZ_KEY)
   try {
     if (storedTimeZone) {
       return JSON.parse(storedTimeZone)
@@ -65,9 +67,9 @@ const useTimeZone = (): UseTimeZoneReturn => {
       setTimeZone(getStoredTimeZone())
     }
 
-    window.addEventListener(STORAGE_KEY, handler)
+    window.addEventListener(TimeZoneEvents.update, handler)
     return () => {
-      window.removeEventListener(STORAGE_KEY, handler)
+      window.removeEventListener(TimeZoneEvents.update, handler)
     }
   }, [])
 
@@ -78,8 +80,8 @@ const useTimeZone = (): UseTimeZoneReturn => {
       try {
         // If different from current state, update localStorage & notify other instances
         if (prevTz.name !== tz.name) {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(tz))
-          window.dispatchEvent(new Event(STORAGE_KEY))
+          localStorage.setItem(LOCAL_STORAGE_TZ_KEY, JSON.stringify(tz))
+          window.dispatchEvent(new Event(TimeZoneEvents.update))
         }
 
         toast.push({

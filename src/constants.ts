@@ -1,5 +1,7 @@
 import {ScheduleState} from './types'
 
+export const LOCAL_STORAGE_TZ_KEY = 'scheduled-publishing::time-zone'
+
 export const SANITY_API_VERSION = '2022-02-02'
 
 export const SCHEDULE_FILTER_DICTIONARY: Record<ScheduleState, string> = {

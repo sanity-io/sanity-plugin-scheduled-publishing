@@ -38,7 +38,7 @@ const ScheduleContextMenu = (props: Props) => {
     permission: 'publish',
   })
 
-  const {deleteSchedule, publishSchedule} = useScheduleOperation()
+  const {deleteSchedule, executeSchedule} = useScheduleOperation()
 
   const insufficientPermissions = !isPermissionsLoading && !permissions?.granted
 
@@ -47,12 +47,12 @@ const ScheduleContextMenu = (props: Props) => {
     onEdit?.()
   }
 
-  const handlePublish = () => {
-    publishSchedule({schedule})
-  }
-
   const handleDelete = () => {
     deleteSchedule({schedule}).then(() => onDelete?.())
+  }
+
+  const handleExecute = () => {
+    executeSchedule({schedule})
   }
 
   return (
@@ -78,7 +78,7 @@ const ScheduleContextMenu = (props: Props) => {
               currentUser={currentUser}
               hasPermission={!insufficientPermissions}
               icon={PublishIcon}
-              onClick={handlePublish}
+              onClick={handleExecute}
               permissionsOperationLabel="execute schedules"
               title="Publish now"
             />

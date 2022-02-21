@@ -134,8 +134,8 @@ const ScheduleItemTool = (props: Props) => {
             <ScheduleContextMenu
               actions={{
                 delete: true,
-                edit: isScheduled,
-                execute: isScheduled,
+                edit: isScheduled && !invalidDocument,
+                execute: isScheduled && !invalidDocument,
               }}
               onEdit={dialogScheduleEditShow}
               schedule={schedule}
