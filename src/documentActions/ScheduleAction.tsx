@@ -5,6 +5,7 @@ import {
   useCurrentUser,
 } from '@sanity/base/hooks'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
+import {Box} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
@@ -34,7 +35,7 @@ const debug = debugWithName('ScheduleAction')
  */
 
 const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
-  const {draft, id, onComplete, published, type} = props
+  const {draft, id, liveEdit, onComplete, published, type} = props
 
   // Studio hooks
   const {value: currentUser} = useCurrentUser()
@@ -88,6 +89,15 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
     }
   }
 
+  let tooltip: string | null = `This document doesn't exist yet`
+  if (documentExists) {
+    tooltip = null
+  }
+  if (liveEdit) {
+    tooltip =
+      'Live Edit is enabled for this content type and publishing happens automatically as you make changes'
+  }
+
   return {
     dialog: dialogOpen && {
       content: (
@@ -113,11 +123,11 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
       onClose: onComplete,
       type: 'modal',
     },
-    disabled: !documentExists,
+    disabled: !documentExists || liveEdit,
     label: title,
     icon: CalendarIcon,
     onHandle: handleDialogOpen,
-    title: documentExists ? '' : `This document doesn't exist yet`,
+    title: tooltip && <Box style={{maxWidth: '315px'}}>{tooltip}</Box>,
   }
 }
 
