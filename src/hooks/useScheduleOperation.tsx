@@ -1,5 +1,6 @@
 import {useToast} from '@sanity/ui'
 import axios from 'axios'
+import pluralize from 'pluralize'
 import React from 'react'
 import client from '../client'
 import ToastDescription from '../components/ToastDescription'
@@ -18,6 +19,7 @@ const {dataset, projectId, url} = client.config()
 export enum ScheduleEvents {
   create = 'scheduleCreate',
   delete = 'scheduleDelete',
+  deleteMultiple = 'scheduleDeleteMultiple',
   execute = 'scheduleExecute',
   update = 'scheduleUpdate',
 }
@@ -29,6 +31,10 @@ export type ScheduleCreateEvent = {
 
 export type ScheduleDeleteEvent = {
   scheduleId: string
+}
+
+export type ScheduleDeleteMultipleEvent = {
+  scheduleIds: string[]
 }
 
 export type ScheduleExecuteEvent = {
@@ -45,6 +51,7 @@ declare global {
   interface WindowEventMap {
     [ScheduleEvents.create]: CustomEvent<ScheduleCreateEvent>
     [ScheduleEvents.delete]: CustomEvent<ScheduleDeleteEvent>
+    [ScheduleEvents.deleteMultiple]: CustomEvent<ScheduleDeleteMultipleEvent>
     [ScheduleEvents.execute]: CustomEvent<ScheduleExecuteEvent>
     [ScheduleEvents.update]: CustomEvent<ScheduleUpdateEvent>
   }
@@ -90,6 +97,12 @@ function _delete({scheduleId}: {scheduleId: string}) {
     `${url}/schedules/${projectId}/${dataset}/${scheduleId}`, //
     {withCredentials: true}
   )
+}
+
+function _deleteMultiple({scheduleIds}: {scheduleIds: string[]}) {
+  debug('_deleteMultiple:', scheduleIds)
+  const requests = scheduleIds.map((scheduleId) => _delete({scheduleId}))
+  return Promise.allSettled(requests)
 }
 
 function _publish({documentIds}: {documentIds: string[]}) {
@@ -167,6 +180,7 @@ export default function useScheduleOperation() {
           description: (
             <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to create schedule" />
           ),
+          duration: 15000, // 15s
           status: 'error',
         })
       }
@@ -211,6 +225,84 @@ export default function useScheduleOperation() {
           description: (
             <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to delete schedule" />
           ),
+          duration: 15000, // 15s
+          status: 'error',
+        })
+      }
+    }
+  }
+
+  async function deleteSchedules({
+    displayToast = true,
+    schedules,
+  }: {
+    displayToast?: boolean
+    schedules: Schedule[]
+  }) {
+    try {
+      const scheduleIds = schedules.map((schedule) => schedule.id)
+      const response = await _deleteMultiple({scheduleIds})
+
+      const {fulfilledIds, rejectedReasons} = response.reduce<{
+        fulfilledIds: string[]
+        rejectedReasons: string[]
+      }>(
+        (acc, v, index) => {
+          if (v.status === 'fulfilled') {
+            acc.fulfilledIds.push(schedules[index].id)
+          }
+
+          if (v.status === 'rejected') {
+            acc.rejectedReasons.push(`[${schedules[index].id}]: ${v.reason}`)
+          }
+
+          return acc
+        },
+        {fulfilledIds: [], rejectedReasons: []}
+      )
+      const numFulfilledIds = fulfilledIds.length
+      const numRejectedReasons = rejectedReasons.length
+
+      if (fulfilledIds?.length > 0) {
+        window.dispatchEvent(
+          scheduleCustomEvent(ScheduleEvents.deleteMultiple, {
+            detail: {scheduleIds: fulfilledIds},
+          })
+        )
+      }
+
+      if (displayToast) {
+        if (fulfilledIds?.length > 0) {
+          toast.push({
+            closable: true,
+            description: (
+              <ToastDescription title={`${pluralize('schedule', numFulfilledIds, true)} deleted`} />
+            ),
+            status: 'success',
+          })
+        }
+        if (rejectedReasons?.length > 0) {
+          toast.push({
+            closable: true,
+            description: (
+              <ToastDescription
+                body={rejectedReasons?.toString()}
+                title={`Unable to delete ${pluralize('schedule', numRejectedReasons, true)}`}
+              />
+            ),
+            duration: 15000, // 15s
+            status: 'error',
+          })
+        }
+      }
+    } catch (err) {
+      if (displayToast) {
+        toast.push({
+          closable: true,
+          description: (
+            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to delete schedules" />
+          ),
+          duration: 15000, // 15s
           status: 'error',
         })
       }
@@ -246,6 +338,7 @@ export default function useScheduleOperation() {
           description: (
             <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to publish schedule" />
           ),
+          duration: 15000, // 15s
           status: 'error',
         })
       }
@@ -291,6 +384,7 @@ export default function useScheduleOperation() {
           description: (
             <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to update schedule" />
           ),
+          duration: 15000, // 15s
           status: 'error',
         })
       }
@@ -300,6 +394,7 @@ export default function useScheduleOperation() {
   return {
     createSchedule,
     deleteSchedule,
+    deleteSchedules,
     executeSchedule,
     updateSchedule,
   }

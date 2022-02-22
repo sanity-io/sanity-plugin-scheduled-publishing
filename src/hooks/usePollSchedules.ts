@@ -3,7 +3,12 @@ import {useCallback, useEffect} from 'react'
 import useSWR from 'swr'
 import client from '../client'
 import {Schedule, ScheduleState} from '../types'
-import {ScheduleDeleteEvent, ScheduleEvents, ScheduleUpdateEvent} from './useScheduleOperation'
+import {
+  ScheduleDeleteEvent,
+  ScheduleDeleteMultipleEvent,
+  ScheduleEvents,
+  ScheduleUpdateEvent,
+} from './useScheduleOperation'
 
 // @ts-expect-error
 const {dataset, projectId, url} = client.config()
@@ -62,6 +67,15 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
     )
   }, [])
 
+  // Immediately remove schedules from SWR cache and revalidate
+  const handleDeleteMultiple = useCallback((event: CustomEvent<ScheduleDeleteMultipleEvent>) => {
+    mutate(
+      (schedules) =>
+        schedules?.filter((schedule) => !event.detail.scheduleIds.includes(schedule.id)),
+      true // revalidate SWR
+    )
+  }, [])
+
   // Immediately update schedule in SWR cache and revalidate
   const handleUpdate = useCallback((event: CustomEvent<ScheduleUpdateEvent>) => {
     mutate(
@@ -83,9 +97,11 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   // Listen to schedule events
   useEffect(() => {
     window.addEventListener(ScheduleEvents.delete, handleDelete)
+    window.addEventListener(ScheduleEvents.deleteMultiple, handleDeleteMultiple)
     window.addEventListener(ScheduleEvents.update, handleUpdate)
     return () => {
       window.removeEventListener(ScheduleEvents.delete, handleDelete)
+      window.removeEventListener(ScheduleEvents.deleteMultiple, handleDeleteMultiple)
       window.removeEventListener(ScheduleEvents.update, handleUpdate)
     }
   }, [])

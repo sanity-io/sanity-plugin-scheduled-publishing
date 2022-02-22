@@ -1,6 +1,7 @@
 import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Label, Stack} from '@sanity/ui'
 import React from 'react'
+import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule, ScheduleState} from '../types'
 import CardEmptySchedules from './CardEmptySchedules'
 import ScheduleItemTool from './ScheduleItemTool'
@@ -13,10 +14,12 @@ interface Props {
 const Schedules = (props: Props) => {
   const {schedules, scheduleState} = props
 
+  const {deleteSchedules} = useScheduleOperation()
+
   // Iterate through all schedules and inject date headers
   const schedulesWithHeaders = schedules
     .reduce<[string, Schedule[]][]>((acc, val) => {
-      // Localised date string: 'Februrary 2025'
+      // Localised date string: 'February 2025'
       const dateStr = new Date(val.executeAt).toLocaleString('default', {
         month: 'long',
         year: 'numeric',
@@ -30,6 +33,13 @@ const Schedules = (props: Props) => {
       return acc
     }, [])
     .flat(2)
+
+  const activeSchedules = schedules.filter((schedule) => schedule.state === scheduleState)
+
+  // Callbacks
+  const handleClearSchedules = () => {
+    deleteSchedules({schedules: activeSchedules})
+  }
 
   return (
     <>
@@ -58,9 +68,9 @@ const Schedules = (props: Props) => {
           {scheduleState === 'succeeded' && (
             <Flex justify="center" marginTop={6}>
               <Button
-                disabled
                 icon={CheckmarkCircleIcon}
                 mode="ghost"
+                onClick={handleClearSchedules}
                 text="Clear all completed schedules"
               />
             </Flex>
