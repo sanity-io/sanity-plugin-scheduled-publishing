@@ -2,7 +2,13 @@ import {
   useCurrentUser,
   unstable_useDocumentPairPermissions as useDocumentPairPermissions,
 } from '@sanity/base/hooks'
-import {EditIcon, EllipsisVerticalIcon, PublishIcon, TrashIcon} from '@sanity/icons'
+import {
+  CheckmarkCircleIcon,
+  EditIcon,
+  EllipsisVerticalIcon,
+  PublishIcon,
+  TrashIcon,
+} from '@sanity/icons'
 import {Button, Menu, MenuButton} from '@sanity/ui'
 import schema from 'part:@sanity/base/schema'
 import React, {useMemo} from 'react'
@@ -12,6 +18,7 @@ import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
 
 interface Props {
   actions?: {
+    clear?: boolean
     delete?: boolean
     edit?: boolean
     execute?: boolean
@@ -92,6 +99,16 @@ const ScheduleContextMenu = (props: Props) => {
               permissionsOperationLabel="delete schedules"
               title="Delete schedule"
               tone="critical"
+            />
+          )}
+          {actions?.clear && (
+            <MenuItemWithPermissionsTooltip
+              currentUser={currentUser}
+              hasPermission={!insufficientPermissions}
+              icon={CheckmarkCircleIcon}
+              onClick={handleDelete}
+              permissionsOperationLabel="delete schedules"
+              title="Clear completed schedule"
             />
           )}
         </Menu>

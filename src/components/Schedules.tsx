@@ -35,20 +35,22 @@ const Schedules = (props: Props) => {
           <Text size={1}>No schedules</Text>
         </Box>
       ) : (
-        <Stack space={2}>
-          {schedulesWithHeaders.map((v, index) => {
-            if (typeof v === 'string') {
-              return (
-                <Box key={v} paddingBottom={3} paddingTop={index === 0 ? 1 : 5}>
-                  <Label muted size={1}>
-                    {v}
-                  </Label>
-                </Box>
-              )
-            }
-            return <ScheduleItemTool key={v.id} schedule={v} />
-          })}
-        </Stack>
+        <Box>
+          <Stack space={2}>
+            {schedulesWithHeaders.map((v, index) => {
+              if (typeof v === 'string') {
+                return (
+                  <Box key={v} paddingBottom={3} paddingTop={index === 0 ? 1 : 5}>
+                    <Label muted size={1}>
+                      {v}
+                    </Label>
+                  </Box>
+                )
+              }
+              return <ScheduleItemTool key={v.id} schedule={v} />
+            })}
+          </Stack>
+        </Box>
       )}
     </>
   )

@@ -33,6 +33,7 @@ const ScheduleItemTool = (props: Props) => {
 
   const visibleDocument = draft || published
   const invalidDocument = !visibleDocument && !isLoading
+  const isCompleted = schedule.state === 'succeeded'
   const isScheduled = schedule.state === 'scheduled'
 
   const LinkComponent = useMemo(
@@ -113,7 +114,7 @@ const ScheduleItemTool = (props: Props) => {
               </Box>
 
               {/* Document status */}
-              <Box marginX={2} style={{flexShrink: 0}}>
+              <Box marginX={3} style={{flexShrink: 0}}>
                 {!isLoading && (
                   <Inline space={4}>
                     <PublishedStatus document={published} />
@@ -127,11 +128,18 @@ const ScheduleItemTool = (props: Props) => {
           {/* Context menu */}
           <Box marginLeft={1} style={{flexShrink: 0}}>
             <ScheduleContextMenu
-              actions={{
-                delete: true,
-                edit: isScheduled && !invalidDocument,
-                execute: isScheduled && !invalidDocument,
-              }}
+              actions={
+                invalidDocument
+                  ? {
+                      delete: true,
+                    }
+                  : {
+                      clear: isCompleted,
+                      delete: !isCompleted,
+                      edit: isScheduled,
+                      execute: isScheduled,
+                    }
+              }
               onEdit={dialogScheduleEditShow}
               schedule={schedule}
             />
