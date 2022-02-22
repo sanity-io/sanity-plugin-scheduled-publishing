@@ -1,4 +1,5 @@
 import {StateLink} from '@sanity/base/router'
+import {white} from '@sanity/color'
 import {Badge, Inline, Tab, Text} from '@sanity/ui'
 import React from 'react'
 import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
@@ -22,27 +23,31 @@ const ScheduleFilter = (props: Props) => {
       // @ts-ignore
       as={StateLink}
       id={state}
-      paddingLeft={2}
-      paddingRight={critical ? 1 : 2}
-      paddingY={1}
+      padding={1}
       selected={selected}
       state={{state}}
       tone={critical ? 'critical' : 'default'}
     >
-      <Inline space={3}>
+      <Inline paddingLeft={1} space={critical && count > 0 ? 3 : 2}>
         <Text size={2} weight="medium">
           {title}
         </Text>
-        {critical ? (
-          <Badge padding={2} radius={2} tone="critical">
-            <Text size={1} style={{color: 'white'}}>
+        {count > 0 && (
+          <Badge
+            mode={critical ? 'default' : 'outline'}
+            padding={2}
+            radius={2}
+            style={{
+              background: critical ? undefined : 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+            }}
+            tone={critical ? 'critical' : 'default'}
+          >
+            <Text size={1} style={{color: critical ? white.hex : 'inherit'}}>
               {count}
             </Text>
           </Badge>
-        ) : (
-          <Text muted size={1}>
-            {count}
-          </Text>
         )}
       </Inline>
     </Tab>
