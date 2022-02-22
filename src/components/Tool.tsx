@@ -1,6 +1,5 @@
 import {HOCRouter, withRouterHOC} from '@sanity/base/router'
-import {CheckmarkCircleIcon} from '@sanity/icons'
-import {Box, Button, Card, Flex} from '@sanity/ui'
+import {Box, Card, Flex} from '@sanity/ui'
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import {SCHEDULE_STATES, TOOL_HEADER_HEIGHT} from '../constants'
@@ -57,7 +56,7 @@ function Tool(props: Props) {
   }, [scheduleState])
 
   return (
-    <Card display="flex" height="fill" overflow="auto">
+    <Card display="flex" flex={1} height="fill" overflow="auto">
       {/* LHS Column */}
       <Column
         display={['none', null, null, 'flex']}
@@ -73,7 +72,7 @@ function Tool(props: Props) {
       <Column flex={1}>
         <Flex
           align="center"
-          paddingLeft={3}
+          paddingLeft={4}
           paddingRight={3}
           style={{
             borderBottom: '1px solid var(--card-border-color)',
@@ -86,20 +85,8 @@ function Tool(props: Props) {
           </Flex>
         </Flex>
         <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={4}>
-          <Schedules schedules={filteredSchedules} />
+          <Schedules schedules={filteredSchedules} scheduleState={scheduleState} />
         </Box>
-
-        {/* Clear completed schedules */}
-        {scheduleState === 'succeeded' && filteredSchedules.length > 0 && (
-          <Flex justify="center" marginBottom={5} marginTop={6}>
-            <Button
-              disabled
-              icon={CheckmarkCircleIcon}
-              mode="ghost"
-              text="Clear all completed schedules"
-            />
-          </Flex>
-        )}
       </Column>
     </Card>
   )

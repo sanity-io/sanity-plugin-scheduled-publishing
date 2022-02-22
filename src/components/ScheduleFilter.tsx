@@ -1,6 +1,6 @@
 import {StateLink} from '@sanity/base/router'
-import {white} from '@sanity/color'
-import {Badge, Inline, Tab, Text} from '@sanity/ui'
+import {red, white} from '@sanity/color'
+import {Box, Flex, Tab, Text} from '@sanity/ui'
 import React from 'react'
 import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
 import {ScheduleState} from '../types'
@@ -17,39 +17,46 @@ const ScheduleFilter = (props: Props) => {
 
   const title = SCHEDULE_FILTER_DICTIONARY[state]
 
+  const hasItems = count > 0
+
   return (
     <Tab
       aria-controls="filters"
       // @ts-ignore
       as={StateLink}
       id={state}
-      padding={1}
+      paddingX={1}
+      paddingY={2}
       selected={selected}
       state={{state}}
       tone={critical ? 'critical' : 'default'}
     >
-      <Inline paddingLeft={1} space={critical && count > 0 ? 3 : 2}>
+      <Flex align="center" paddingX={1}>
         <Text size={2} weight="medium">
           {title}
         </Text>
-        {count > 0 && (
-          <Badge
-            mode={critical ? 'default' : 'outline'}
-            padding={2}
-            radius={2}
-            style={{
-              background: critical ? undefined : 'transparent',
-              border: 'none',
-              boxShadow: 'none',
-            }}
-            tone={critical ? 'critical' : 'default'}
-          >
-            <Text size={1} style={{color: critical ? white.hex : 'inherit'}}>
-              {count}
-            </Text>
-          </Badge>
-        )}
-      </Inline>
+        {/*
+        HACK: when there are no items, continue to render count (with 0 opacity) in order to
+        preseve correct tab height / vertical padding.
+        */}
+        <Box
+          marginLeft={count > 0 ? 2 : 0}
+          style={{
+            background: critical && hasItems ? red[500].hex : 'transparent',
+            color: critical && hasItems ? white.hex : 'inherit',
+            border: 'none',
+            boxShadow: 'none',
+            borderRadius: '2px',
+            opacity: hasItems ? 1 : 0,
+            padding: hasItems ? '0.25em 0.4em' : '0.25em 0',
+            width: hasItems ? 'auto' : 0,
+          }}
+        >
+          <Text size={1} style={{color: critical && hasItems ? white.hex : 'inherit'}}>
+            {count}
+          </Text>
+        </Box>
+      </Flex>
     </Tab>
   )
 }

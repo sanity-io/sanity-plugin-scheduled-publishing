@@ -1,14 +1,17 @@
-import {Box, Label, Stack, Text} from '@sanity/ui'
+import {CheckmarkCircleIcon} from '@sanity/icons'
+import {Box, Button, Flex, Label, Stack} from '@sanity/ui'
 import React from 'react'
-import {Schedule} from '../types'
+import {Schedule, ScheduleState} from '../types'
+import CardEmptySchedules from './CardEmptySchedules'
 import ScheduleItemTool from './ScheduleItemTool'
 
 interface Props {
   schedules: Schedule[]
+  scheduleState: ScheduleState
 }
 
 const Schedules = (props: Props) => {
-  const {schedules} = props
+  const {schedules, scheduleState} = props
 
   // Iterate through all schedules and inject date headers
   const schedulesWithHeaders = schedules
@@ -31,11 +34,11 @@ const Schedules = (props: Props) => {
   return (
     <>
       {schedulesWithHeaders.length === 0 ? (
-        <Box>
-          <Text size={1}>No schedules</Text>
+        <Box marginY={2}>
+          <CardEmptySchedules scheduleState={scheduleState} />
         </Box>
       ) : (
-        <Box>
+        <Box marginBottom={5}>
           <Stack space={2}>
             {schedulesWithHeaders.map((v, index) => {
               if (typeof v === 'string') {
@@ -50,6 +53,18 @@ const Schedules = (props: Props) => {
               return <ScheduleItemTool key={v.id} schedule={v} />
             })}
           </Stack>
+
+          {/* Clear completed schedules */}
+          {scheduleState === 'succeeded' && (
+            <Flex justify="center" marginTop={6}>
+              <Button
+                disabled
+                icon={CheckmarkCircleIcon}
+                mode="ghost"
+                text="Clear all completed schedules"
+              />
+            </Flex>
+          )}
         </Box>
       )}
     </>
