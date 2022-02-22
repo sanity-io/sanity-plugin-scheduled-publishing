@@ -40,8 +40,8 @@ const ScheduleFilters = (props: Props) => {
           }
           id="state"
           menu={
-            <Menu>
-              <Box paddingX={3} paddingY={2} style={{minWidth: '175px'}}>
+            <Menu style={{minWidth: '175px'}}>
+              <Box paddingX={3} paddingY={2}>
                 <Label muted size={1}>
                   Scheduled state
                 </Label>

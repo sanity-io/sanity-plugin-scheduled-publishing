@@ -8,12 +8,6 @@ export interface NormalizedTimeZone {
   value: string
 }
 
-export type ScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
-
-export interface ScheduleFilter {
-  state: ScheduleState
-  title: string
-}
 export interface Schedule {
   author: string
   createdAt: string
@@ -30,6 +24,15 @@ export interface Schedule {
   state: ScheduleState
 }
 
+export interface ScheduleFilter {
+  state: ScheduleState
+  title: string
+}
+
 export interface ScheduleFormData {
   date: string
 }
+
+export type ScheduleSort = 'createdAt' | 'executeAt'
+
+export type ScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
