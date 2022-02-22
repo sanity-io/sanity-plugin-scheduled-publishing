@@ -1,5 +1,4 @@
-import {ClockIcon} from '@sanity/icons'
-import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
+import {Box, Card, Flex} from '@sanity/ui'
 import React from 'react'
 import {useDocumentActionProps} from '../contexts/documentActionProps'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
@@ -43,12 +42,7 @@ const ScheduleItemDocument = (props: Props) => {
               style={{height: '35px'}}
             >
               {/* Schedule date */}
-              <Inline space={3}>
-                <Text size={2}>
-                  <ClockIcon />
-                </Text>
-                <DateWithTooltip date={props.schedule.executeAt} />
-              </Inline>
+              <DateWithTooltip date={props.schedule.executeAt} />
 
               {/* Avatar */}
               <User id={schedule?.author} />

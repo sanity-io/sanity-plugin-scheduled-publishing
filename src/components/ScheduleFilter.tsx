@@ -1,17 +1,18 @@
 import {StateLink} from '@sanity/base/router'
-import {Flex, Tab, Text} from '@sanity/ui'
+import {Badge, Inline, Tab, Text} from '@sanity/ui'
 import React from 'react'
 import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
 import {ScheduleState} from '../types'
 
 interface Props {
   count: number
+  critical?: boolean
   selected?: boolean
   state: ScheduleState
 }
 
 const ScheduleFilter = (props: Props) => {
-  const {count, selected, state} = props
+  const {count, critical, selected, state} = props
 
   const title = SCHEDULE_FILTER_DICTIONARY[state]
 
@@ -21,16 +22,29 @@ const ScheduleFilter = (props: Props) => {
       // @ts-ignore
       as={StateLink}
       id={state}
-      padding={3}
+      paddingLeft={2}
+      paddingRight={critical ? 1 : 2}
+      paddingY={1}
       selected={selected}
       state={{state}}
+      tone={critical ? 'critical' : 'default'}
     >
-      <Flex align="baseline" justify="space-between">
+      <Inline space={3}>
         <Text size={2} weight="medium">
           {title}
         </Text>
-        <Text size={1}>{count}</Text>
-      </Flex>
+        {critical ? (
+          <Badge padding={2} radius={2} tone="critical">
+            <Text size={1} style={{color: 'white'}}>
+              {count}
+            </Text>
+          </Badge>
+        ) : (
+          <Text muted size={1}>
+            {count}
+          </Text>
+        )}
+      </Inline>
     </Tab>
   )
 }

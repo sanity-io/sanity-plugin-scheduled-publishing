@@ -1,6 +1,6 @@
 import {IntentLink} from '@sanity/base/components'
-import {ClockIcon, WarningOutlineIcon} from '@sanity/icons'
-import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
+import {WarningOutlineIcon} from '@sanity/icons'
+import {Box, Card, Flex, Inline} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
 import React, {forwardRef, useEffect, useMemo, useState} from 'react'
@@ -104,12 +104,7 @@ const ScheduleItemTool = (props: Props) => {
 
               {/* Schedule date */}
               <Box marginLeft={4} style={{flexShrink: 0, minWidth: '250px'}}>
-                <Inline space={3}>
-                  <Text size={2}>
-                    <ClockIcon />
-                  </Text>
-                  <DateWithTooltip date={props.schedule.executeAt} />
-                </Inline>
+                <DateWithTooltip date={props.schedule.executeAt} />
               </Box>
 
               {/* Avatar */}

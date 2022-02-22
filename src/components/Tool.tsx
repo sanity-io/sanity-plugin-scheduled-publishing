@@ -1,8 +1,8 @@
 import {HOCRouter, withRouterHOC} from '@sanity/base/router'
-import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
+import {Box, Card, Flex} from '@sanity/ui'
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
-import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_STATES, TOOL_HEADER_HEIGHT} from '../constants'
+import {SCHEDULE_STATES, TOOL_HEADER_HEIGHT} from '../constants'
 import usePollSchedules from '../hooks/usePollSchedules'
 import {ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
@@ -13,7 +13,7 @@ import ToolCalendar from './ToolCalendar'
 
 const debug = debugWithName('Tool')
 
-const Column = styled(Flex)`
+const Column = styled(Box)`
   flex-direction: column;
   &:not(:first-child) {
     border-left: 1px solid var(--card-border-color);
@@ -31,7 +31,6 @@ function Tool(props: Props) {
   const {schedules} = usePollSchedules()
 
   const scheduleState: ScheduleState = router.state.state || 'scheduled'
-  const scheduleStateTitle = SCHEDULE_FILTER_DICTIONARY[scheduleState]
 
   // Filter schedules by selected router state + sort conditionally
   const filteredSchedules = schedules
@@ -60,6 +59,7 @@ function Tool(props: Props) {
     <Card display="flex" height="fill" overflow="auto">
       {/* LHS Column */}
       <Column
+        display={['none', null, null, 'flex']}
         style={{
           position: 'sticky',
           top: 0,
@@ -67,13 +67,12 @@ function Tool(props: Props) {
         }}
       >
         <ToolCalendar />
-        <ScheduleFilters scheduleState={scheduleState} schedules={schedules} />
       </Column>
       {/* RHS Column */}
       <Column flex={1}>
         <Flex
           align="center"
-          paddingLeft={4}
+          paddingLeft={3}
           paddingRight={3}
           style={{
             borderBottom: '1px solid var(--card-border-color)',
@@ -81,10 +80,7 @@ function Tool(props: Props) {
           }}
         >
           <Flex align="center" flex={1} justify="space-between">
-            <Inline space={3}>
-              <Text weight="medium">{scheduleStateTitle}</Text>
-              <Text muted>{filteredSchedules.length}</Text>
-            </Inline>
+            <ScheduleFilters scheduleState={scheduleState} schedules={schedules} />
             <TimeZoneButton />
           </Flex>
         </Flex>
