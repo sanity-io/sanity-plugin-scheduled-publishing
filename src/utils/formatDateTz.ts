@@ -15,7 +15,7 @@ export default function formatDateTz({
   prefix?: string
   timeZone: NormalizedTimeZone
 }): string {
-  let format = `iii d MMM yyyy 'at' p`
+  let format = `iiii',' d MMMM yyyy',' p`
   if (prefix) {
     format = `'${prefix}'${format}`
   }
