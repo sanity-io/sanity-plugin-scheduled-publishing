@@ -42,7 +42,7 @@ const CardEmptySchedules = (props: Props) => {
   }
 
   return (
-    <Card paddingX={6} paddingY={8} radius={2} shadow={1}>
+    <Card paddingX={6} paddingBottom={8} paddingTop={7} radius={2} shadow={1}>
       <Stack space={4}>
         <Flex justify="center">
           <BigIcon />
