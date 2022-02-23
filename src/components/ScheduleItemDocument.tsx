@@ -3,6 +3,7 @@ import React from 'react'
 import {useDocumentActionProps} from '../contexts/documentActionProps'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import {Schedule} from '../types'
+import DateWithTooltipElementQuery from './DateWithTooltipElementQuery'
 import DateWithTooltip from './DateWithTooltip'
 import ScheduleContextMenu from './ScheduleContextMenu'
 import User from './User'
@@ -22,47 +23,49 @@ const ScheduleItemDocument = (props: Props) => {
       {/* Dialogs */}
       {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
 
-      <Card padding={1} radius={2} shadow={1}>
-        <Flex align="center" justify="space-between">
-          <Card
-            __unstable_focusRing
-            data-as="a"
-            flex={1}
-            onClick={dialogScheduleEditShow}
-            padding={1}
-            radius={2}
-            shadow={1}
-            tabIndex={0}
-          >
-            <Flex
-              align="center"
-              gap={2}
-              justify="space-between"
-              paddingX={2}
-              style={{height: '35px'}}
+      <DateWithTooltipElementQuery>
+        <Card padding={1} radius={2} shadow={1}>
+          <Flex align="center" justify="space-between">
+            <Card
+              __unstable_focusRing
+              data-as="a"
+              flex={1}
+              onClick={dialogScheduleEditShow}
+              padding={1}
+              radius={2}
+              shadow={1}
+              tabIndex={0}
             >
-              {/* Schedule date */}
-              <DateWithTooltip date={props.schedule.executeAt} />
+              <Flex
+                align="center"
+                gap={2}
+                justify="space-between"
+                paddingX={2}
+                style={{height: '35px'}}
+              >
+                {/* Schedule date */}
+                <DateWithTooltip date={props.schedule.executeAt} />
 
-              {/* Avatar */}
-              <User id={schedule?.author} />
-            </Flex>
-          </Card>
+                {/* Avatar */}
+                <User id={schedule?.author} />
+              </Flex>
+            </Card>
 
-          {/* Context menu */}
-          <Box marginLeft={1} style={{flexShrink: 0}}>
-            <ScheduleContextMenu
-              actions={{
-                delete: true,
-                edit: true,
-              }}
-              onDelete={onComplete}
-              onEdit={dialogScheduleEditShow}
-              schedule={schedule}
-            />
-          </Box>
-        </Flex>
-      </Card>
+            {/* Context menu */}
+            <Box marginLeft={1} style={{flexShrink: 0}}>
+              <ScheduleContextMenu
+                actions={{
+                  delete: true,
+                  edit: true,
+                }}
+                onDelete={onComplete}
+                onEdit={dialogScheduleEditShow}
+                schedule={schedule}
+              />
+            </Box>
+          </Flex>
+        </Card>
+      </DateWithTooltipElementQuery>
     </>
   )
 }

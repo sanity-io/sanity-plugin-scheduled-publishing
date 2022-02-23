@@ -6,20 +6,20 @@ import formatDateTz from '../utils/formatDateTz'
 
 interface Props {
   date: string
+  useElementQueries?: boolean
 }
 
 const DateWithTooltip = (props: Props) => {
-  const {date} = props
+  const {date, useElementQueries} = props
 
   const {timeZone} = useTimeZone()
 
   const currentDate = new Date()
   const targetDate = new Date(date)
 
-  const formattedDateTime = formatDateTz({
-    date,
-    timeZone,
-  })
+  const dateTimeLarge = formatDateTz({date, mode: 'large', timeZone})
+  const dateTimeMedium = formatDateTz({date, mode: 'medium', timeZone})
+  const dateTimeSmall = formatDateTz({date, mode: 'small', timeZone})
 
   return (
     <Tooltip
@@ -34,7 +34,21 @@ const DateWithTooltip = (props: Props) => {
       }
       portal
     >
-      <Text size={1}>{formattedDateTime}</Text>
+      <Text size={1}>
+        {/*
+          If `useElementQueries` is enabled, dates will be conditionally toggled at different element
+          breakpoints - provided this `<DateWithTooltip>` is wrapped in a `<DateElementQuery>` component.
+        */}
+        {useElementQueries ? (
+          <>
+            <Box className="date-small">{dateTimeSmall}</Box>
+            <Box className="date-medium">{dateTimeMedium}</Box>
+            <Box className="date-large">{dateTimeLarge}</Box>
+          </>
+        ) : (
+          dateTimeLarge
+        )}
+      </Text>
     </Tooltip>
   )
 }

@@ -9,8 +9,9 @@ import {ScheduleSort, ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
 import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
-import TimeZoneButton from './TimeZoneButton'
+import ButtonTimeZone from './ButtonTimeZone'
 import ToolCalendar from './ToolCalendar'
+import ButtonTimeZoneElementQuery from './ButtonTimeZoneElementQuery'
 
 const debug = debugWithName('Tool')
 
@@ -78,55 +79,57 @@ function Tool(props: Props) {
       </Column>
       {/* RHS Column */}
       <Column flex={1}>
-        <Flex
-          align="center"
-          paddingLeft={4}
-          paddingRight={3}
-          style={{
-            borderBottom: '1px solid var(--card-border-color)',
-            minHeight: `${TOOL_HEADER_HEIGHT}px`,
-          }}
-        >
-          <Flex align="center" flex={1} justify="space-between">
-            <ScheduleFilters scheduleState={scheduleState} schedules={schedules} />
-            <Flex align="center" gap={1}>
-              <TimeZoneButton />
-              <MenuButton
-                button={
-                  <Button
-                    icon={EllipsisVerticalIcon}
-                    mode="bleed"
-                    paddingX={2}
-                    paddingY={3}
-                    tone="default"
-                  />
-                }
-                id="sort"
-                menu={
-                  <Menu style={{minWidth: '250px'}}>
-                    <Box paddingX={3} paddingY={2}>
-                      <Label muted size={1}>
-                        Sort
-                      </Label>
-                    </Box>
-                    <MenuItem
-                      icon={SortIcon}
-                      iconRight={sortBy === 'createdAt' ? CheckmarkIcon : undefined}
-                      onClick={handleSortByCreateAt}
-                      text="Sort by time added"
+        <ButtonTimeZoneElementQuery>
+          <Flex
+            align="center"
+            paddingLeft={4}
+            paddingRight={3}
+            style={{
+              borderBottom: '1px solid var(--card-border-color)',
+              minHeight: `${TOOL_HEADER_HEIGHT}px`,
+            }}
+          >
+            <Flex align="center" flex={1} justify="space-between">
+              <ScheduleFilters scheduleState={scheduleState} schedules={schedules} />
+              <Flex align="center" gap={1}>
+                <ButtonTimeZone useElementQueries />
+                <MenuButton
+                  button={
+                    <Button
+                      icon={EllipsisVerticalIcon}
+                      mode="bleed"
+                      paddingX={2}
+                      paddingY={3}
+                      tone="default"
                     />
-                    <MenuItem
-                      icon={SortIcon}
-                      iconRight={sortBy === 'executeAt' ? CheckmarkIcon : undefined}
-                      onClick={handleSortByExecuteAt}
-                      text="Sort by time scheduled"
-                    />
-                  </Menu>
-                }
-              />
+                  }
+                  id="sort"
+                  menu={
+                    <Menu style={{minWidth: '250px'}}>
+                      <Box paddingX={3} paddingY={2}>
+                        <Label muted size={1}>
+                          Sort
+                        </Label>
+                      </Box>
+                      <MenuItem
+                        icon={SortIcon}
+                        iconRight={sortBy === 'createdAt' ? CheckmarkIcon : undefined}
+                        onClick={handleSortByCreateAt}
+                        text="Sort by time added"
+                      />
+                      <MenuItem
+                        icon={SortIcon}
+                        iconRight={sortBy === 'executeAt' ? CheckmarkIcon : undefined}
+                        onClick={handleSortByExecuteAt}
+                        text="Sort by time scheduled"
+                      />
+                    </Menu>
+                  }
+                />
+              </Flex>
             </Flex>
           </Flex>
-        </Flex>
+        </ButtonTimeZoneElementQuery>
         <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={4}>
           <Schedules schedules={filteredSchedules} scheduleState={scheduleState} sortBy={sortBy} />
         </Box>
