@@ -41,7 +41,7 @@ const ScheduleContextMenu = (props: Props) => {
   const {value: currentUser} = useCurrentUser()
   const [permissions, isPermissionsLoading] = useDocumentPairPermissions({
     id: firstDocument.documentId,
-    type: schemaType.name,
+    type: schemaType?.name,
     permission: 'publish',
   })
 
