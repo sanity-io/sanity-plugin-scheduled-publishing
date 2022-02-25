@@ -1,14 +1,16 @@
 import {IntentLink} from '@sanity/base/components'
 import {WarningOutlineIcon} from '@sanity/icons'
+import {SanityDocument, ValidationMarker} from '@sanity/types'
 import {Box, Card, Flex, Inline} from '@sanity/ui'
+import {validateDocument} from '@sanity/validation'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
-import React, {forwardRef, useEffect, useMemo, useState} from 'react'
+import React, {forwardRef, useCallback, useEffect, useMemo, useState} from 'react'
 import useDialogScheduleEdit from '../hooks/useDialogScheduleEdit'
 import {Schedule} from '../types'
 import {getPreviewStateObservable, PaneItemPreviewState} from '../utils/paneItemHelpers'
-import DateWithTooltipElementQuery from './DateWithTooltipElementQuery'
 import DateWithTooltip from './DateWithTooltip'
+import DateWithTooltipElementQuery from './DateWithTooltipElementQuery'
 import ScheduleContextMenu from './ScheduleContextMenu'
 import {DraftStatus} from './studio/DocumentStatus/DraftStatus'
 import {PublishedStatus} from './studio/DocumentStatus/PublishedStatus'
@@ -16,6 +18,34 @@ import User from './User'
 
 interface Props {
   schedule: Schedule
+}
+
+function useDocumentValidation(document?: SanityDocument | null): ValidationStatus {
+  const [isValidating, setIsValidating] = useState(false)
+  const [markers, setMarkers] = useState<ValidationMarker[]>([])
+
+  const validate = useCallback(
+    async function (doc?: SanityDocument | null) {
+      setIsValidating(true)
+      if (doc?._id) {
+        const newMarkers = await validateDocument(doc, schema)
+        setMarkers(newMarkers)
+      } else {
+        setMarkers([])
+      }
+      setIsValidating(false)
+    },
+    [setMarkers]
+  )
+
+  useEffect(() => {
+    validate(document)
+  }, [document])
+
+  return {
+    isValidating,
+    markers,
+  }
 }
 
 const ScheduleItemTool = (props: Props) => {
@@ -31,6 +61,12 @@ const ScheduleItemTool = (props: Props) => {
   const [paneItemPreview, setPaneItemPreview] = useState<PaneItemPreviewState>({})
 
   const {draft, published, isLoading} = paneItemPreview
+
+  const validation = useDocumentValidation(draft || published)
+  console.log(`Schedule ${schedule.id}`, {
+    markers: validation.markers,
+    document: draft || published,
+  })
 
   const visibleDocument = draft || published
   const invalidDocument = !visibleDocument && !isLoading
