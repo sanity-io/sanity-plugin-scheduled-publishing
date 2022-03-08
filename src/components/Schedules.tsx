@@ -1,6 +1,6 @@
 import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Label, Stack} from '@sanity/ui'
-import React from 'react'
+import React, {Fragment} from 'react'
 import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule, ScheduleSort, ScheduleState} from '../types'
 import CardEmptySchedules from './CardEmptySchedules'
@@ -56,17 +56,17 @@ const Schedules = (props: Props) => {
                 index > 0 ? getLocalizedDate(sortedSchedules[index - 1].executeAt) : null
               const dateCurrent = getLocalizedDate(v.executeAt)
               return (
-                <>
+                <Fragment key={v.id}>
                   {/* Render date subheaders (only when sorting by execution / publish date) */}
                   {sortBy === 'executeAt' && dateCurrent !== datePrevious && (
-                    <Box key={dateCurrent} paddingBottom={3} paddingTop={index === 0 ? 1 : 5}>
+                    <Box paddingBottom={3} paddingTop={index === 0 ? 1 : 5}>
                       <Label muted size={1}>
                         {dateCurrent}
                       </Label>
                     </Box>
                   )}
-                  <ScheduleItemTool key={v.id} schedule={v} />
-                </>
+                  <ScheduleItemTool schedule={v} />
+                </Fragment>
               )
             })}
           </Stack>
