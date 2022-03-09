@@ -1,0 +1,60 @@
+import {Box, Card, Flex} from '@sanity/ui'
+import React from 'react'
+import {useDocumentActionProps} from '../../contexts/documentActionProps'
+import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
+import {Schedule} from '../../types'
+import DateWithTooltip from '../DateWithTooltip'
+import ScheduleContextMenu from '../ScheduleContextMenu'
+import User from '../User'
+
+interface Props {
+  schedule: Schedule
+}
+
+const DocumentPreview = (props: Props) => {
+  const {schedule} = props
+
+  const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
+  const {onComplete} = useDocumentActionProps()
+
+  return (
+    <>
+      {/* Dialogs */}
+      {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
+
+      <Card
+        __unstable_focusRing
+        data-as="a"
+        flex={1}
+        onClick={dialogScheduleEditShow}
+        padding={1}
+        radius={2}
+        shadow={1}
+        tabIndex={0}
+      >
+        <Flex align="center" gap={2} justify="space-between" paddingX={2} style={{height: '35px'}}>
+          {/* Schedule date */}
+          <DateWithTooltip date={props.schedule.executeAt} />
+
+          {/* Avatar */}
+          <User id={schedule?.author} />
+        </Flex>
+      </Card>
+
+      {/* Context menu */}
+      <Box marginLeft={1} style={{flexShrink: 0}}>
+        <ScheduleContextMenu
+          actions={{
+            delete: true,
+            edit: true,
+          }}
+          onDelete={onComplete}
+          onEdit={dialogScheduleEditShow}
+          schedule={schedule}
+        />
+      </Box>
+    </>
+  )
+}
+
+export default DocumentPreview

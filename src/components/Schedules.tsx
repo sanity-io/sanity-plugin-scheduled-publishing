@@ -4,7 +4,7 @@ import React, {Fragment} from 'react'
 import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule, ScheduleSort, ScheduleState} from '../types'
 import CardEmptySchedules from './CardEmptySchedules'
-import ScheduleItemTool from './ScheduleItemTool'
+import {ScheduleItem} from './ScheduleItem'
 
 interface Props {
   schedules: Schedule[]
@@ -50,13 +50,13 @@ const Schedules = (props: Props) => {
       ) : (
         <Box marginBottom={5}>
           <Stack space={2}>
-            {sortedSchedules.map((v, index) => {
+            {sortedSchedules.map((schedule, index) => {
               // Get localised date string for current and previous schedules (e.g. 'February 2025')
               const datePrevious =
                 index > 0 ? getLocalizedDate(sortedSchedules[index - 1].executeAt) : null
-              const dateCurrent = getLocalizedDate(v.executeAt)
+              const dateCurrent = getLocalizedDate(schedule.executeAt)
               return (
-                <Fragment key={v.id}>
+                <Fragment key={schedule.id}>
                   {/* Render date subheaders (only when sorting by execution / publish date) */}
                   {sortBy === 'executeAt' && dateCurrent !== datePrevious && (
                     <Box paddingBottom={3} paddingTop={index === 0 ? 1 : 5}>
@@ -65,7 +65,7 @@ const Schedules = (props: Props) => {
                       </Label>
                     </Box>
                   )}
-                  <ScheduleItemTool schedule={v} />
+                  <ScheduleItem schedule={schedule} type="tool" />
                 </Fragment>
               )
             })}

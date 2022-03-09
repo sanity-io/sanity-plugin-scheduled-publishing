@@ -3,7 +3,7 @@ import {Box, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import {Schedule} from '../types'
 import Callout from './Callout'
-import ScheduleItemDocument from './ScheduleItemDocument'
+import {ScheduleItem} from './ScheduleItem'
 
 interface Props {
   publishWarning?: boolean
@@ -22,7 +22,7 @@ const DialogScheduleListContent = (props: Props) => {
       ) : (
         <Stack space={2}>
           {schedules.map((schedule) => (
-            <ScheduleItemDocument key={schedule.id} schedule={schedule} />
+            <ScheduleItem key={schedule.id} schedule={schedule} type="document" />
           ))}
         </Stack>
       )}
