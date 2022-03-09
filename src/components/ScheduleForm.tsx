@@ -1,6 +1,5 @@
 import {Card, Stack} from '@sanity/ui'
 import React from 'react'
-import useTimeZone from '../hooks/useTimeZone'
 import {ScheduleFormData} from '../types'
 import {DateTimeInput} from './DateInputs'
 
@@ -9,17 +8,8 @@ interface Props {
   value?: ScheduleFormData | null
 }
 
-/*
-const getCurrentTimeOffset = (minuteOffset: number) => {
-  const currentDate = new Date()
-  return new Date(currentDate.getTime() + minuteOffset * 60000).toISOString()
-}
-*/
-
 const ScheduleForm = (props: Props) => {
   const {onChange, value} = props
-
-  const {timeZone} = useTimeZone()
 
   const handleChange = (date: string | null) => {
     if (date && onChange) {
@@ -34,7 +24,6 @@ const ScheduleForm = (props: Props) => {
           level={0}
           markers={[]}
           onChange={handleChange}
-          timeZone={timeZone}
           type={{
             name: 'date',
             options: {
@@ -46,46 +35,6 @@ const ScheduleForm = (props: Props) => {
           value={value?.date}
         />
       </Card>
-
-      {/* Debug buttons */}
-      {/*
-        <Card padding={4} radius={2} shadow={1} tone="default">
-          <Stack space={3}>
-            <Text size={1} weight="semibold">
-              Debug: set schedule time from now
-            </Text>
-            <Inline space={2}>
-              <Button
-                onClick={handleChange.bind(undefined, getCurrentTimeOffset(-0.25))}
-                text="-15s"
-                tone="critical"
-              />
-              <Button
-                onClick={handleChange.bind(undefined, getCurrentTimeOffset(0.25))}
-                text="+15s"
-              />
-              <Button
-                onClick={handleChange.bind(undefined, getCurrentTimeOffset(0.5))}
-                text="+30s"
-              />
-              <Button onClick={handleChange.bind(undefined, getCurrentTimeOffset(1))} text="+1m" />
-              <Button onClick={handleChange.bind(undefined, getCurrentTimeOffset(5))} text="+5m" />
-              <Button
-                onClick={handleChange.bind(undefined, getCurrentTimeOffset(10))}
-                text="+10m"
-              />
-              <Button
-                onClick={handleChange.bind(undefined, getCurrentTimeOffset(30))}
-                text="+30m"
-              />
-              <Button
-                onClick={handleChange.bind(undefined, getCurrentTimeOffset(60))}
-                text="+60m"
-              />
-            </Inline>
-          </Stack>
-        </Card>
-        */}
     </Stack>
   )
 }

@@ -1,5 +1,6 @@
 import {useToast} from '@sanity/ui'
 import {getTimeZones} from '@vvo/tzdb'
+import {utcToZonedTime} from 'date-fns-tz'
 import React, {useEffect, useState} from 'react'
 import ToastDescription from '../components/ToastDescription'
 import {LOCAL_STORAGE_TZ_KEY} from '../constants'
@@ -11,6 +12,7 @@ enum TimeZoneEvents {
   update = 'timeZoneEventUpdate',
 }
 interface UseTimeZoneReturn {
+  getCurrentZoneDate: () => Date
   setTimeZone: (timeZone: NormalizedTimeZone) => void
   timeIsLocal: boolean
   timeZone: NormalizedTimeZone
@@ -73,6 +75,10 @@ const useTimeZone = (): UseTimeZoneReturn => {
     }
   }, [])
 
+  const getCurrentZoneDate = () => {
+    return utcToZonedTime(new Date(), timeZone.name)
+  }
+
   const handleNewValue: UseTimeZoneReturn['setTimeZone'] = (tz) => {
     debug('handleNewValue:', tz)
 
@@ -112,6 +118,7 @@ const useTimeZone = (): UseTimeZoneReturn => {
   }
 
   return {
+    getCurrentZoneDate,
     setTimeZone: handleNewValue,
     timeIsLocal: getLocalTimeZone().name === timeZone.name,
     timeZone,

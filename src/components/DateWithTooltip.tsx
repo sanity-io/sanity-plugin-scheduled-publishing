@@ -5,7 +5,7 @@ import useTimeZone from '../hooks/useTimeZone'
 import formatDateTz from '../utils/formatDateTz'
 
 interface Props {
-  date: string
+  date: string // local date in UTC
   useElementQueries?: boolean
 }
 
@@ -14,8 +14,10 @@ const DateWithTooltip = (props: Props) => {
 
   const {timeZone} = useTimeZone()
 
-  const currentDate = new Date()
-  const targetDate = new Date(date)
+  // Get distance between both dates
+  const distance = formatDistance(new Date(date), new Date(), {
+    addSuffix: true,
+  })
 
   const dateTimeLarge = formatDateTz({date, mode: 'large', timeZone})
   const dateTimeMedium = formatDateTz({date, mode: 'medium', timeZone})
@@ -26,9 +28,7 @@ const DateWithTooltip = (props: Props) => {
       content={
         <Box padding={2}>
           <Text muted size={1}>
-            {formatDistance(targetDate, currentDate, {
-              addSuffix: true,
-            })}
+            {distance}
           </Text>
         </Box>
       }

@@ -8,6 +8,7 @@ import {ARROW_KEYS, HOURS_24, MONTH_NAMES, DEFAULT_TIME_PRESETS} from './constan
 import {features} from './features'
 import {formatTime} from './utils'
 import {YearInput} from './YearInput'
+import useTimeZone from '../../../../hooks/useTimeZone'
 
 export type CalendarProps = Omit<React.ComponentProps<'div'>, 'onSelect'> & {
   selectTime?: boolean
@@ -37,10 +38,12 @@ export const Calendar = forwardRef(function Calendar(
   props: CalendarProps,
   forwardedRef: React.ForwardedRef<HTMLDivElement>
 ) {
+  const {getCurrentZoneDate} = useTimeZone()
+
   const {
     selectTime,
     onFocusedDateChange,
-    selectedDate = new Date(),
+    selectedDate = getCurrentZoneDate(),
     focusedDate = selectedDate,
     timeStep = 1,
     onSelect,
@@ -153,18 +156,24 @@ export const Calendar = forwardRef(function Calendar(
   }, [ref, focusCurrentWeekDay, focusedDate])
 
   const handleYesterdayClick = useCallback(
-    () => handleDateChange(addDays(new Date(), -1)),
-    [handleDateChange]
+    () => handleDateChange(addDays(getCurrentZoneDate(), -1)),
+    [handleDateChange, getCurrentZoneDate]
   )
 
-  const handleTodayClick = useCallback(() => handleDateChange(new Date()), [handleDateChange])
+  const handleTodayClick = useCallback(
+    () => handleDateChange(getCurrentZoneDate()),
+    [handleDateChange, getCurrentZoneDate]
+  )
 
   const handleTomorrowClick = useCallback(
-    () => handleDateChange(addDays(new Date(), 1)),
-    [handleDateChange]
+    () => handleDateChange(addDays(getCurrentZoneDate(), 1)),
+    [handleDateChange, getCurrentZoneDate]
   )
 
-  const handleNowClick = useCallback(() => onSelect(new Date()), [onSelect])
+  const handleNowClick = useCallback(
+    () => onSelect(getCurrentZoneDate()),
+    [onSelect, getCurrentZoneDate]
+  )
 
   return (
     <Box data-ui="Calendar" {...restProps} ref={ref}>

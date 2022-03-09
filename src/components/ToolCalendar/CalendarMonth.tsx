@@ -1,7 +1,7 @@
-import {Box, Grid, Text} from '@sanity/ui'
+import {Box, Card, Grid, Label} from '@sanity/ui'
 import {isSameDay, isSameMonth} from 'date-fns'
 import React from 'react'
-import useTimeZone from '../../../../hooks/useTimeZone'
+import useTimeZone from '../../hooks/useTimeZone'
 import {CalendarDay} from './CalendarDay'
 import {WEEK_DAY_NAMES} from './constants'
 import {getWeeksOfMonth} from './utils'
@@ -16,15 +16,16 @@ interface CalendarMonthProps {
 
 export function CalendarMonth(props: CalendarMonthProps) {
   const {getCurrentZoneDate} = useTimeZone()
+
   return (
     <Box aria-hidden={props.hidden || false} data-ui="CalendarMonth">
-      <Grid gap={1} style={{gridTemplateColumns: 'repeat(7, minmax(44px, 46px))'}}>
+      <Grid style={{gridTemplateColumns: 'repeat(7, 1fr)'}}>
         {WEEK_DAY_NAMES.map((weekday) => (
-          <Box key={weekday} paddingY={2}>
-            <Text size={1} weight="medium" style={{textAlign: 'center'}}>
-              {weekday}
-            </Text>
-          </Box>
+          <Card key={weekday} paddingY={3}>
+            <Label size={1} style={{textAlign: 'center'}}>
+              {weekday.substring(0, 1)}
+            </Label>
+          </Card>
         ))}
 
         {getWeeksOfMonth(props.date).map((week, weekIdx) =>

@@ -10,7 +10,7 @@ import {debugWithName} from '../utils/debug'
 import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
 import ButtonTimeZone from './ButtonTimeZone'
-import ToolCalendar from './ToolCalendar'
+import {ToolCalendar} from './ToolCalendar'
 import ButtonTimeZoneElementQuery from './ButtonTimeZoneElementQuery'
 
 const debug = debugWithName('Tool')

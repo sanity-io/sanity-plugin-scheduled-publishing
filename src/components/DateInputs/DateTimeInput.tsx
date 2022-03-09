@@ -4,7 +4,7 @@ import {CommonDateTimeInput} from './CommonDateTimeInput'
 import {CommonProps, ParseResult} from './types'
 import {isValidDate} from './utils'
 import {formatInTimeZone} from 'date-fns-tz'
-import {NormalizedTimeZone} from '../../types'
+import useTimeZone from '../../hooks/useTimeZone'
 
 type ParsedOptions = {
   dateFormat: string
@@ -23,7 +23,6 @@ const DEFAULT_TIME_FORMAT = 'HH:mm'
 
 export type Props = CommonProps & {
   onChange: (date: string | null) => void
-  timeZone: NormalizedTimeZone
   type: {
     name: string
     title: string
@@ -74,8 +73,10 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
   props: Props,
   forwardedRef: React.ForwardedRef<HTMLInputElement>
 ) {
-  const {timeZone, type, onChange, ...rest} = props
+  const {type, onChange, ...rest} = props
   const {title, description, placeholder} = type
+
+  const {getCurrentZoneDate, timeZone} = useTimeZone()
 
   const {dateFormat, timeFormat, timeStep} = parseOptions(type.options)
 
@@ -98,7 +99,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
 
   const parseInputValue = React.useCallback(
     (inputValue: string) => {
-      const parsed = parse(inputValue, `${dateFormat} ${timeFormat}`, new Date())
+      const parsed = parse(inputValue, `${dateFormat} ${timeFormat}`, getCurrentZoneDate())
       if (isValid(parsed)) {
         return {
           isValid: true,
@@ -110,7 +111,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
         error: `Invalid date. Must be on the format "${dateFormat} ${timeFormat}"`,
       } as ParseResult
     },
-    [dateFormat, timeFormat]
+    [dateFormat, getCurrentZoneDate, timeFormat]
   )
 
   return (
