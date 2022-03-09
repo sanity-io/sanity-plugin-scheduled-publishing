@@ -1,5 +1,4 @@
 import {WarningOutlineIcon} from '@sanity/icons'
-import {isSanityDocument} from '@sanity/types'
 import {Card, Flex} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
@@ -55,8 +54,8 @@ export const ScheduleItem = (props: Props) => {
       )
     }
 
-    // Fallback if document is not defined (or valid)
-    if (!isSanityDocument(visibleDocument) || invalidDocument) {
+    // Fallback if document is not defined
+    if (invalidDocument) {
       return (
         <>
           <Card padding={1}>

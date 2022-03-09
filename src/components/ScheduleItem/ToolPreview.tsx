@@ -28,25 +28,19 @@ const ToolPreview = (props: Props) => {
 
   const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
 
-  if (!previewState || !visibleDocument) {
-    return null
-  }
-
-  const LinkComponent = useMemo(
-    () =>
-      forwardRef((linkProps: any, ref: any) => (
-        <IntentLink
-          {...linkProps}
-          intent="edit"
-          params={{
-            type: schemaType.name,
-            id: getPublishedId(visibleDocument?._id),
-          }}
-          ref={ref}
-        />
-      )),
-    [IntentLink]
-  )
+  const LinkComponent = useMemo(() => {
+    return forwardRef((linkProps: any, ref: any) => (
+      <IntentLink
+        {...linkProps}
+        intent="edit"
+        params={{
+          type: schemaType.name,
+          id: visibleDocument && getPublishedId(visibleDocument?._id),
+        }}
+        ref={ref}
+      />
+    ))
+  }, [IntentLink, visibleDocument])
 
   return (
     <>
