@@ -3,8 +3,8 @@ import {
   unstable_useDocumentPairPermissions as useDocumentPairPermissions,
 } from '@sanity/base/hooks'
 import {
+  CalendarIcon,
   CheckmarkCircleIcon,
-  EditIcon,
   EllipsisVerticalIcon,
   PublishIcon,
   TrashIcon,
@@ -74,7 +74,7 @@ const ScheduleContextMenu = (props: Props) => {
             <MenuItemWithPermissionsTooltip
               currentUser={currentUser}
               hasPermission={!insufficientPermissions}
-              icon={EditIcon}
+              icon={CalendarIcon}
               onClick={handleEdit}
               permissionsOperationLabel="edit schedules"
               title="Edit schedule"
