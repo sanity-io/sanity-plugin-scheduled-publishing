@@ -53,7 +53,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
   debug('schedules', schedules)
 
-  const hasExistingSchedules = schedules.length > 0
+  const hasExistingSchedules = schedules && schedules.length > 0
 
   // Check to see if the document 'exists' (has either been published OR has draft content).
   // When creating a new document, despite having an ID assigned it won't exist in your dataset
@@ -114,7 +114,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
           buttonText="Schedule"
           disabled={!formData?.date}
           icon={ClockIcon}
-          onAction={schedules.length === 0 ? handleScheduleCreate : undefined}
+          onAction={schedules?.length === 0 ? handleScheduleCreate : undefined}
           onComplete={onComplete}
           tone="primary"
         />

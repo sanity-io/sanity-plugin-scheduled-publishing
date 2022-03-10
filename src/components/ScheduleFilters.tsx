@@ -7,7 +7,7 @@ import {Schedule, ScheduleState} from '../types'
 import ScheduleFilter from './ScheduleFilter'
 
 interface Props {
-  schedules: Schedule[]
+  schedules: Schedule[] | undefined
   scheduleState: ScheduleState
 }
 
@@ -22,7 +22,7 @@ const ScheduleFilters = (props: Props) => {
     navigate(state)
   }
 
-  const currentSchedules = schedules.filter((schedule) => schedule.state === scheduleState)
+  const currentSchedules = schedules?.filter((schedule) => schedule.state === scheduleState)
 
   return (
     <>
@@ -34,7 +34,9 @@ const ScheduleFilters = (props: Props) => {
               fontSize={1}
               iconRight={SelectIcon}
               mode="ghost"
-              text={`${SCHEDULE_FILTER_DICTIONARY[scheduleState]} (${currentSchedules.length})`}
+              text={`${SCHEDULE_FILTER_DICTIONARY[scheduleState]} (${
+                currentSchedules?.length || 0
+              })`}
               tone="default"
             />
           }
@@ -65,7 +67,7 @@ const ScheduleFilters = (props: Props) => {
         <Flex gap={2}>
           {SCHEDULE_STATES.map((filter) => (
             <ScheduleFilter
-              count={schedules.filter((schedule) => schedule.state === filter).length}
+              count={schedules?.filter((schedule) => schedule.state === filter).length || 0}
               critical={filter === 'cancelled'}
               key={filter}
               selected={scheduleState === filter}

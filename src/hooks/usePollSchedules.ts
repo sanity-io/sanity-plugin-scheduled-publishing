@@ -39,15 +39,13 @@ const SWR_OPTIONS = {
   shouldRetryOnError: false,
 }
 
-// TODO: correctly type SWR errors
-
 /**
  * Poll for all schedules
  */
 function usePollSchedules({documentId, state}: {documentId?: string; state?: ScheduleState} = {}): {
-  error: any
-  isLoading: boolean
-  schedules: Schedule[]
+  error: Error
+  isInitialLoading: boolean
+  schedules: Schedule[] | undefined
 } {
   const queryKey: QueryKey = {
     params: {
@@ -108,8 +106,8 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
 
   return {
     error,
-    isLoading: !error && !data,
-    schedules: data || [],
+    isInitialLoading: !error && !data,
+    schedules: data,
   }
 }
 

@@ -25,7 +25,6 @@ export const ScheduleItem = (props: Props) => {
   const schemaName = 'article'
   const schemaType = useMemo(() => schema.get(schemaName), [])
 
-  // const {draft, published, isLoading} = usePreviewState(firstDocument?.documentId, schemaType)
   const previewState = usePreviewState(firstDocument?.documentId, schemaType)
 
   const visibleDocument = previewState.draft || previewState.published
