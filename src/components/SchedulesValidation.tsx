@@ -28,8 +28,8 @@ export function SchedulesValidation(props: Props) {
 }
 
 /**
- * useValidationStatus is sweet, but a hook, so this just a boilerplate wrapper component around it so we
- * can get all that sweetness for free
+ * useValidationStatus is sweet, but a hook, so this a boilerplate wrapper component around it,
+ * so we get a callback when the hook returns new values
  * */
 export function ValidateScheduleDoc({
   schedule,

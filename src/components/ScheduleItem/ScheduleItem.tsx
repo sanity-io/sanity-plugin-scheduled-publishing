@@ -11,6 +11,7 @@ import DocumentPreview from './DocumentPreview'
 import ToolPreview from './ToolPreview'
 import {useSchemaType} from '../../hooks/useSchemaType'
 import {getScheduledDocument} from '../../utils/paneItemHelpers'
+import {SchemaType} from '@sanity/types'
 
 interface Props {
   schedule: Schedule
@@ -30,48 +31,13 @@ export const ScheduleItem = (props: Props) => {
   const visibleDocument = previewState.draft || previewState.published
   const invalidDocument = !visibleDocument && !previewState.isLoading
 
-  // Generate preview component based on wheter this document and schema exists
   const preview = useMemo(() => {
     const hasSchemaType = Boolean(schemaType?.name && schema.get(schemaType.name))
-
-    // Fallback if no valid schema is found
     if (!hasSchemaType) {
-      return (
-        <PreviewWrapper>
-          <Card padding={1}>
-            <SanityDefaultPreview
-              icon={WarningOutlineIcon}
-              layout="default"
-              value={{
-                title: (
-                  <em>
-                    No schema found for type <code>{schemaType.name}</code>
-                  </em>
-                ),
-              }}
-            />
-          </Card>
-        </PreviewWrapper>
-      )
+      return <NoSchemaItem schemaType={schemaType} />
     }
-
-    // Fallback if document is not defined
     if (invalidDocument) {
-      return (
-        <PreviewWrapper>
-          <Card padding={1}>
-            <SanityDefaultPreview
-              icon={WarningOutlineIcon}
-              layout="default"
-              value={{
-                subtitle: <em>It may have been since been deleted</em>,
-                title: <em>Document not found</em>,
-              }}
-            />
-          </Card>
-          <ScheduleContextMenu actions={{delete: true}} schedule={schedule} />
-        </PreviewWrapper>
-      )
+      return <InvalidDocument schedule={schedule} />
     }
 
     if (type === 'document') {
@@ -92,11 +58,48 @@ export const ScheduleItem = (props: Props) => {
         />
       )
     }
-
     return <PreviewWrapper />
-  }, [previewState])
+  }, [previewState, schedule, schemaType, validationStatus])
 
   return <DateWithTooltipElementQuery>{preview}</DateWithTooltipElementQuery>
+}
+
+function NoSchemaItem({schemaType}: {schemaType: SchemaType}) {
+  return (
+    <PreviewWrapper>
+      <Card padding={1}>
+        <SanityDefaultPreview
+          icon={WarningOutlineIcon}
+          layout="default"
+          value={{
+            title: (
+              <em>
+                No schema found for type <code>{schemaType.name}</code>
+              </em>
+            ),
+          }}
+        />
+      </Card>
+    </PreviewWrapper>
+  )
+}
+
+function InvalidDocument({schedule}: {schedule: Schedule}) {
+  return (
+    <PreviewWrapper>
+      <Card padding={1}>
+        <SanityDefaultPreview
+          icon={WarningOutlineIcon}
+          layout="default"
+          value={{
+            subtitle: <em>It may have been since been deleted</em>,
+            title: <em>Document not found</em>,
+          }}
+        />
+      </Card>
+      <ScheduleContextMenu actions={{delete: true}} schedule={schedule} />
+    </PreviewWrapper>
+  )
 }
 
 function PreviewWrapper(props: PropsWithChildren<unknown>) {
