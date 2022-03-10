@@ -5,22 +5,25 @@ import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import {getPublishedId} from 'part:@sanity/base/util/draft-utils'
 import React, {forwardRef, useMemo} from 'react'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
-import {Schedule} from '../../types'
+import {Schedule, ValidationStatus} from '../../types'
 import {PaneItemPreviewState} from '../../utils/paneItemHelpers'
 import DateWithTooltip from '../DateWithTooltip'
 import ScheduleContextMenu from '../ScheduleContextMenu'
 import {DraftStatus} from '../studio/DocumentStatus/DraftStatus'
 import {PublishedStatus} from '../studio/DocumentStatus/PublishedStatus'
 import User from '../User'
+import {ItemValidation} from './ItemValidation'
+import {useValidationState} from '../../utils/validation-utils'
 
 interface Props {
   previewState: PaneItemPreviewState
   schemaType: SchemaType
   schedule: Schedule
+  validationStatus: ValidationStatus
 }
 
 const ToolPreview = (props: Props) => {
-  const {previewState, schedule, schemaType} = props
+  const {previewState, schedule, schemaType, validationStatus} = props
 
   const visibleDocument = previewState.draft || previewState.published
   const isCompleted = schedule.state === 'succeeded'
@@ -42,30 +45,33 @@ const ToolPreview = (props: Props) => {
     ))
   }, [IntentLink, visibleDocument])
 
+  const {validationTone, hasError, hasWarning} = useValidationState(validationStatus)
   return (
-    <>
-      {/* Dialogs */}
-      {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
+    <Card padding={1} radius={2} shadow={1} tone={validationTone}>
+      <Flex align="center" justify="space-between">
+        {/* Dialogs */}
+        {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
 
-      <Card
-        __unstable_focusRing
-        as={LinkComponent}
-        data-as="a"
-        flex={1}
-        padding={1}
-        radius={2}
-        tabIndex={0}
-      >
-        <Flex align="center" justify="space-between">
-          {/* Preview */}
-          <Box style={{flexBasis: 'auto', flexGrow: 1}}>
-            <SanityDefaultPreview
-              icon={schemaType?.icon}
-              isPlaceholder={previewState.isLoading}
-              layout="default"
-              value={visibleDocument}
-            />
-          </Box>
+        <Card
+          __unstable_focusRing
+          as={LinkComponent}
+          data-as="a"
+          flex={1}
+          padding={1}
+          radius={2}
+          tabIndex={0}
+          tone={validationTone}
+        >
+          <Flex align="center" justify="space-between">
+            {/* Preview */}
+            <Box style={{flexBasis: 'auto', flexGrow: 1}}>
+              <SanityDefaultPreview
+                icon={schemaType?.icon}
+                isPlaceholder={previewState.isLoading}
+                layout="default"
+                value={visibleDocument}
+              />
+            </Box>
 
           {/* Schedule date */}
           <Box
@@ -90,26 +96,34 @@ const ToolPreview = (props: Props) => {
               <Inline space={4}>
                 <PublishedStatus document={previewState.published} />
                 <DraftStatus document={previewState.draft} />
+                <ItemValidation
+                  validationStatus={validationStatus}
+                  tone={validationTone}
+                  hasError={hasError}
+                  hasWarning={hasWarning}
+                  type={schemaType}
+                />
               </Inline>
             )}
           </Box>
         </Flex>
       </Card>
 
-      {/* Context menu */}
-      <Box marginLeft={1} style={{flexShrink: 0}}>
-        <ScheduleContextMenu
-          actions={{
-            clear: isCompleted,
-            delete: !isCompleted,
-            edit: isScheduled,
-            execute: isScheduled,
-          }}
-          onEdit={dialogScheduleEditShow}
-          schedule={schedule}
-        />
-      </Box>
-    </>
+        {/* Context menu */}
+        <Box marginLeft={1} style={{flexShrink: 0}}>
+          <ScheduleContextMenu
+            actions={{
+              clear: isCompleted,
+              delete: !isCompleted,
+              edit: isScheduled,
+              execute: isScheduled,
+            }}
+            onEdit={dialogScheduleEditShow}
+            schedule={schedule}
+          />
+        </Box>
+      </Flex>
+    </Card>
   )
 }
 

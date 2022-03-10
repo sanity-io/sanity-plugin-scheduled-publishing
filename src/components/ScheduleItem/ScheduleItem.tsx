@@ -2,28 +2,28 @@ import {WarningOutlineIcon} from '@sanity/icons'
 import {Card, Flex} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import schema from 'part:@sanity/base/schema'
-import React, {useMemo} from 'react'
+import React, {PropsWithChildren, useMemo} from 'react'
 import usePreviewState from '../../hooks/usePreviewState'
-import {Schedule} from '../../types'
+import {Schedule, ValidationStatus} from '../../types'
 import DateWithTooltipElementQuery from '../DateWithTooltipElementQuery'
 import ScheduleContextMenu from '../ScheduleContextMenu'
 import DocumentPreview from './DocumentPreview'
 import ToolPreview from './ToolPreview'
+import {useSchemaType} from '../../hooks/useSchemaType'
+import {getScheduledDocument} from '../../utils/paneItemHelpers'
 
 interface Props {
   schedule: Schedule
+  validationStatus: ValidationStatus
   type: 'document' | 'tool'
 }
 
 export const ScheduleItem = (props: Props) => {
-  const {schedule, type} = props
+  const {schedule, type, validationStatus} = props
 
-  // Whilst schedules can contain multiple documents, this plugin specifically limits schedules to one document only
-  const firstDocument = schedule.documents?.[0]
+  const firstDocument = getScheduledDocument(schedule)
 
-  // TODO: correctly infer type from schedule when exposed
-  const schemaName = 'article'
-  const schemaType = useMemo(() => schema.get(schemaName), [])
+  const schemaType = useSchemaType(schedule)
 
   const previewState = usePreviewState(firstDocument?.documentId, schemaType)
 
@@ -37,26 +37,28 @@ export const ScheduleItem = (props: Props) => {
     // Fallback if no valid schema is found
     if (!hasSchemaType) {
       return (
-        <Card padding={1}>
-          <SanityDefaultPreview
-            icon={WarningOutlineIcon}
-            layout="default"
-            value={{
-              title: (
-                <em>
-                  No schema found for type <code>{schemaName}</code>
-                </em>
-              ),
-            }}
-          />
-        </Card>
+        <PreviewWrapper>
+          <Card padding={1}>
+            <SanityDefaultPreview
+              icon={WarningOutlineIcon}
+              layout="default"
+              value={{
+                title: (
+                  <em>
+                    No schema found for type <code>{schemaType.name}</code>
+                  </em>
+                ),
+              }}
+            />
+          </Card>
+        </PreviewWrapper>
       )
     }
 
     // Fallback if document is not defined
     if (invalidDocument) {
       return (
-        <>
+        <PreviewWrapper>
           <Card padding={1}>
             <SanityDefaultPreview
               icon={WarningOutlineIcon}
@@ -68,28 +70,41 @@ export const ScheduleItem = (props: Props) => {
             />
           </Card>
           <ScheduleContextMenu actions={{delete: true}} schedule={schedule} />
-        </>
+        </PreviewWrapper>
       )
     }
 
     if (type === 'document') {
-      return <DocumentPreview schedule={schedule} />
+      return (
+        <PreviewWrapper>
+          <DocumentPreview schedule={schedule} />
+        </PreviewWrapper>
+      )
     }
 
     if (type === 'tool') {
-      return <ToolPreview previewState={previewState} schedule={schedule} schemaType={schemaType} />
+      return (
+        <ToolPreview
+          previewState={previewState}
+          schedule={schedule}
+          schemaType={schemaType}
+          validationStatus={validationStatus}
+        />
+      )
     }
 
-    return null
+    return <PreviewWrapper />
   }, [previewState])
 
+  return <DateWithTooltipElementQuery>{preview}</DateWithTooltipElementQuery>
+}
+
+function PreviewWrapper(props: PropsWithChildren<unknown>) {
   return (
-    <DateWithTooltipElementQuery>
-      <Card padding={1} radius={2} shadow={1}>
-        <Flex align="center" justify="space-between">
-          {preview}
-        </Flex>
-      </Card>
-    </DateWithTooltipElementQuery>
+    <Card padding={1} radius={2} shadow={1}>
+      <Flex align="center" justify="space-between">
+        {props.children}
+      </Flex>
+    </Card>
   )
 }

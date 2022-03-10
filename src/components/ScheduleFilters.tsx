@@ -2,19 +2,23 @@ import {useRouter} from '@sanity/base/router'
 import {CheckmarkIcon, SelectIcon} from '@sanity/icons'
 import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
 import React from 'react'
-import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_STATES} from '../constants'
-import {Schedule, ScheduleState} from '../types'
+import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_FILTERS, ScheduleFilterType} from '../constants'
+import {Schedule, ScheduledDocValidations} from '../types'
 import ScheduleFilter from './ScheduleFilter'
+import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[] | undefined
-  scheduleState: ScheduleState
+  scheduleState: ScheduleFilterType
+  validations: ScheduledDocValidations
 }
+
+const EMPTY_SCHEDULE: Schedule[] = []
 
 // TODO: refactor, filters should be receiving a much smaller snapshot of data
 
 const ScheduleFilters = (props: Props) => {
-  const {scheduleState, schedules} = props
+  const {scheduleState, schedules = EMPTY_SCHEDULE, validations} = props
 
   const {navigate} = useRouter()
 
@@ -22,7 +26,7 @@ const ScheduleFilters = (props: Props) => {
     navigate(state)
   }
 
-  const currentSchedules = schedules?.filter((schedule) => schedule.state === scheduleState)
+  const currentSchedules = useFilteredSchedules(schedules, scheduleState, validations)
 
   return (
     <>
@@ -48,7 +52,7 @@ const ScheduleFilters = (props: Props) => {
                   Scheduled state
                 </Label>
               </Box>
-              {SCHEDULE_STATES.map((filter) => (
+              {SCHEDULE_FILTERS.map((filter) => (
                 <MenuItem
                   iconRight={filter === scheduleState ? CheckmarkIcon : undefined}
                   key={filter}
@@ -64,11 +68,12 @@ const ScheduleFilters = (props: Props) => {
 
       {/* Larger breakpoints: Horizontal tabs */}
       <Box display={['none', 'none', 'block']}>
-        <TabList space={2}>
+        <TabList gap={2}>
           {SCHEDULE_STATES.map((filter) => (
             <ScheduleFilter
-              count={schedules?.filter((schedule) => schedule.state === filter).length || 0}
-              critical={filter === 'cancelled'}
+              schedules={schedules}
+              validations={validations}
+              critical={filter === 'cancelled' || filter === 'errors'}
               key={filter}
               selected={scheduleState === filter}
               state={filter}

@@ -10,6 +10,7 @@ export default {
   input: [
     'src/documentActions.ts', //
     'src/documentBadges.ts',
+    'src/inputResolver.ts',
     'src/tool.ts',
   ],
   output: [

@@ -15,6 +15,7 @@ import React, {useMemo} from 'react'
 import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule} from '../types'
 import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
+import {getScheduledDocument} from '../utils/paneItemHelpers'
 
 interface Props {
   actions?: {
@@ -34,8 +35,7 @@ const ScheduleContextMenu = (props: Props) => {
   // TODO: correctly infer type from schedule when exposed
   const schemaType = useMemo(() => schema.get('article'), [])
 
-  // Whilst schedules can contain multiple documents, this plugin specifically limits schedules to one document only
-  const firstDocument = schedule.documents?.[0]
+  const firstDocument = getScheduledDocument(schedule)
 
   // Studio hooks
   const {value: currentUser} = useCurrentUser()

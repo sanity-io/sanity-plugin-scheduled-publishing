@@ -11,6 +11,10 @@
     {
       "implements": "part:@sanity/base/document-badges/resolver",
       "path": "documentBadges.js"
+    },
+    {
+      "implements": "part:@sanity/form-builder/input-resolver",
+      "path": "inputResolver.js"
     }
   ],
   "paths": {
