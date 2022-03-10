@@ -9,6 +9,7 @@ import {getDraftId, getPublishedId} from 'part:@sanity/base/util/draft-utils'
 import React from 'react'
 import {combineLatest, Observable, of} from 'rxjs'
 import {map, startWith} from 'rxjs/operators'
+import {Schedule} from '../types'
 
 export interface PaneItemPreviewState {
   isLoading?: boolean
@@ -56,12 +57,28 @@ export function getPreviewStateObservable(
 
   return combineLatest([draft$, published$]).pipe(
     // @ts-ignore
-    map(([draft, published]) => ({
-      draft: draft.snapshot ? {title, ...(draft.snapshot as any)} : null,
-      isLoading: false,
-      // @ts-ignore
-      published: published.snapshot ? {title, ...(published.snapshot as any)} : null,
-    })),
+    map(([draft, published]) => {
+      return {
+        draft: draft.snapshot ? {title, ...(draft.snapshot as any)} : null,
+        isLoading: false,
+        // @ts-ignore
+        published: published.snapshot ? {title, ...(published.snapshot as any)} : null,
+      }
+    }),
     startWith({draft: null, isLoading: true, published: null})
   )
+}
+
+/**
+ * Whilst schedules can contain multiple documents, this plugin specifically limits schedules to one document only
+ */
+export function getScheduledDocument(schedule: Schedule) {
+  return schedule.documents?.[0]
+}
+
+/**
+ * Whilst schedules can contain multiple documents, this plugin specifically limits schedules to one document only
+ */
+export function getScheduledDocumentId(schedule: Schedule): string | undefined {
+  return getScheduledDocument(schedule)?.documentId.replaceAll('drafts.', '')
 }

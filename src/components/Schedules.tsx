@@ -1,15 +1,19 @@
 import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Label, Stack} from '@sanity/ui'
-import React, {Fragment} from 'react'
+import React, {Fragment, useMemo} from 'react'
 import useScheduleOperation from '../hooks/useScheduleOperation'
-import {Schedule, ScheduleSort, ScheduleState} from '../types'
+import {Schedule, ScheduledDocValidations, ScheduleSort} from '../types'
 import CardEmptySchedules from './CardEmptySchedules'
 import {ScheduleItem} from './ScheduleItem'
+import {ScheduleFilterType} from '../constants'
+import {getValidationStatus} from '../utils/validation-utils'
+import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[]
-  scheduleState: ScheduleState
+  scheduleState: ScheduleFilterType
   sortBy: ScheduleSort
+  validations: ScheduledDocValidations
 }
 
 function getLocalizedDate(date: string) {
@@ -20,23 +24,13 @@ function getLocalizedDate(date: string) {
 }
 
 const Schedules = (props: Props) => {
-  const {schedules, scheduleState, sortBy} = props
+  const {schedules, scheduleState, sortBy, validations} = props
 
   const {deleteSchedules} = useScheduleOperation()
 
-  const sortedSchedules = schedules.sort((a, b) => {
-    if (sortBy === 'createdAt') {
-      return a[sortBy] < b[sortBy] ? 1 : -1
-    }
-    if (sortBy === 'executeAt') {
-      return a[sortBy] > b[sortBy] ? 1 : -1
-    }
-    return 1
-  })
+  const activeSchedules = useFilteredSchedules(schedules, scheduleState, validations)
+  const sortedSchedules = useSortedSchedules(activeSchedules, sortBy)
 
-  const activeSchedules = schedules.filter((schedule) => schedule.state === scheduleState)
-
-  // Callbacks
   const handleClearSchedules = () => {
     deleteSchedules({schedules: activeSchedules})
   }
@@ -65,7 +59,11 @@ const Schedules = (props: Props) => {
                       </Label>
                     </Box>
                   )}
-                  <ScheduleItem schedule={schedule} type="tool" />
+                  <ScheduleItem
+                    schedule={schedule}
+                    type="tool"
+                    validationStatus={getValidationStatus(schedule, validations)}
+                  />
                 </Fragment>
               )
             })}
@@ -85,6 +83,22 @@ const Schedules = (props: Props) => {
         </Box>
       )}
     </>
+  )
+}
+
+function useSortedSchedules(schedules: Schedule[], sortBy: ScheduleSort): Schedule[] {
+  return useMemo(
+    () =>
+      schedules.sort((a, b) => {
+        if (sortBy === 'createdAt') {
+          return a[sortBy] < b[sortBy] ? 1 : -1
+        }
+        if (sortBy === 'executeAt') {
+          return a[sortBy] > b[sortBy] ? 1 : -1
+        }
+        return 1
+      }),
+    [schedules, sortBy]
   )
 }
 

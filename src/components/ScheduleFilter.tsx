@@ -2,19 +2,22 @@ import {StateLink} from '@sanity/base/router'
 import {red, white} from '@sanity/color'
 import {Box, Flex, Tab, Text} from '@sanity/ui'
 import React from 'react'
-import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
-import {ScheduleState} from '../types'
+import {SCHEDULE_FILTER_DICTIONARY, ScheduleFilterType} from '../constants'
+import {Schedule, ScheduledDocValidations} from '../types'
+import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
-  count: number
+  schedules: Schedule[]
+  validations: ScheduledDocValidations
   critical?: boolean
   selected?: boolean
-  state: ScheduleState
+  state: ScheduleFilterType
 }
 
 const ScheduleFilter = (props: Props) => {
-  const {count, critical, selected, state, ...rest} = props
+  const {critical, selected, state, schedules, validations, ...rest} = props
 
+  const count = useFilteredSchedules(schedules, state, validations).length
   const title = SCHEDULE_FILTER_DICTIONARY[state]
 
   const hasItems = count > 0

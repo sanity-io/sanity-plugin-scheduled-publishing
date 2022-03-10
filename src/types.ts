@@ -1,3 +1,6 @@
+import {ScheduleFilterType} from './constants'
+import {Marker} from '@sanity/types'
+
 export interface NormalizedTimeZone {
   abbreviation: string
   alternativeName: string
@@ -25,7 +28,7 @@ export interface Schedule {
 }
 
 export interface ScheduleFilter {
-  state: ScheduleState
+  state: ScheduleFilterType
   title: string
 }
 
@@ -36,3 +39,13 @@ export interface ScheduleFormData {
 export type ScheduleSort = 'createdAt' | 'executeAt'
 
 export type ScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
+
+export interface ValidationStatus {
+  isValidating: boolean
+  markers: Marker[]
+}
+
+/**
+ * key is schedule.id, NOT documentId
+ */
+export type ScheduledDocValidations = Record<string, ValidationStatus>

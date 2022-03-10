@@ -4,6 +4,7 @@ import React from 'react'
 import {Schedule} from '../types'
 import Callout from './Callout'
 import {ScheduleItem} from './ScheduleItem'
+import {EMPTY_VALIDATION_STATUS} from '../utils/validation-utils'
 
 interface Props {
   publishWarning?: boolean
@@ -22,7 +23,12 @@ const DialogScheduleListContent = (props: Props) => {
       ) : (
         <Stack space={2}>
           {schedules.map((schedule) => (
-            <ScheduleItem key={schedule.id} schedule={schedule} type="document" />
+            <ScheduleItem
+              key={schedule.id}
+              schedule={schedule}
+              type="document"
+              validationStatus={EMPTY_VALIDATION_STATUS}
+            />
           ))}
         </Stack>
       )}
