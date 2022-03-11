@@ -11,14 +11,8 @@ export const DatePicker = React.forwardRef(function DatePicker(
   },
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
-  const {getCurrentZoneDate} = useTimeZone()
-
-  const {
-    // Default to current date in selected time zone
-    value = getCurrentZoneDate(),
-    onChange,
-    ...rest
-  } = props
+  const {utcToCurrentZoneDate} = useTimeZone()
+  const {value = new Date(), onChange, ...rest} = props
   const [focusedDate, setFocusedDay] = React.useState<Date>()
 
   const handleSelect = React.useCallback(
@@ -33,9 +27,9 @@ export const DatePicker = React.forwardRef(function DatePicker(
     <Calendar
       {...rest}
       ref={ref}
-      selectedDate={value}
+      selectedDate={utcToCurrentZoneDate(value)}
       onSelect={handleSelect}
-      focusedDate={focusedDate || value}
+      focusedDate={utcToCurrentZoneDate(focusedDate || value)}
       onFocusedDateChange={setFocusedDay}
     />
   )

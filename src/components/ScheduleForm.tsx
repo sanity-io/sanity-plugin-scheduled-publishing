@@ -27,8 +27,9 @@ const ScheduleForm = (props: Props) => {
           type={{
             name: 'date',
             options: {
-              dateFormat: `iii d MMM yyyy 'at'`,
-              timeFormat: 'p',
+              // date-fns format
+              dateFormat: `d/MM/yyyy`,
+              timeFormat: 'HH:mm',
             },
             title: 'Date and time',
           }}

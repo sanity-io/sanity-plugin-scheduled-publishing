@@ -16,6 +16,7 @@ interface CalendarMonthProps {
 
 export function CalendarMonth(props: CalendarMonthProps) {
   const {getCurrentZoneDate} = useTimeZone()
+
   return (
     <Box aria-hidden={props.hidden || false} data-ui="CalendarMonth">
       <Grid gap={1} style={{gridTemplateColumns: 'repeat(7, minmax(44px, 46px))'}}>

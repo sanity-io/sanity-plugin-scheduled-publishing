@@ -4,7 +4,6 @@ import {FormField} from '@sanity/base/components'
 import {Marker} from '@sanity/types'
 import {TextInput, useForwardedRef} from '@sanity/ui'
 import React, {useEffect} from 'react'
-import useTimeZone from '../../hooks/useTimeZone'
 import {DateTimeInput} from './base/DateTimeInput'
 import {CommonProps, ParseResult} from './types'
 
@@ -42,8 +41,6 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
     onChange,
     ...rest
   } = props
-
-  const {getCurrentZoneDate} = useTimeZone()
 
   const [localValue, setLocalValue] = React.useState<string | null>(null)
 
@@ -120,7 +117,7 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
           id={id}
           selectTime={selectTime}
           timeStep={timeStep}
-          placeholder={placeholder || `e.g. ${formatInputValue(getCurrentZoneDate())}`}
+          placeholder={placeholder || `e.g. ${formatInputValue(new Date())}`}
           ref={inputRef}
           value={parseResult?.date}
           inputValue={inputValue || ''}

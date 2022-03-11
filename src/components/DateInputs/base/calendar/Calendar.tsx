@@ -1,14 +1,14 @@
-import {Box, Button, Flex, Grid, Select, Text, useForwardedRef} from '@sanity/ui'
 import {ChevronLeftIcon, ChevronRightIcon} from '@sanity/icons'
+import {Box, Button, Flex, Select, Text, useForwardedRef} from '@sanity/ui'
 import {addDays, addMonths, setDate, setHours, setMinutes, setMonth, setYear} from 'date-fns'
 import {range} from 'lodash'
 import React, {forwardRef, useCallback, useEffect} from 'react'
+import useTimeZone from '../../../../hooks/useTimeZone'
 import {CalendarMonth} from './CalendarMonth'
-import {ARROW_KEYS, HOURS_24, MONTH_NAMES, DEFAULT_TIME_PRESETS} from './constants'
+import {ARROW_KEYS, DEFAULT_TIME_PRESETS, HOURS_24, MONTH_NAMES} from './constants'
 import {features} from './features'
 import {formatTime} from './utils'
 import {YearInput} from './YearInput'
-import useTimeZone from '../../../../hooks/useTimeZone'
 
 export type CalendarProps = Omit<React.ComponentProps<'div'>, 'onSelect'> & {
   selectTime?: boolean
@@ -38,7 +38,7 @@ export const Calendar = forwardRef(function Calendar(
   props: CalendarProps,
   forwardedRef: React.ForwardedRef<HTMLDivElement>
 ) {
-  const {getCurrentZoneDate} = useTimeZone()
+  const {getCurrentZoneDate, zoneDateToUtc} = useTimeZone()
 
   const {
     selectTime,
@@ -51,8 +51,8 @@ export const Calendar = forwardRef(function Calendar(
   } = props
 
   const setFocusedDate = useCallback(
-    (date: Date) => onFocusedDateChange(date),
-    [onFocusedDateChange]
+    (date: Date) => onFocusedDateChange(zoneDateToUtc(date)),
+    [onFocusedDateChange, zoneDateToUtc]
   )
 
   const setFocusedDateMonth = useCallback(
@@ -77,32 +77,36 @@ export const Calendar = forwardRef(function Calendar(
 
   const handleDateChange = useCallback(
     (date: Date) => {
-      onSelect(setMinutes(setHours(date, selectedDate.getHours()), selectedDate.getMinutes()))
+      onSelect(
+        zoneDateToUtc(
+          setMinutes(setHours(date, selectedDate.getHours()), selectedDate.getMinutes())
+        )
+      )
     },
-    [onSelect, selectedDate]
+    [onSelect, selectedDate, zoneDateToUtc]
   )
 
   const handleMinutesChange = useCallback(
     (event: React.FormEvent<HTMLSelectElement>) => {
       const m = Number(event.currentTarget.value)
-      onSelect(setMinutes(selectedDate, m))
+      onSelect(zoneDateToUtc(setMinutes(selectedDate, m)))
     },
-    [onSelect, selectedDate]
+    [onSelect, selectedDate, zoneDateToUtc]
   )
 
   const handleHoursChange = useCallback(
     (event: React.FormEvent<HTMLSelectElement>) => {
       const m = Number(event.currentTarget.value)
-      onSelect(setHours(selectedDate, m))
+      onSelect(zoneDateToUtc(setHours(selectedDate, m)))
     },
-    [onSelect, selectedDate]
+    [onSelect, selectedDate, zoneDateToUtc]
   )
 
   const handleTimeChange = useCallback(
     (hours: number, mins: number) => {
-      onSelect(setHours(setMinutes(selectedDate, mins), hours))
+      onSelect(zoneDateToUtc(setHours(setMinutes(selectedDate, mins), hours)))
     },
-    [onSelect, selectedDate]
+    [onSelect, selectedDate, zoneDateToUtc]
   )
 
   const ref = useForwardedRef(forwardedRef)
@@ -122,16 +126,16 @@ export const Calendar = forwardRef(function Calendar(
         return
       }
       if (event.key === 'ArrowUp') {
-        onFocusedDateChange(addDays(focusedDate, -7))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, -7)))
       }
       if (event.key === 'ArrowDown') {
-        onFocusedDateChange(addDays(focusedDate, 7))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, 7)))
       }
       if (event.key === 'ArrowLeft') {
-        onFocusedDateChange(addDays(focusedDate, -1))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, -1)))
       }
       if (event.key === 'ArrowRight') {
-        onFocusedDateChange(addDays(focusedDate, 1))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, 1)))
       }
       // set focus temporarily on this element to make sure focus is still inside the calendar-grid after re-render
       ref.current?.querySelector<HTMLElement>('[data-preserve-focus]')?.focus()
@@ -155,39 +159,12 @@ export const Calendar = forwardRef(function Calendar(
     }
   }, [ref, focusCurrentWeekDay, focusedDate])
 
-  const handleYesterdayClick = useCallback(
-    () => handleDateChange(addDays(getCurrentZoneDate(), -1)),
-    [handleDateChange, getCurrentZoneDate]
-  )
-
-  const handleTodayClick = useCallback(
-    () => handleDateChange(getCurrentZoneDate()),
-    [handleDateChange, getCurrentZoneDate]
-  )
-
-  const handleTomorrowClick = useCallback(
-    () => handleDateChange(addDays(getCurrentZoneDate(), 1)),
-    [handleDateChange, getCurrentZoneDate]
-  )
-
-  const handleNowClick = useCallback(
-    () => onSelect(getCurrentZoneDate()),
-    [onSelect, getCurrentZoneDate]
-  )
+  const handleNowClick = useCallback(() => onSelect(new Date()), [onSelect])
 
   return (
     <Box data-ui="Calendar" {...restProps} ref={ref}>
       {/* Select date */}
       <Box padding={2}>
-        {/* Day presets */}
-        {features.dayPresets && (
-          <Grid columns={3} data-ui="CalendaryDayPresets" gap={1}>
-            <Button text="Yesterday" mode="bleed" fontSize={1} onClick={handleYesterdayClick} />
-            <Button text="Today" mode="bleed" fontSize={1} onClick={handleTodayClick} />
-            <Button text="Tomorrow" mode="bleed" fontSize={1} onClick={handleTomorrowClick} />
-          </Grid>
-        )}
-
         {/* Select month and year */}
         <Flex>
           <Box flex={1}>

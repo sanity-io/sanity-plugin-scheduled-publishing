@@ -4,6 +4,7 @@ import {NormalizedTimeZone} from '../types'
 /**
  * Return time-zone adjusted date in the format 'Fri 24 Dec 2021 at 6:00 AM'
  */
+// TODO: consider moving into `useTimeZone` to avoid needing to pass `timeZone`
 export default function formatDateTz({
   date,
   includeTimeZone,

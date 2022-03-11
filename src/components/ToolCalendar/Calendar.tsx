@@ -1,10 +1,9 @@
-import {Box, Button, Flex, Grid, Text, useForwardedRef} from '@sanity/ui'
+import {Box, Button, Flex, Text, useForwardedRef} from '@sanity/ui'
 import {ChevronLeftIcon, ChevronRightIcon} from '@sanity/icons'
 import {addDays, addMonths, setHours, setMinutes} from 'date-fns'
 import React, {forwardRef, useCallback, useEffect} from 'react'
 import {CalendarMonth} from './CalendarMonth'
 import {ARROW_KEYS, MONTH_NAMES} from './constants'
-import {features} from './features'
 import {TOOL_HEADER_HEIGHT} from '../../constants'
 import useTimeZone from '../../hooks/useTimeZone'
 
@@ -42,11 +41,11 @@ export const Calendar = forwardRef(function Calendar(
     ...restProps
   } = props
 
-  const {getCurrentZoneDate} = useTimeZone()
+  const {zoneDateToUtc} = useTimeZone()
 
   const setFocusedDate = useCallback(
-    (date: Date) => onFocusedDateChange(date),
-    [onFocusedDateChange]
+    (date: Date) => onFocusedDateChange(zoneDateToUtc(date)),
+    [onFocusedDateChange, zoneDateToUtc]
   )
 
   const moveFocusedDate = useCallback(
@@ -56,9 +55,13 @@ export const Calendar = forwardRef(function Calendar(
 
   const handleDateChange = useCallback(
     (date: Date) => {
-      onSelect(setMinutes(setHours(date, selectedDate.getHours()), selectedDate.getMinutes()))
+      onSelect(
+        zoneDateToUtc(
+          setMinutes(setHours(date, selectedDate.getHours()), selectedDate.getMinutes())
+        )
+      )
     },
-    [onSelect, selectedDate]
+    [onSelect, selectedDate, zoneDateToUtc]
   )
 
   const ref = useForwardedRef(forwardedRef)
@@ -78,16 +81,16 @@ export const Calendar = forwardRef(function Calendar(
         return
       }
       if (event.key === 'ArrowUp') {
-        onFocusedDateChange(addDays(focusedDate, -7))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, -7)))
       }
       if (event.key === 'ArrowDown') {
-        onFocusedDateChange(addDays(focusedDate, 7))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, 7)))
       }
       if (event.key === 'ArrowLeft') {
-        onFocusedDateChange(addDays(focusedDate, -1))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, -1)))
       }
       if (event.key === 'ArrowRight') {
-        onFocusedDateChange(addDays(focusedDate, 1))
+        onFocusedDateChange(zoneDateToUtc(addDays(focusedDate, 1)))
       }
       // set focus temporarily on this element to make sure focus is still inside the calendar-grid after re-render
       ref.current?.querySelector<HTMLElement>('[data-preserve-focus]')?.focus()
@@ -111,25 +114,7 @@ export const Calendar = forwardRef(function Calendar(
     }
   }, [ref, focusCurrentWeekDay, focusedDate])
 
-  const handleYesterdayClick = useCallback(
-    () => handleDateChange(addDays(getCurrentZoneDate(), -1)),
-    [handleDateChange, getCurrentZoneDate]
-  )
-
-  const handleTodayClick = useCallback(
-    () => handleDateChange(getCurrentZoneDate()),
-    [handleDateChange, getCurrentZoneDate]
-  )
-
-  const handleTomorrowClick = useCallback(
-    () => handleDateChange(addDays(getCurrentZoneDate(), 1)),
-    [handleDateChange, getCurrentZoneDate]
-  )
-
-  const handleNowClick = useCallback(
-    () => onSelect(getCurrentZoneDate()),
-    [onSelect, getCurrentZoneDate]
-  )
+  const handleNowClick = useCallback(() => onSelect(new Date()), [onSelect])
 
   const handlePrevMonthClick = useCallback(() => moveFocusedDate(-1), [moveFocusedDate])
 
@@ -173,15 +158,6 @@ export const Calendar = forwardRef(function Calendar(
 
       {/* Select date */}
       <Box>
-        {/* Day presets */}
-        {features.dayPresets && (
-          <Grid columns={3} data-ui="CalendaryDayPresets" gap={1}>
-            <Button text="Yesterday" mode="bleed" fontSize={1} onClick={handleYesterdayClick} />
-            <Button text="Today" mode="bleed" fontSize={1} onClick={handleTodayClick} />
-            <Button text="Tomorrow" mode="bleed" fontSize={1} onClick={handleTomorrowClick} />
-          </Grid>
-        )}
-
         {/* Selected month (grid of days) */}
         <Box data-calendar-grid onKeyDown={handleKeyDown} overflow="hidden" tabIndex={0}>
           <CalendarMonth
