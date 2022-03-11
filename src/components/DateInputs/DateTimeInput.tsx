@@ -92,6 +92,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
     timeStep,
   } = parseOptions(type.options)
 
+  // Returns date in UTC
   const handleChange = useCallback(
     (nextDate: string | null) => {
       let date = nextDate

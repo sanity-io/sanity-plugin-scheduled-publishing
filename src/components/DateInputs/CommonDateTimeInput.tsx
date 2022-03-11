@@ -4,6 +4,7 @@ import {FormField} from '@sanity/base/components'
 import {Marker} from '@sanity/types'
 import {TextInput, useForwardedRef} from '@sanity/ui'
 import React, {useEffect} from 'react'
+import useTimeZone from '../../hooks/useTimeZone'
 import {DateTimeInput} from './base/DateTimeInput'
 import {CommonProps, ParseResult} from './types'
 
@@ -50,6 +51,9 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
     setLocalValue(null)
   }, [value])
 
+  const {zoneDateToUtc} = useTimeZone()
+
+  // Text input changes ('wall time')
   const handleDatePickerInputChange = React.useCallback(
     (event) => {
       const nextInputValue = event.currentTarget.value
@@ -64,7 +68,8 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
           setLocalValue(null)
         }
       } else if (result.isValid) {
-        onChange(serialize(result.date))
+        // Convert zone time to UTC
+        onChange(serialize(zoneDateToUtc(result.date)))
       } else {
         setLocalValue(nextInputValue)
       }
@@ -72,6 +77,7 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
     [localValue, serialize, onChange, parseInputValue]
   )
 
+  // Calendar changes (UTC)
   const handleDatePickerChange = React.useCallback(
     (nextDate: Date | null) => {
       onChange(nextDate ? serialize(nextDate) : null)

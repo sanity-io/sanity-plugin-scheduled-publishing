@@ -36,9 +36,7 @@ export const LazyTextInput = React.forwardRef(function LazyTextInput(
           onChange(event)
         }
       }
-      // TODO: better understand why this is used in studio.
-      // This currently shows an unsightly flash of the previous input value (on blur) when uncommented.
-      // setInputValue(undefined)
+      setInputValue(undefined)
     },
     [onChange, value]
   )
