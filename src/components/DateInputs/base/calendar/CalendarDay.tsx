@@ -1,5 +1,6 @@
 import {Card, Text} from '@sanity/ui'
-import React, {useCallback} from 'react'
+import {endOfDay} from 'date-fns'
+import React, {useCallback, useMemo} from 'react'
 
 interface CalendarDayProps {
   date: Date
@@ -7,15 +8,27 @@ interface CalendarDayProps {
   onSelect: (date: Date) => void
   isCurrentMonth?: boolean
   isToday: boolean
+  isValidDate?: (selectedDate: Date) => boolean
   selected?: boolean
 }
 
 export function CalendarDay(props: CalendarDayProps) {
-  const {date, focused, isCurrentMonth, isToday, onSelect, selected} = props
+  const {date, focused, isCurrentMonth, isToday, isValidDate, onSelect, selected} = props
+
+  // Round date to the end of day when passing to custom validate function.
+  // Remember that all calendar days are in UTC, but comparison is done with 'wall clock' time.
+  const isValid = useMemo(() => {
+    if (!isValidDate) {
+      return true
+    }
+    return isValidDate(endOfDay(date))
+  }, [date])
 
   const handleClick = useCallback(() => {
-    onSelect(date)
-  }, [date, onSelect])
+    if (isValid) {
+      onSelect(date)
+    }
+  }, [date, isValid, onSelect])
 
   return (
     <div aria-selected={selected} data-ui="CalendarDay">
@@ -26,6 +39,7 @@ export function CalendarDay(props: CalendarDayProps) {
         __unstable_focusRing
         data-weekday
         data-focused={focused ? 'true' : ''}
+        disabled={!isValid}
         role="button"
         tabIndex={-1}
         onClick={handleClick}

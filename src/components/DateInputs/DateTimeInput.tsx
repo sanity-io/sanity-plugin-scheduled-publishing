@@ -1,19 +1,21 @@
+import {getMinutes, isValid, parse, parseISO, setMinutes} from 'date-fns'
+import {formatInTimeZone} from 'date-fns-tz'
 import React, {useCallback} from 'react'
-import {getMinutes, setMinutes, parse, parseISO, isValid} from 'date-fns'
+import useTimeZone from '../../hooks/useTimeZone'
 import {CommonDateTimeInput} from './CommonDateTimeInput'
 import {CommonProps, ParseResult} from './types'
 import {isValidDate} from './utils'
-import {formatInTimeZone} from 'date-fns-tz'
-import useTimeZone from '../../hooks/useTimeZone'
 
 type ParsedOptions = {
+  calendarTodayLabel: string
   dateFormat: string
+  isValidDate: (selectedDate: Date) => boolean
   timeFormat: string
   timeStep: number
-  calendarTodayLabel: string
 }
 type SchemaOptions = {
   dateFormat?: string
+  isValidDate?: (selectedDate: Date) => boolean
   timeFormat?: string
   timeStep?: number
   calendarTodayLabel?: string
@@ -34,10 +36,15 @@ export type Props = CommonProps & {
 
 function parseOptions(options: SchemaOptions = {}): ParsedOptions {
   return {
+    calendarTodayLabel: options.calendarTodayLabel || 'Today',
     dateFormat: options.dateFormat || DEFAULT_DATE_FORMAT,
+    isValidDate:
+      options.isValidDate ||
+      function () {
+        return true
+      },
     timeFormat: options.timeFormat || DEFAULT_TIME_FORMAT,
     timeStep: ('timeStep' in options && Number(options.timeStep)) || 1,
-    calendarTodayLabel: options.calendarTodayLabel || 'Today',
   }
 }
 
@@ -78,7 +85,12 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
 
   const {getCurrentZoneDate, timeZone} = useTimeZone()
 
-  const {dateFormat, timeFormat, timeStep} = parseOptions(type.options)
+  const {
+    dateFormat,
+    isValidDate: parsedOptionsIsValidDate,
+    timeFormat,
+    timeStep,
+  } = parseOptions(type.options)
 
   const handleChange = useCallback(
     (nextDate: string | null) => {
@@ -127,6 +139,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
       serialize={serialize}
       deserialize={deserialize}
       formatInputValue={formatInputValue}
+      isValidDate={parsedOptionsIsValidDate}
       parseInputValue={parseInputValue}
     />
   )

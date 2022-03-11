@@ -1,5 +1,6 @@
 import {Card, Stack} from '@sanity/ui'
 import React from 'react'
+import useTimeZone from '../hooks/useTimeZone'
 import {ScheduleFormData} from '../types'
 import {DateTimeInput} from './DateInputs'
 
@@ -11,10 +12,17 @@ interface Props {
 const ScheduleForm = (props: Props) => {
   const {onChange, value} = props
 
+  const {getCurrentZoneDate} = useTimeZone()
+
   const handleChange = (date: string | null) => {
     if (date && onChange) {
       onChange({date})
     }
+  }
+
+  // Only allow dates in the future (`selectedDate` is UTC)
+  const handleIsValidDate = (selectedDate: Date): boolean => {
+    return selectedDate > getCurrentZoneDate()
   }
 
   return (
@@ -29,6 +37,7 @@ const ScheduleForm = (props: Props) => {
             options: {
               // date-fns format
               dateFormat: `d/MM/yyyy`,
+              isValidDate: handleIsValidDate,
               timeFormat: 'HH:mm',
             },
             title: 'Date and time',

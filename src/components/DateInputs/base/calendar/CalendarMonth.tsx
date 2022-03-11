@@ -12,11 +12,12 @@ interface CalendarMonthProps {
   selected?: Date
   onSelect: (date: Date) => void
   hidden?: boolean
+  isValidDate?: (selectedDate: Date) => boolean
 }
 
 export function CalendarMonth(props: CalendarMonthProps) {
   const {getCurrentZoneDate} = useTimeZone()
-
+  const {isValidDate} = props
   return (
     <Box aria-hidden={props.hidden || false} data-ui="CalendarMonth">
       <Grid gap={1} style={{gridTemplateColumns: 'repeat(7, minmax(44px, 46px))'}}>
@@ -28,6 +29,7 @@ export function CalendarMonth(props: CalendarMonthProps) {
           </Box>
         ))}
 
+        {/* Note: UTC dates are passed to each Calendar day but we use 'clock time' for comparison */}
         {getWeeksOfMonth(props.date).map((week, weekIdx) =>
           week.days.map((date, dayIdx) => {
             const focused = props.focused && isSameDay(date, props.focused)
@@ -41,6 +43,7 @@ export function CalendarMonth(props: CalendarMonthProps) {
                 focused={focused}
                 isCurrentMonth={isCurrentMonth}
                 isToday={isToday}
+                isValidDate={isValidDate}
                 // eslint-disable-next-line react/no-array-index-key
                 key={`${weekIdx}-${dayIdx}`}
                 onSelect={props.onSelect}
