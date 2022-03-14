@@ -54,6 +54,7 @@ function ValidationInfoWithRouter(props: ValidationProps & {router: HOCRouter}) 
           <Card tone={hasError ? 'critical' : 'default'} style={{visibility}}>
             <Button
               tone={hasError ? 'critical' : 'caution'}
+              style={{background: 'none'}}
               title="Show validation issues"
               mode="bleed"
               data-testid="schedule-validation-list-button"

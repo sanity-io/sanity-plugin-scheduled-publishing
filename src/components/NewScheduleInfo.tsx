@@ -38,7 +38,7 @@ function ValidationWarning({id, type}: {id: string; type: string}) {
 
   return (
     <Card tone="critical" style={{background: 'none'}}>
-      <Flex gap={3}>
+      <Flex gap={1} align="center">
         <Box>
           <ValidationInfo
             markers={validationStatus.markers}
@@ -46,11 +46,9 @@ function ValidationWarning({id, type}: {id: string; type: string}) {
             documentId={publishedId}
           />
         </Box>
-        <Box>
-          <Text accent size={1}>
-            {DOCUMENT_HAS_ERRORS_TEXT}
-          </Text>
-        </Box>
+        <Text accent size={1}>
+          {DOCUMENT_HAS_ERRORS_TEXT}
+        </Text>
       </Flex>
     </Card>
   )
