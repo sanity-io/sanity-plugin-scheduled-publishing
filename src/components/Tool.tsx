@@ -1,4 +1,5 @@
 import {HOCRouter, withRouterHOC} from '@sanity/base/router'
+import {white} from '@sanity/color'
 import {CheckmarkIcon, EllipsisVerticalIcon, ErrorOutlineIcon, SortIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Label, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import React, {useEffect, useState} from 'react'
@@ -77,8 +78,16 @@ function Tool(props: Props) {
         <ToolCalendar />
       </Column>
       {/* RHS Column */}
-      <Column flex={1}>
-        <ButtonTimeZoneElementQuery>
+      <Column flex={1} overflow="auto">
+        <ButtonTimeZoneElementQuery
+          style={{
+            background: white.hex,
+            position: 'sticky',
+            top: 0,
+            zIndex: 1,
+          }}
+        >
+          {/* Header */}
           <Flex
             align="center"
             paddingLeft={4}
