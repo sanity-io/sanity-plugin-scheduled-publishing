@@ -3,6 +3,7 @@ import {getScheduledDocumentId} from '../utils/paneItemHelpers'
 import {useSchemaType} from '../hooks/useSchemaType'
 import {useValidationStatus} from '@sanity/react-hooks'
 import React, {useEffect} from 'react'
+import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[]
@@ -13,10 +14,10 @@ export type UpdateValidation = (schedule: Schedule, validationStatus: Validation
 
 export function SchedulesValidation(props: Props) {
   const {schedules, updateValidation} = props
-
+  const validatedSchedules = useFilteredSchedules(schedules, 'scheduled')
   return (
     <>
-      {schedules.map((schedule) => (
+      {validatedSchedules.map((schedule) => (
         <ValidateScheduleDoc
           key={schedule.id}
           schedule={schedule}

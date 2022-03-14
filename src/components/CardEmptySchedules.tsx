@@ -3,11 +3,10 @@ import React from 'react'
 import BigIconComingSoon from './BigIconComingSoon'
 import BigIconSuccess from './BigIconSuccess'
 import BigIconScreen from './BigIconScreen'
-import {ScheduleFilterType} from '../constants'
-import {ErrorOutlineIcon} from '@sanity/icons'
+import {ScheduleState} from '../types'
 
 interface Props {
-  scheduleState: ScheduleFilterType
+  scheduleState: ScheduleState
 }
 
 const CardEmptySchedules = (props: Props) => {
@@ -35,12 +34,6 @@ const CardEmptySchedules = (props: Props) => {
         'When editing a document, create a new scheduled publication from the menu next to the Publish button.'
       heading = 'No upcoming scheduled publications'
       BigIcon = BigIconScreen
-      break
-    }
-    case 'errors': {
-      description = 'Documents with validation errors show up here.'
-      heading = 'No scheduled publications have validation errors.'
-      BigIcon = ErrorOutlineIcon
       break
     }
     default: {

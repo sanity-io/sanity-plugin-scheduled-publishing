@@ -2,20 +2,18 @@ import {useRouter} from '@sanity/base/router'
 import {CheckmarkIcon, SelectIcon} from '@sanity/icons'
 import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
 import React from 'react'
-import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_FILTERS, ScheduleFilterType} from '../constants'
-import {Schedule, ScheduledDocValidations} from '../types'
+import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_FILTERS} from '../constants'
+import {Schedule, ScheduledDocValidations, ScheduleState} from '../types'
 import ScheduleFilter from './ScheduleFilter'
 import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[] | undefined
-  scheduleState: ScheduleFilterType
+  scheduleState: ScheduleState
   validations: ScheduledDocValidations
 }
 
 const EMPTY_SCHEDULE: Schedule[] = []
-
-// TODO: refactor, filters should be receiving a much smaller snapshot of data
 
 const ScheduleFilters = (props: Props) => {
   const {scheduleState, schedules = EMPTY_SCHEDULE, validations} = props
@@ -26,7 +24,7 @@ const ScheduleFilters = (props: Props) => {
     navigate(state)
   }
 
-  const currentSchedules = useFilteredSchedules(schedules, scheduleState, validations)
+  const currentSchedules = useFilteredSchedules(schedules, scheduleState)
 
   return (
     <>
@@ -72,8 +70,8 @@ const ScheduleFilters = (props: Props) => {
           {SCHEDULE_STATES.map((filter) => (
             <ScheduleFilter
               schedules={schedules}
-              validations={validations}
-              critical={filter === 'cancelled' || filter === 'errors'}
+              validations={filter === 'scheduled' ? validations : undefined}
+              critical={filter === 'cancelled'}
               key={filter}
               selected={scheduleState === filter}
               state={filter}

@@ -13,7 +13,7 @@ export default function resolveInput(type: any): any {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getRootType(type: any): any {
+function getRootType(type: any): any {
   if (!type.type) {
     return type
   }
