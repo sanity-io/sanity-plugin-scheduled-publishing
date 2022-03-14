@@ -9,7 +9,7 @@ import DateWithTooltipElementQuery from '../DateWithTooltipElementQuery'
 import ScheduleContextMenu from '../ScheduleContextMenu'
 import DocumentPreview from './DocumentPreview'
 import ToolPreview from './ToolPreview'
-import {useSchemaType} from '../../hooks/useSchemaType'
+import {useScheduleSchemaType} from '../../hooks/useSchemaType'
 import {getScheduledDocument} from '../../utils/paneItemHelpers'
 import {SchemaType} from '@sanity/types'
 
@@ -24,7 +24,7 @@ export const ScheduleItem = (props: Props) => {
 
   const firstDocument = getScheduledDocument(schedule)
 
-  const schemaType = useSchemaType(schedule)
+  const schemaType = useScheduleSchemaType(schedule)
 
   const previewState = usePreviewState(firstDocument?.documentId, schemaType)
 
@@ -43,7 +43,11 @@ export const ScheduleItem = (props: Props) => {
     if (type === 'document') {
       return (
         <PreviewWrapper>
-          <DocumentPreview schedule={schedule} />
+          <DocumentPreview
+            schedule={schedule}
+            schemaType={schemaType}
+            validationStatus={validationStatus}
+          />
         </PreviewWrapper>
       )
     }

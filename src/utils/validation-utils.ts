@@ -2,6 +2,7 @@ import {Schedule, ScheduledDocValidations, ValidationStatus} from '../types'
 import {useMemo} from 'react'
 import {isValidationErrorMarker, isValidationWarningMarker} from '@sanity/types'
 import {ButtonTone} from '@sanity/ui'
+import {Marker} from '@sanity/types'
 
 export const EMPTY_VALIDATION_STATUS: ValidationStatus = {
   markers: [],
@@ -16,14 +17,13 @@ export function getValidationStatus(
 }
 
 interface ValidationState {
-  validationStatus: ValidationStatus
+  markers: Marker[]
   validationTone: ButtonTone
   hasError: boolean
   hasWarning: boolean
 }
 
-export function getValidationState(validationStatus: ValidationStatus): ValidationState {
-  const markers = validationStatus.markers
+export function getValidationState(markers: Marker[]): ValidationState {
   const validationMarkers = markers.filter((marker) => marker.type === 'validation')
 
   const hasError = validationMarkers.filter(isValidationErrorMarker).length > 0
@@ -38,13 +38,13 @@ export function getValidationState(validationStatus: ValidationStatus): Validati
   }
 
   return {
-    validationStatus,
+    markers,
     validationTone,
     hasError,
     hasWarning,
   }
 }
 
-export function useValidationState(validationStatus: ValidationStatus): ValidationState {
-  return useMemo(() => getValidationState(validationStatus), [validationStatus])
+export function useValidationState(markers: Marker[]): ValidationState {
+  return useMemo(() => getValidationState(markers), [markers])
 }

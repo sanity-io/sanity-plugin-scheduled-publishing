@@ -5,7 +5,7 @@ import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule} from '../types'
 import DialogFooter from './DialogFooter'
 import DialogHeader from './DialogHeader'
-import DialogScheduleFormContent from './DialogScheduleFormContent'
+import {EditScheduleForm} from './EditScheduleForm'
 
 interface Props {
   onClose: () => void
@@ -49,7 +49,7 @@ const DialogScheduleEdit = (props: Props) => {
       width={1}
     >
       <Box padding={4}>
-        <DialogScheduleFormContent onChange={onFormChange} type="edit" value={formData} />
+        <EditScheduleForm onChange={onFormChange} value={formData} />
       </Box>
     </Dialog>
   )

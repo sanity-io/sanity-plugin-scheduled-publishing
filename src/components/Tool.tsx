@@ -6,20 +6,15 @@ import {Box, Button, Card, Flex, Label, Menu, MenuButton, MenuItem, Text} from '
 import styled from 'styled-components'
 import {SCHEDULE_FILTERS, TOOL_HEADER_HEIGHT} from '../constants'
 import usePollSchedules from '../hooks/usePollSchedules'
-import {
-  Schedule,
-  ScheduledDocValidations,
-  ScheduleSort,
-  ScheduleState,
-  ValidationStatus,
-} from '../types'
+import {Schedule, ScheduleSort, ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
 import ButtonTimeZone from './ButtonTimeZone'
 import ButtonTimeZoneElementQuery from './ButtonTimeZoneElementQuery'
 import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
 import {ToolCalendar} from './ToolCalendar'
-import {SchedulesValidation} from './SchedulesValidation'
+import {SchedulesValidation} from './validation/SchedulesValidation'
+import {useValidations} from '../hooks/useValidations'
 
 const debug = debugWithName('Tool')
 
@@ -39,7 +34,7 @@ function Tool(props: Props) {
   const {router} = props
 
   const [sortBy, setSortBy] = useState<ScheduleSort>('executeAt')
-  const [validations, setValidations] = useState<ScheduledDocValidations>({})
+  const [validations, updateValidation] = useValidations()
 
   const {error, isInitialLoading, schedules = NO_SCHEDULE} = usePollSchedules()
 
@@ -52,9 +47,6 @@ function Tool(props: Props) {
 
   const handleSortByCreateAt = useCallback(() => setSortBy('createdAt'), [])
   const handleSortByExecuteAt = useCallback(() => setSortBy('executeAt'), [])
-  const updateValidation = (s: Schedule, vs: ValidationStatus) =>
-    setValidations((current) => ({...current, [s.id]: vs}))
-  // @ts-ignore
   return (
     <Card display="flex" flex={1} height="fill" overflow="auto">
       {/* LHS Column */}

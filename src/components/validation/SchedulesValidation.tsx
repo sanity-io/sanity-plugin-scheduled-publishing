@@ -1,9 +1,9 @@
-import {Schedule, ValidationStatus} from '../types'
-import {getScheduledDocumentId} from '../utils/paneItemHelpers'
-import {useSchemaType} from '../hooks/useSchemaType'
+import {Schedule, ValidationStatus} from '../../types'
+import {getScheduledDocumentId} from '../../utils/paneItemHelpers'
+import {useScheduleSchemaType} from '../../hooks/useSchemaType'
 import {useValidationStatus} from '@sanity/react-hooks'
 import React, {useEffect} from 'react'
-import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
+import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[]
@@ -55,7 +55,7 @@ function ValidationRunner({
   schedule: Schedule
   updateValidation: UpdateValidation
 }) {
-  const schemaType = useSchemaType(schedule)
+  const schemaType = useScheduleSchemaType(schedule)
   const validationStatus = useValidationStatus(id, schemaType.name)
 
   useEffect(() => {
