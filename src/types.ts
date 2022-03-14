@@ -17,7 +17,7 @@ export interface Schedule {
   // description: string // TODO: deprecate
   documents: {
     documentId: string
-    ifRevisionId: string
+    documentType: string
   }[]
   executeAt: string
   id: string

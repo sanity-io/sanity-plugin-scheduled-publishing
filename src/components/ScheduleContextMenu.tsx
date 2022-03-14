@@ -32,10 +32,9 @@ interface Props {
 const ScheduleContextMenu = (props: Props) => {
   const {actions, onDelete, onEdit, schedule} = props
 
-  // TODO: correctly infer type from schedule when exposed
-  const schemaType = useMemo(() => schema.get('article'), [])
-
   const firstDocument = getScheduledDocument(schedule)
+
+  const schemaType = useMemo(() => schema.get(firstDocument.documentType), [])
 
   // Studio hooks
   const {value: currentUser} = useCurrentUser()
