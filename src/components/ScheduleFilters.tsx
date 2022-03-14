@@ -66,8 +66,8 @@ const ScheduleFilters = (props: Props) => {
 
       {/* Larger breakpoints: Horizontal tabs */}
       <Box display={['none', 'none', 'block']}>
-        <TabList gap={2}>
-          {SCHEDULE_STATES.map((filter) => (
+        <TabList>
+          {SCHEDULE_FILTERS.map((filter) => (
             <ScheduleFilter
               schedules={schedules}
               validations={filter === 'scheduled' ? validations : undefined}
