@@ -24,7 +24,7 @@ type QueryKey = {
 
 const fetcher = (queryKey: QueryKey) =>
   axios
-    .get<Schedule[]>(queryKey.url, {
+    .get<{schedules: Schedule[] | undefined}>(queryKey.url, {
       params: queryKey.params,
       withCredentials: true,
     })
@@ -62,7 +62,11 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   // Immediately remove schedule from SWR cache and revalidate
   const handleDelete = useCallback((event: CustomEvent<ScheduleDeleteEvent>) => {
     mutate(
-      (schedules) => schedules?.filter((schedule) => schedule.id !== event.detail.scheduleId),
+      (currentData) => ({
+        schedules: currentData?.schedules?.filter(
+          (schedule) => schedule.id !== event.detail.scheduleId
+        ),
+      }),
       true // revalidate SWR
     )
   }, [])
@@ -70,8 +74,11 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   // Immediately remove schedules from SWR cache and revalidate
   const handleDeleteMultiple = useCallback((event: CustomEvent<ScheduleDeleteMultipleEvent>) => {
     mutate(
-      (schedules) =>
-        schedules?.filter((schedule) => !event.detail.scheduleIds.includes(schedule.id)),
+      (currentData) => ({
+        schedules: currentData?.schedules?.filter(
+          (schedule) => !event.detail.scheduleIds.includes(schedule.id)
+        ),
+      }),
       true // revalidate SWR
     )
   }, [])
@@ -79,16 +86,22 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   // Immediately update schedule in SWR cache and revalidate
   const handleUpdate = useCallback((event: CustomEvent<ScheduleUpdateEvent>) => {
     mutate(
-      (schedules = []) => {
-        const index = schedules?.findIndex((schedule) => schedule.id === event.detail.scheduleId)
-        return [
-          ...schedules?.slice(0, index),
-          {
-            ...schedules[index],
-            executeAt: event.detail.date,
-          },
-          ...schedules?.slice(index + 1),
-        ]
+      // (schedules = []) => {
+      (currentData) => {
+        const currentSchedules = currentData?.schedules || []
+        const index = currentSchedules.findIndex(
+          (schedule) => schedule.id === event.detail.scheduleId
+        )
+        return {
+          schedules: [
+            ...currentSchedules?.slice(0, index),
+            {
+              ...currentSchedules[index],
+              executeAt: event.detail.date,
+            },
+            ...currentSchedules?.slice(index + 1),
+          ],
+        }
       },
       true // revalidate SWR
     )
@@ -109,7 +122,7 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   return {
     error,
     isInitialLoading: !error && !data,
-    schedules: data ?? NO_SCHEDULES,
+    schedules: data?.schedules || NO_SCHEDULES,
   }
 }
 
