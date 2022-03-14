@@ -143,14 +143,14 @@ export const Calendar = forwardRef(function Calendar(
               mode="bleed"
               onClick={handlePrevMonthClick}
               radius={0}
-              style={{height: '55px', width: '55px'}}
+              style={{height: '55px', width: '50px'}}
             />
             <Button
               icon={ChevronRightIcon}
               mode="bleed"
               onClick={handleNextMonthClick}
               radius={0}
-              style={{height: '55px', width: '55px'}}
+              style={{height: '55px', width: '50px'}}
             />
           </Flex>
         </Flex>

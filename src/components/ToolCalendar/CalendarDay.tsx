@@ -22,8 +22,7 @@ export function CalendarDay(props: CalendarDayProps) {
   if (isToday || selected) {
     tone = 'primary'
   } else if (isWeekend(date)) {
-    // tone = 'transparent'
-    tone = 'default'
+    tone = 'transparent'
   } else {
     tone = 'default'
   }
@@ -46,10 +45,11 @@ export function CalendarDay(props: CalendarDayProps) {
         tone={tone}
       >
         <Text
-          muted={!selected && !isCurrentMonth}
           size={1}
-          style={{textAlign: 'center'}}
-          weight={isCurrentMonth ? 'medium' : 'regular'}
+          style={{
+            opacity: !selected && !isCurrentMonth ? 0.35 : 1,
+            textAlign: 'center',
+          }}
         >
           {date.getDate()}
         </Text>
