@@ -1,6 +1,6 @@
 import {useRouter} from '@sanity/base/router'
 import {CheckmarkIcon, SelectIcon} from '@sanity/icons'
-import {Box, Button, Flex, Label, Menu, MenuButton, MenuItem} from '@sanity/ui'
+import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
 import React from 'react'
 import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_STATES} from '../constants'
 import {Schedule, ScheduleState} from '../types'
@@ -64,7 +64,7 @@ const ScheduleFilters = (props: Props) => {
 
       {/* Larger breakpoints: Horizontal tabs */}
       <Box display={['none', 'none', 'block']}>
-        <Flex gap={2}>
+        <TabList space={2}>
           {SCHEDULE_STATES.map((filter) => (
             <ScheduleFilter
               count={schedules?.filter((schedule) => schedule.state === filter).length || 0}
@@ -74,7 +74,7 @@ const ScheduleFilters = (props: Props) => {
               state={filter}
             />
           ))}
-        </Flex>
+        </TabList>
       </Box>
     </>
   )

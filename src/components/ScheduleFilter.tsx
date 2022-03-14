@@ -1,7 +1,7 @@
 import {StateLink} from '@sanity/base/router'
 import {red, white} from '@sanity/color'
 import {Box, Flex, Tab, Text} from '@sanity/ui'
-import React from 'react'
+import React, {forwardRef} from 'react'
 import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
 import {ScheduleState} from '../types'
 
@@ -12,8 +12,8 @@ interface Props {
   state: ScheduleState
 }
 
-const ScheduleFilter = (props: Props) => {
-  const {count, critical, selected, state} = props
+const ScheduleFilter = forwardRef((props: Props) => {
+  const {count, critical, selected, state, ...rest} = props
 
   const title = SCHEDULE_FILTER_DICTIONARY[state]
 
@@ -21,7 +21,6 @@ const ScheduleFilter = (props: Props) => {
 
   return (
     <Tab
-      aria-controls="filters"
       // @ts-ignore
       as={StateLink}
       id={state}
@@ -30,6 +29,7 @@ const ScheduleFilter = (props: Props) => {
       selected={selected}
       state={{state}}
       tone={critical ? 'critical' : 'default'}
+      {...rest}
     >
       <Flex align="center" paddingX={1}>
         <Text size={2} weight="medium">
@@ -59,6 +59,6 @@ const ScheduleFilter = (props: Props) => {
       </Flex>
     </Tab>
   )
-}
+})
 
 export default ScheduleFilter
