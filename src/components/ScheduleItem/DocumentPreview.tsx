@@ -1,22 +1,29 @@
 import {Box, Card, Flex} from '@sanity/ui'
-import React from 'react'
+import React, {useMemo} from 'react'
 import {useDocumentActionProps} from '../../contexts/documentActionProps'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
-import {Schedule} from '../../types'
+import {Schedule, ValidationStatus} from '../../types'
 import DateWithTooltip from '../DateWithTooltip'
 import ScheduleContextMenu from '../ScheduleContextMenu'
 import User from '../User'
+import {ValidationInfo} from '../validation/ValidationInfo'
+import {useValidationState} from '../../utils/validation-utils'
+import {SchemaType} from '@sanity/types'
+import {getScheduledDocumentId} from '../../utils/paneItemHelpers'
 
 interface Props {
   schedule: Schedule
+  schemaType: SchemaType
+  validationStatus: ValidationStatus
 }
 
 const DocumentPreview = (props: Props) => {
-  const {schedule} = props
+  const {schedule, validationStatus, schemaType} = props
 
   const {DialogScheduleEdit, dialogProps, dialogScheduleEditShow} = useDialogScheduleEdit(schedule)
   const {onComplete} = useDocumentActionProps()
-
+  const {hasError, hasWarning} = useValidationState(validationStatus.markers)
+  const publishedId = useMemo(() => getScheduledDocumentId(schedule), [schedule])
   return (
     <>
       {/* Dialogs */}
@@ -40,6 +47,16 @@ const DocumentPreview = (props: Props) => {
           <User id={schedule?.author} />
         </Flex>
       </Card>
+
+      {(hasError || hasWarning) && (
+        <Box marginX={2}>
+          <ValidationInfo
+            markers={validationStatus.markers}
+            type={schemaType}
+            documentId={publishedId}
+          />
+        </Box>
+      )}
 
       {/* Context menu */}
       <Box marginLeft={1} style={{flexShrink: 0}}>

@@ -9,13 +9,16 @@ import {Box} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
-import DialogScheduleFormContent from '../components/DialogScheduleFormContent'
+import {EditScheduleForm} from '../components/EditScheduleForm'
 import DialogScheduleListContent from '../components/DialogScheduleListContent'
 import {DocumentActionPropsProvider} from '../contexts/documentActionProps'
 import usePollSchedules from '../hooks/usePollSchedules'
 import useScheduleForm from '../hooks/useScheduleForm'
 import useScheduleOperation from '../hooks/useScheduleOperation'
 import {debugWithName} from '../utils/debug'
+import {useValidations} from '../hooks/useValidations'
+import {SchedulesValidation} from '../components/validation/SchedulesValidation'
+import {NewScheduleInfo} from '../components/NewScheduleInfo'
 
 const debug = debugWithName('ScheduleAction')
 
@@ -51,6 +54,9 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   // Poll for document schedules
   // TODO: handle error + isLoading states
   const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
+
+  const [validations, updateValidation] = useValidations()
+
   debug('schedules', schedules)
 
   const hasExistingSchedules = schedules && schedules.length > 0
@@ -102,11 +108,16 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
     dialog: dialogOpen && {
       content: (
         <DocumentActionPropsProvider value={props}>
-          {hasExistingSchedules ? (
-            <DialogScheduleListContent schedules={schedules} />
-          ) : (
-            <DialogScheduleFormContent onChange={onFormChange} type="new" value={formData} />
-          )}
+          <>
+            <SchedulesValidation schedules={schedules} updateValidation={updateValidation} />
+            {hasExistingSchedules ? (
+              <DialogScheduleListContent schedules={schedules} validations={validations} />
+            ) : (
+              <EditScheduleForm onChange={onFormChange} value={formData}>
+                <NewScheduleInfo id={id} schemaType={type} />
+              </EditScheduleForm>
+            )}
+          </>
         </DocumentActionPropsProvider>
       ),
       footer: !hasExistingSchedules && (

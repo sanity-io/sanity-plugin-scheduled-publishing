@@ -1,18 +1,19 @@
 import {InfoOutlineIcon} from '@sanity/icons'
 import {Box, Stack, Text} from '@sanity/ui'
 import React from 'react'
-import {Schedule} from '../types'
+import {Schedule, ScheduledDocValidations} from '../types'
 import Callout from './Callout'
 import {ScheduleItem} from './ScheduleItem'
-import {EMPTY_VALIDATION_STATUS} from '../utils/validation-utils'
+import {getValidationStatus} from '../utils/validation-utils'
 
 interface Props {
   publishWarning?: boolean
   schedules: Schedule[]
+  validations: ScheduledDocValidations
 }
 
 const DialogScheduleListContent = (props: Props) => {
-  const {publishWarning, schedules} = props
+  const {publishWarning, schedules, validations} = props
 
   return (
     <Stack space={4}>
@@ -27,7 +28,7 @@ const DialogScheduleListContent = (props: Props) => {
               key={schedule.id}
               schedule={schedule}
               type="document"
-              validationStatus={EMPTY_VALIDATION_STATUS}
+              validationStatus={getValidationStatus(schedule, validations)}
             />
           ))}
         </Stack>

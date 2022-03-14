@@ -39,13 +39,15 @@ const SWR_OPTIONS = {
   shouldRetryOnError: false,
 }
 
+const NO_SCHEDULES: Schedule[] = []
+
 /**
  * Poll for all schedules
  */
 function usePollSchedules({documentId, state}: {documentId?: string; state?: ScheduleState} = {}): {
   error: Error
   isInitialLoading: boolean
-  schedules: Schedule[] | undefined
+  schedules: Schedule[]
 } {
   const queryKey: QueryKey = {
     params: {
@@ -107,7 +109,7 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   return {
     error,
     isInitialLoading: !error && !data,
-    schedules: data,
+    schedules: data ?? NO_SCHEDULES,
   }
 }
 
