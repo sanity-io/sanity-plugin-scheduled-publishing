@@ -2,7 +2,7 @@ import {HOCRouter, withRouterHOC} from '@sanity/base/router'
 import {white} from '@sanity/color'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {CheckmarkIcon, EllipsisVerticalIcon, ErrorOutlineIcon, SortIcon} from '@sanity/icons'
-import {Box, Button, Card, Flex, Label, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
+import {Box, Button, Card, Flex, Inline, Label, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import styled from 'styled-components'
 import {SCHEDULE_FILTERS, TOOL_HEADER_HEIGHT} from '../constants'
 import usePollSchedules from '../hooks/usePollSchedules'
@@ -133,11 +133,16 @@ function Tool(props: Props) {
           {/* Error */}
           {error && (
             <Card overflow="hidden" padding={4} radius={2} shadow={1} tone="critical">
-              <Flex align="center" gap={4}>
-                <Text size={3}>
+              <Flex align="center" gap={3}>
+                <Text size={2}>
                   <ErrorOutlineIcon />
                 </Text>
-                <Text size={2}>Unable to load schedules: {error.message}</Text>
+                <Inline space={2}>
+                  <Text size={1} weight="semibold">
+                    Unable to fetch schedules:
+                  </Text>
+                  <Text size={1}>{error.message}</Text>
+                </Inline>
               </Flex>
             </Card>
           )}

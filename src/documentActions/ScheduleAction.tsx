@@ -5,7 +5,7 @@ import {
   useCurrentUser,
 } from '@sanity/base/hooks'
 import {CalendarIcon, ClockIcon, ErrorOutlineIcon} from '@sanity/icons'
-import {Box} from '@sanity/ui'
+import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
@@ -108,13 +108,24 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
     tooltip =
       'Live Edit is enabled for this content type and publishing happens automatically as you make changes'
   }
-  if (error) {
-    tooltip = `Unable to fetch schedules. Please check the developer console for more information.`
-  }
 
   return {
     dialog: dialogOpen && {
-      content: (
+      content: error ? (
+        <Card overflow="hidden" padding={4} radius={2} shadow={1} tone="critical">
+          <Flex align="center" gap={3}>
+            <Text size={2}>
+              <ErrorOutlineIcon />
+            </Text>
+            <Inline space={2}>
+              <Text size={1} weight="semibold">
+                Unable to fetch schedules.
+              </Text>
+              <Text size={1}>Please check the developer console for more information.</Text>
+            </Inline>
+          </Flex>
+        </Card>
+      ) : (
         <DocumentActionPropsProvider value={props}>
           <>
             <SchedulesValidation schedules={schedules} updateValidation={updateValidation} />
@@ -142,9 +153,9 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
       onClose: onComplete,
       type: 'modal',
     },
-    disabled: Boolean(error) || isInitialLoading || !documentExists || liveEdit,
+    disabled: isInitialLoading || !documentExists || liveEdit,
     label: title,
-    icon: error ? ErrorOutlineIcon : CalendarIcon,
+    icon: CalendarIcon,
     onHandle: handleDialogOpen,
     title: tooltip && <Box style={{maxWidth: '315px'}}>{tooltip}</Box>,
   }
