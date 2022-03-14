@@ -1,5 +1,5 @@
 import {Card, Stack} from '@sanity/ui'
-import React from 'react'
+import React, {useState} from 'react'
 import useTimeZone from '../hooks/useTimeZone'
 import {ScheduleFormData} from '../types'
 import {DateTimeInput} from './DateInputs'
@@ -14,9 +14,16 @@ const ScheduleForm = (props: Props) => {
 
   const {getCurrentZoneDate} = useTimeZone()
 
+  // Date input is stored locally to handle behaviour of the studio's `<LazyTextInput />` component.
+  // If we don't keep this local state (and only rely on the canonical value of `ScheduleFormData`),
+  // you'll see an unsightly flash when text inputs are blurred / lose focus, as `<LazyTextInput />`
+  // clears its internal value before it's had a chance to re-render as a result of its own props changing.
+  const [inputValue, setInputValue] = useState<string>()
+
   const handleChange = (date: string | null) => {
     if (date && onChange) {
       onChange({date})
+      setInputValue(date)
     }
   }
 
@@ -42,7 +49,7 @@ const ScheduleForm = (props: Props) => {
             },
             title: 'Date and time',
           }}
-          value={value?.date}
+          value={inputValue === undefined ? value?.date : inputValue}
         />
       </Card>
     </Stack>
