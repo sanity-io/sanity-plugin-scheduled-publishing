@@ -4,7 +4,7 @@ import {
   unstable_useDocumentPairPermissions as useDocumentPairPermissions,
   useCurrentUser,
 } from '@sanity/base/hooks'
-import {CalendarIcon, ClockIcon} from '@sanity/icons'
+import {CalendarIcon, ClockIcon, ErrorOutlineIcon} from '@sanity/icons'
 import {Box} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
 import DialogFooter from '../components/DialogFooter'
@@ -52,8 +52,10 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   const [dialogOpen, setDialogOpen] = useState(false)
   const {formData, onFormChange} = useScheduleForm()
   // Poll for document schedules
-  // TODO: handle error + isLoading states
-  const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
+  const {error, isInitialLoading, schedules} = usePollSchedules({
+    documentId: id,
+    state: 'scheduled',
+  })
 
   const [validations, updateValidation] = useValidations()
 
@@ -99,9 +101,15 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   if (documentExists) {
     tooltip = null
   }
+  if (isInitialLoading) {
+    tooltip = 'Loading schedules'
+  }
   if (liveEdit) {
     tooltip =
       'Live Edit is enabled for this content type and publishing happens automatically as you make changes'
+  }
+  if (error) {
+    tooltip = `Unable to fetch schedules. Please check the developer console for more information.`
   }
 
   return {
@@ -125,7 +133,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
           buttonText="Schedule"
           disabled={!formData?.date}
           icon={ClockIcon}
-          onAction={schedules?.length === 0 ? handleScheduleCreate : undefined}
+          onAction={handleScheduleCreate}
           onComplete={onComplete}
           tone="primary"
         />
@@ -134,9 +142,9 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
       onClose: onComplete,
       type: 'modal',
     },
-    disabled: !documentExists || liveEdit,
+    disabled: Boolean(error) || isInitialLoading || !documentExists || liveEdit,
     label: title,
-    icon: CalendarIcon,
+    icon: error ? ErrorOutlineIcon : CalendarIcon,
     onHandle: handleDialogOpen,
     title: tooltip && <Box style={{maxWidth: '315px'}}>{tooltip}</Box>,
   }
