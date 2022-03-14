@@ -4,9 +4,15 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {CheckmarkIcon, EllipsisVerticalIcon, ErrorOutlineIcon, SortIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Label, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import styled from 'styled-components'
-import {SCHEDULE_FILTERS, ScheduleFilterType, TOOL_HEADER_HEIGHT} from '../constants'
+import {SCHEDULE_FILTERS, TOOL_HEADER_HEIGHT} from '../constants'
 import usePollSchedules from '../hooks/usePollSchedules'
-import {Schedule, ScheduledDocValidations, ScheduleSort, ValidationStatus} from '../types'
+import {
+  Schedule,
+  ScheduledDocValidations,
+  ScheduleSort,
+  ScheduleState,
+  ValidationStatus,
+} from '../types'
 import {debugWithName} from '../utils/debug'
 import ButtonTimeZone from './ButtonTimeZone'
 import ButtonTimeZoneElementQuery from './ButtonTimeZoneElementQuery'
@@ -37,10 +43,10 @@ function Tool(props: Props) {
 
   const {error, isInitialLoading, schedules = NO_SCHEDULE} = usePollSchedules()
 
-  const scheduleState: ScheduleFilterType = router.state.state || 'scheduled'
+  const scheduleState: ScheduleState = router.state.state || 'scheduled'
   debug('scheduleState', scheduleState)
 
-  const filteredSchedules = useSortedSchedules(schedules, scheduleState)
+  const sortedSchedules = useSortedSchedules(schedules, scheduleState)
 
   useFallbackNavigation(router, scheduleState)
 
@@ -48,7 +54,6 @@ function Tool(props: Props) {
   const handleSortByExecuteAt = useCallback(() => setSortBy('executeAt'), [])
   const updateValidation = (s: Schedule, vs: ValidationStatus) =>
     setValidations((current) => ({...current, [s.id]: vs}))
-
   // @ts-ignore
   return (
     <Card display="flex" flex={1} height="fill" overflow="auto">
@@ -146,11 +151,11 @@ function Tool(props: Props) {
           )}
 
           {/* Loaded schedules */}
-          {filteredSchedules && (
+          {sortedSchedules && (
             <>
               <SchedulesValidation schedules={schedules} updateValidation={updateValidation} />
               <Schedules
-                schedules={filteredSchedules}
+                schedules={sortedSchedules}
                 scheduleState={scheduleState}
                 sortBy={sortBy}
                 validations={validations}
@@ -163,13 +168,12 @@ function Tool(props: Props) {
   )
 }
 
-function useSortedSchedules(schedules: Schedule[], filter: ScheduleFilterType): Schedule[] {
+function useSortedSchedules(schedules: Schedule[], filter: ScheduleState): Schedule[] {
   return useMemo(() => {
     return schedules.sort((a, b) => {
       switch (filter) {
         // Upcoming items are displayed in chronological order
         case 'scheduled':
-        case 'errors':
           return a.executeAt >= b.executeAt ? 1 : -1
         // Everything else should be displayed in reverse order
         default:
@@ -179,7 +183,7 @@ function useSortedSchedules(schedules: Schedule[], filter: ScheduleFilterType): 
   }, [schedules, filter])
 }
 
-function useFallbackNavigation(router: HOCRouter, filter: ScheduleFilterType) {
+function useFallbackNavigation(router: HOCRouter, filter: ScheduleState) {
   useEffect(() => {
     if (!SCHEDULE_FILTERS.includes(filter)) {
       router.navigate({state: SCHEDULE_FILTERS[0]})

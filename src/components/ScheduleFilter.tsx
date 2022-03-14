@@ -1,23 +1,30 @@
 import {StateLink} from '@sanity/base/router'
 import {red, white} from '@sanity/color'
-import {Box, Flex, Tab, Text} from '@sanity/ui'
-import React from 'react'
-import {SCHEDULE_FILTER_DICTIONARY, ScheduleFilterType} from '../constants'
-import {Schedule, ScheduledDocValidations} from '../types'
+import {Box, Card, Flex, Tab, Text} from '@sanity/ui'
+import React, {useMemo} from 'react'
+import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
+import {Schedule, ScheduledDocValidations, ScheduleState} from '../types'
 import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
+import {ErrorOutlineIcon} from '@sanity/icons'
 
 interface Props {
   schedules: Schedule[]
-  validations: ScheduledDocValidations
+  validations?: ScheduledDocValidations
   critical?: boolean
   selected?: boolean
-  state: ScheduleFilterType
+  state: ScheduleState
 }
 
 const ScheduleFilter = (props: Props) => {
   const {critical, selected, state, schedules, validations, ...rest} = props
 
-  const count = useFilteredSchedules(schedules, state, validations).length
+  const count = useFilteredSchedules(schedules, state).length
+  const showValidationError: boolean = useMemo(
+    () =>
+      !!validations &&
+      Object.values(validations).some((v) => v.markers.some((m) => (m.level = 'error'))),
+    [validations, state]
+  )
   const title = SCHEDULE_FILTER_DICTIONARY[state]
 
   const hasItems = count > 0
@@ -39,8 +46,8 @@ const ScheduleFilter = (props: Props) => {
           {title}
         </Text>
         {/*
-        HACK: when there are no items, continue to render count (with 0 opacity) in order to
-        preseve correct tab height / vertical padding.
+        HACK: when there are no items, we still render in with hidden visibility to
+        preserve correct tab height / vertical padding.
         */}
         <Box
           marginLeft={count > 0 ? 2 : 0}
@@ -50,7 +57,7 @@ const ScheduleFilter = (props: Props) => {
             border: 'none',
             boxShadow: 'none',
             borderRadius: '2px',
-            opacity: hasItems ? 1 : 0,
+            visibility: hasItems ? 'visible' : 'hidden',
             padding: hasItems ? '0.25em 0.4em' : '0.25em 0',
             width: hasItems ? 'auto' : 0,
           }}
@@ -59,6 +66,13 @@ const ScheduleFilter = (props: Props) => {
             {count}
           </Text>
         </Box>
+        {showValidationError && (
+          <Card tone="critical" marginLeft={1} style={{background: 'transparent'}}>
+            <Text size={1} accent>
+              <ErrorOutlineIcon />
+            </Text>
+          </Card>
+        )}
       </Flex>
     </Tab>
   )

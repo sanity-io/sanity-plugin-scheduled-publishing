@@ -2,16 +2,15 @@ import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Label, Stack} from '@sanity/ui'
 import React, {Fragment, useMemo} from 'react'
 import useScheduleOperation from '../hooks/useScheduleOperation'
-import {Schedule, ScheduledDocValidations, ScheduleSort} from '../types'
+import {Schedule, ScheduledDocValidations, ScheduleSort, ScheduleState} from '../types'
 import CardEmptySchedules from './CardEmptySchedules'
 import {ScheduleItem} from './ScheduleItem'
-import {ScheduleFilterType} from '../constants'
 import {getValidationStatus} from '../utils/validation-utils'
 import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[]
-  scheduleState: ScheduleFilterType
+  scheduleState: ScheduleState
   sortBy: ScheduleSort
   validations: ScheduledDocValidations
 }
@@ -28,7 +27,7 @@ const Schedules = (props: Props) => {
 
   const {deleteSchedules} = useScheduleOperation()
 
-  const activeSchedules = useFilteredSchedules(schedules, scheduleState, validations)
+  const activeSchedules = useFilteredSchedules(schedules, scheduleState)
   const sortedSchedules = useSortedSchedules(activeSchedules, sortBy)
 
   const handleClearSchedules = () => {

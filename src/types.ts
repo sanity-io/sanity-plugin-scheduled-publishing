@@ -1,4 +1,3 @@
-import {ScheduleFilterType} from './constants'
 import {Marker} from '@sanity/types'
 
 export interface NormalizedTimeZone {
@@ -28,7 +27,7 @@ export interface Schedule {
 }
 
 export interface ScheduleFilter {
-  state: ScheduleFilterType
+  state: ScheduleState
   title: string
 }
 
