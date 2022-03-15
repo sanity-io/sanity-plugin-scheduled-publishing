@@ -49,7 +49,7 @@ const DocumentPreview = (props: Props) => {
       </Card>
 
       {(hasError || hasWarning) && (
-        <Box marginX={2}>
+        <Box marginX={1}>
           <ValidationInfo
             markers={validationStatus.markers}
             type={schemaType}
