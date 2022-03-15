@@ -19,4 +19,4 @@ export const TOOL_HEADER_HEIGHT = 55 // px
 
 export const DOCUMENT_HAS_WARNINGS_TEXT = 'This document has validation warnings.'
 export const DOCUMENT_HAS_ERRORS_TEXT =
-  'This document has validation errors that should be resolved before the publishing date.'
+  'This document has validation errors that should be resolved before its publish date.'

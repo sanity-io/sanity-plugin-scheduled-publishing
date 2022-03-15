@@ -39,7 +39,7 @@ export function ScheduleBanner(props: Props) {
               Scheduled
             </Badge>
             <Flex gap={1} align="center">
-              <Text size={2} accent style={{flexShrink: 0}}>
+              <Text style={{flexShrink: 0}}>
                 <ValidationInfo markers={markers} type={type} documentId={publishedId} />
               </Text>
               {hasError && (

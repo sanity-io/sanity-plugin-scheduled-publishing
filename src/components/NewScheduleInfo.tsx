@@ -1,4 +1,4 @@
-import {Box, Card, Flex, Stack, Text} from '@sanity/ui'
+import {Card, Flex, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import {usePublishedId} from '../hooks/usePublishedId'
 import {useSchemaType} from '../hooks/useSchemaType'
@@ -37,18 +37,10 @@ function ValidationWarning({id, type}: {id: string; type: string}) {
   }
 
   return (
-    <Card tone="critical" style={{background: 'none'}}>
+    <Card padding={2} radius={1} shadow={1} tone="critical">
       <Flex gap={1} align="center">
-        <Box>
-          <ValidationInfo
-            markers={validationStatus.markers}
-            type={schema}
-            documentId={publishedId}
-          />
-        </Box>
-        <Text accent size={1}>
-          {DOCUMENT_HAS_ERRORS_TEXT}
-        </Text>
+        <ValidationInfo markers={validationStatus.markers} type={schema} documentId={publishedId} />
+        <Text size={1}>{DOCUMENT_HAS_ERRORS_TEXT}</Text>
       </Flex>
     </Card>
   )
