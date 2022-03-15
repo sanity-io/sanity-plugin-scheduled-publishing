@@ -1,5 +1,5 @@
 import React, {ReactNode, useCallback} from 'react'
-import {Button, Card, Container, Menu, MenuButton, Stack} from '@sanity/ui'
+import {Button, CardTone, Container, Menu, MenuButton, Stack} from '@sanity/ui'
 import {Marker, ObjectSchemaType, Path, SchemaType} from '@sanity/types'
 import {useValidationState} from '../../utils/validationUtils'
 import {ErrorOutlineIcon, WarningOutlineIcon} from '@sanity/icons'
@@ -20,6 +20,7 @@ const POPOVER_PROPS = {
   portal: true,
   constrainSize: true,
   preventOverflow: true,
+  tone: 'default' as CardTone,
   width: 0,
 }
 
@@ -47,38 +48,34 @@ function ValidationInfoWithRouter(props: ValidationProps & {router: HOCRouter}) 
   )
 
   return (
-    <Card tone="default">
-      <MenuButton
-        id={id || ''}
-        button={
-          <Card tone={hasError ? 'critical' : 'default'} style={{visibility}}>
-            <Button
-              tone={hasError ? 'critical' : 'caution'}
-              style={{background: 'none'}}
-              title="Show validation issues"
-              mode="bleed"
-              data-testid="schedule-validation-list-button"
-              icon={hasError ? ErrorOutlineIcon : WarningOutlineIcon}
-            />
-          </Card>
-        }
-        menu={
-          <Menu padding={3}>
-            <Container width={0}>
-              <Stack space={3}>
-                {menuHeader ?? null}
-                <ValidationList
-                  documentType={type as ObjectSchemaType}
-                  markers={markers}
-                  onFocus={onFocus}
-                />
-              </Stack>
-            </Container>
-          </Menu>
-        }
-        popover={POPOVER_PROPS}
-        placement="bottom-end"
-      />
-    </Card>
+    <MenuButton
+      id={id || ''}
+      button={
+        <Button
+          title="Show validation issues"
+          mode="bleed"
+          data-testid="schedule-validation-list-button"
+          icon={hasError ? ErrorOutlineIcon : WarningOutlineIcon}
+          style={{visibility}}
+          tone={hasError ? 'critical' : 'default'}
+        />
+      }
+      menu={
+        <Menu padding={1}>
+          <Container width={0}>
+            <Stack space={1}>
+              {menuHeader ?? null}
+              <ValidationList
+                documentType={type as ObjectSchemaType}
+                markers={markers}
+                onFocus={onFocus}
+              />
+            </Stack>
+          </Container>
+        </Menu>
+      }
+      popover={POPOVER_PROPS}
+      placement="bottom-end"
+    />
   )
 }
