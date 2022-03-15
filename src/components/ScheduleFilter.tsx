@@ -34,7 +34,7 @@ const ScheduleFilter = (props: Props) => {
 
   return (
     <Tab
-      // @ts-ignore
+      // @ts-expect-error actually, this as property works but is missing in the typings
       as={StateLink}
       id={state}
       paddingX={1}
