@@ -4,21 +4,22 @@ import {
   unstable_useDocumentPairPermissions as useDocumentPairPermissions,
   useCurrentUser,
 } from '@sanity/base/hooks'
-import {CalendarIcon, ClockIcon, ErrorOutlineIcon} from '@sanity/icons'
-import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
+import {CalendarIcon, ClockIcon} from '@sanity/icons'
+import {Box} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
+import ErrorCallout from '../components/ErrorCallout'
 import DialogFooter from '../components/DialogFooter'
 import DialogHeader from '../components/DialogHeader'
-import {EditScheduleForm} from '../components/EditScheduleForm'
 import DialogScheduleListContent from '../components/DialogScheduleListContent'
+import {EditScheduleForm} from '../components/EditScheduleForm'
+import {NewScheduleInfo} from '../components/NewScheduleInfo'
+import {SchedulesValidation} from '../components/validation/SchedulesValidation'
 import {DocumentActionPropsProvider} from '../contexts/documentActionProps'
 import usePollSchedules from '../hooks/usePollSchedules'
 import useScheduleForm from '../hooks/useScheduleForm'
 import useScheduleOperation from '../hooks/useScheduleOperation'
-import {debugWithName} from '../utils/debug'
 import {useValidations} from '../hooks/useValidations'
-import {SchedulesValidation} from '../components/validation/SchedulesValidation'
-import {NewScheduleInfo} from '../components/NewScheduleInfo'
+import {debugWithName} from '../utils/debug'
 
 const debug = debugWithName('ScheduleAction')
 
@@ -112,19 +113,10 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
   return {
     dialog: dialogOpen && {
       content: error ? (
-        <Card overflow="hidden" padding={4} radius={2} shadow={1} tone="critical">
-          <Flex align="center" gap={3}>
-            <Text size={2}>
-              <ErrorOutlineIcon />
-            </Text>
-            <Inline space={2}>
-              <Text size={1} weight="semibold">
-                Unable to fetch schedules.
-              </Text>
-              <Text size={1}>Please check the developer console for more information.</Text>
-            </Inline>
-          </Flex>
-        </Card>
+        <ErrorCallout
+          description="More information in the developer console."
+          title="Something went wrong, unable to retrieve schedules."
+        />
       ) : (
         <DocumentActionPropsProvider value={props}>
           <>

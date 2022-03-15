@@ -1,20 +1,21 @@
 import {HOCRouter, withRouterHOC} from '@sanity/base/router'
 import {white} from '@sanity/color'
+import {CheckmarkIcon, EllipsisVerticalIcon, SortIcon} from '@sanity/icons'
+import {Box, Button, Card, Flex, Label, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import {CheckmarkIcon, EllipsisVerticalIcon, ErrorOutlineIcon, SortIcon} from '@sanity/icons'
-import {Box, Button, Card, Flex, Inline, Label, Menu, MenuButton, MenuItem, Text} from '@sanity/ui'
 import styled from 'styled-components'
 import {SCHEDULE_FILTERS, TOOL_HEADER_HEIGHT} from '../constants'
 import usePollSchedules from '../hooks/usePollSchedules'
+import {useValidations} from '../hooks/useValidations'
 import {Schedule, ScheduleSort, ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
 import ButtonTimeZone from './ButtonTimeZone'
 import ButtonTimeZoneElementQuery from './ButtonTimeZoneElementQuery'
+import ErrorCallout from './ErrorCallout'
 import ScheduleFilters from './ScheduleFilters'
 import Schedules from './Schedules'
 import {ToolCalendar} from './ToolCalendar'
 import {SchedulesValidation} from './validation/SchedulesValidation'
-import {useValidations} from '../hooks/useValidations'
 
 const debug = debugWithName('Tool')
 
@@ -132,19 +133,12 @@ function Tool(props: Props) {
 
           {/* Error */}
           {error && (
-            <Card overflow="hidden" padding={4} radius={2} shadow={1} tone="critical">
-              <Flex align="center" gap={3}>
-                <Text size={2}>
-                  <ErrorOutlineIcon />
-                </Text>
-                <Inline space={2}>
-                  <Text size={1} weight="semibold">
-                    Unable to fetch schedules:
-                  </Text>
-                  <Text size={1}>{error.message}</Text>
-                </Inline>
-              </Flex>
-            </Card>
+            <Box marginBottom={4}>
+              <ErrorCallout
+                description="More information in the developer console."
+                title="Something went wrong, unable to retrieve schedules."
+              />
+            </Box>
           )}
 
           {/* Loaded schedules */}
