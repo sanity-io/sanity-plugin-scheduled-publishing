@@ -1,4 +1,4 @@
-import {SanityProps} from './helper-types'
+import {SanityProps} from './helperTypes'
 import React, {forwardRef, Ref, useMemo} from 'react'
 import {NestedFormBuilder} from './NestedFormBuilder'
 import {ObjectSchemaType} from '@sanity/types'
