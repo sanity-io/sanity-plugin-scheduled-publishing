@@ -1,6 +1,6 @@
 import {StateLink} from '@sanity/base/router'
 import {red, white} from '@sanity/color'
-import {Box, Card, Flex, Tab, Text} from '@sanity/ui'
+import {Box, Flex, Tab, Text} from '@sanity/ui'
 import React, {useMemo} from 'react'
 import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
 import {Schedule, ScheduledDocValidations, ScheduleState} from '../types'
@@ -70,11 +70,11 @@ const ScheduleFilter = (props: Props) => {
           </Text>
         </Box>
         {showValidationError && (
-          <Card tone="critical" marginX={1} style={{background: 'transparent'}}>
-            <Text size={1} accent>
+          <Box marginX={1}>
+            <Text size={1}>
               <ErrorOutlineIcon />
             </Text>
-          </Card>
+          </Box>
         )}
       </Flex>
     </Tab>
