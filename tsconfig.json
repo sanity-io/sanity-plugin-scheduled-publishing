@@ -17,6 +17,7 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
+    "noImplicitAny": true,
     "baseUrl": ".",
     "paths": {
       "@sanity/form-builder/lib/*": ["node_modules/@sanity/form-builder/dist/dts/*"]
