@@ -114,8 +114,10 @@ const ToolPreview = (props: Props) => {
               type={schemaType}
               documentId={publishedId}
               menuHeader={
-                <Box>
-                  <Text>{hasError ? DOCUMENT_HAS_ERRORS_TEXT : DOCUMENT_HAS_WARNINGS_TEXT}</Text>
+                <Box padding={2}>
+                  <Text size={1}>
+                    {hasError ? DOCUMENT_HAS_ERRORS_TEXT : DOCUMENT_HAS_WARNINGS_TEXT}
+                  </Text>
                 </Box>
               }
             />

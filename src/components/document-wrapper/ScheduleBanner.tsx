@@ -26,27 +26,38 @@ export function ScheduleBanner(props: Props) {
 
   return (
     <Box marginBottom={4}>
-      <Card padding={3} shadow={1} tone={hasError ? 'critical' : 'primary'}>
+      <Card
+        padding={3}
+        paddingTop={2}
+        radius={1}
+        shadow={1}
+        tone={hasError ? 'critical' : 'primary'}
+      >
         <Stack space={3}>
           <Flex gap={2} align="center">
-            <Badge>Scheduled</Badge>
-            {hasError && (
-              <Card tone="critical" style={{background: 'none'}}>
-                <Flex gap={2} align="center">
-                  <Box>
-                    <Text size={2} accent>
-                      <ValidationInfo markers={markers} type={type} documentId={publishedId} />
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Text>Please attend to validation issues before the scheduled time.</Text>
-                  </Box>
-                </Flex>
-              </Card>
-            )}
+            <Badge fontSize={1} style={{flexShrink: 0}}>
+              Scheduled
+            </Badge>
+            <Flex gap={1} align="center">
+              <Text size={2} accent style={{flexShrink: 0}}>
+                <ValidationInfo markers={markers} type={type} documentId={publishedId} />
+              </Text>
+              {hasError && (
+                <Box>
+                  <Text muted textOverflow="ellipsis" size={1}>
+                    Please attend to validation issues before the scheduled time.
+                  </Text>
+                </Box>
+              )}
+            </Flex>
           </Flex>
 
-          <Box>This document will be published {formattedDateTime}</Box>
+          <Box marginBottom={1}>
+            <Text size={1}>
+              This document will be published{' '}
+              <span style={{fontWeight: 500}}>{formattedDateTime}</span>
+            </Text>
+          </Box>
         </Stack>
       </Card>
     </Box>
