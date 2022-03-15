@@ -1,8 +1,8 @@
 import {EarthAmericasIcon} from '@sanity/icons'
 import {Box, Button, Text, Tooltip} from '@sanity/ui'
 import React from 'react'
-import useDialogTimeZone from '../hooks/useDialogTimeZone'
-import useTimeZone from '../hooks/useTimeZone'
+import useDialogTimeZone from '../../hooks/useDialogTimeZone'
+import useTimeZone from '../../hooks/useTimeZone'
 
 interface Props {
   useElementQueries?: boolean

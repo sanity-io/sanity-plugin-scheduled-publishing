@@ -1,6 +1,6 @@
 import {Stack} from '@sanity/ui'
 import React, {PropsWithChildren} from 'react'
-import {ScheduleFormData} from '../types'
+import {ScheduleFormData} from '../../types'
 import ScheduleForm from './ScheduleForm'
 
 interface Props {

@@ -7,19 +7,19 @@ import {
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
 import {Box} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
-import ErrorCallout from '../components/ErrorCallout'
-import DialogFooter from '../components/DialogFooter'
-import DialogHeader from '../components/DialogHeader'
-import DialogScheduleListContent from '../components/DialogScheduleListContent'
-import {EditScheduleForm} from '../components/EditScheduleForm'
-import {NewScheduleInfo} from '../components/NewScheduleInfo'
-import {SchedulesValidation} from '../components/validation/SchedulesValidation'
-import {DocumentActionPropsProvider} from '../contexts/documentActionProps'
-import usePollSchedules from '../hooks/usePollSchedules'
-import useScheduleForm from '../hooks/useScheduleForm'
-import useScheduleOperation from '../hooks/useScheduleOperation'
-import {useValidations} from '../hooks/useValidations'
-import {debugWithName} from '../utils/debug'
+import DialogFooter from '../../components/dialogs/DialogFooter'
+import DialogHeader from '../../components/dialogs/DialogHeader'
+import {EditScheduleForm} from '../../components/editScheduleForm/EditScheduleForm'
+import ErrorCallout from '../../components/errorCallout/ErrorCallout'
+import {SchedulesValidation} from '../../components/validation/SchedulesValidation'
+import {DocumentActionPropsProvider} from '../../contexts/documentActionProps'
+import usePollSchedules from '../../hooks/usePollSchedules'
+import useScheduleForm from '../../hooks/useScheduleForm'
+import useScheduleOperation from '../../hooks/useScheduleOperation'
+import {useValidations} from '../../hooks/useValidations'
+import {debugWithName} from '../../utils/debug'
+import {NewScheduleInfo} from './NewScheduleInfo'
+import Schedules from './Schedules'
 
 const debug = debugWithName('ScheduleAction')
 
@@ -38,7 +38,7 @@ const debug = debugWithName('ScheduleAction')
  * empty dependency arrays.
  */
 
-const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
+export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
   const {draft, id, liveEdit, onComplete, published, type} = props
 
   // Studio hooks
@@ -122,7 +122,7 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
           <>
             <SchedulesValidation schedules={schedules} updateValidation={updateValidation} />
             {hasExistingSchedules ? (
-              <DialogScheduleListContent schedules={schedules} validations={validations} />
+              <Schedules schedules={schedules} validations={validations} />
             ) : (
               <EditScheduleForm onChange={onFormChange} value={formData}>
                 <NewScheduleInfo id={id} schemaType={type} />
@@ -152,5 +152,3 @@ const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription =
     title: tooltip && <Box style={{maxWidth: '315px'}}>{tooltip}</Box>,
   }
 }
-
-export default ScheduleAction

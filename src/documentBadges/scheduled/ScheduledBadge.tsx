@@ -1,12 +1,12 @@
 import type {DocumentBadgeComponent} from '@sanity/base'
-import usePollSchedules from '../hooks/usePollSchedules'
-import useTimeZone from '../hooks/useTimeZone'
-import {debugWithName} from '../utils/debug'
-import formatDateTz from '../utils/formatDateTz'
+import usePollSchedules from '../../hooks/usePollSchedules'
+import useTimeZone from '../../hooks/useTimeZone'
+import {debugWithName} from '../../utils/debug'
+import formatDateTz from '../../utils/formatDateTz'
 
 const debug = debugWithName('ScheduledBadge')
 
-const ScheduledBadge: DocumentBadgeComponent = (props) => {
+export const ScheduledBadge: DocumentBadgeComponent = (props) => {
   // Poll for document schedules
   const {schedules} = usePollSchedules({documentId: props.id, state: 'scheduled'})
   debug('schedules', schedules)
@@ -31,5 +31,3 @@ const ScheduledBadge: DocumentBadgeComponent = (props) => {
     title: `Publishing on ${formattedDateTime}`,
   }
 }
-
-export default ScheduledBadge

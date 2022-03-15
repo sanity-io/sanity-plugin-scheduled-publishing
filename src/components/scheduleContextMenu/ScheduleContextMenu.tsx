@@ -12,10 +12,10 @@ import {
 import {Button, Menu, MenuButton} from '@sanity/ui'
 import schema from 'part:@sanity/base/schema'
 import React, {useMemo} from 'react'
-import useScheduleOperation from '../hooks/useScheduleOperation'
-import {Schedule} from '../types'
+import useScheduleOperation from '../../hooks/useScheduleOperation'
+import {Schedule} from '../../types'
 import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
-import {getScheduledDocument} from '../utils/paneItemHelpers'
+import {getScheduledDocument} from '../../utils/paneItemHelpers'
 
 interface Props {
   actions?: {
@@ -29,7 +29,7 @@ interface Props {
   schedule: Schedule
 }
 
-const ScheduleContextMenu = (props: Props) => {
+export const ScheduleContextMenu = (props: Props) => {
   const {actions, onDelete, onEdit, schedule} = props
 
   const firstDocument = getScheduledDocument(schedule)
@@ -117,5 +117,3 @@ const ScheduleContextMenu = (props: Props) => {
     />
   )
 }
-
-export default ScheduleContextMenu

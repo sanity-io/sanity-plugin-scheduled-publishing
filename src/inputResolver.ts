@@ -1,7 +1,7 @@
 import {
   ScheduledDocumentInput,
   scheduledMarkerFieldName,
-} from './components/document-wrapper/ScheduledDocumentInput'
+} from './components/documentWrapper/ScheduledDocumentInput'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function resolveInput(type: any): any {

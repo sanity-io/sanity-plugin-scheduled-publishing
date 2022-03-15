@@ -1,12 +1,12 @@
 import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Label, Stack} from '@sanity/ui'
 import React, {Fragment, useMemo} from 'react'
-import useScheduleOperation from '../hooks/useScheduleOperation'
-import {Schedule, ScheduledDocValidations, ScheduleSort, ScheduleState} from '../types'
-import CardEmptySchedules from './CardEmptySchedules'
-import {ScheduleItem} from './ScheduleItem'
-import {getValidationStatus} from '../utils/validationUtils'
-import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
+import useScheduleOperation from '../../hooks/useScheduleOperation'
+import {Schedule, ScheduledDocValidations, ScheduleSort, ScheduleState} from '../../types'
+import EmptySchedules from './EmptySchedules'
+import {ScheduleItem} from '../scheduleItem'
+import {getValidationStatus} from '../../utils/validationUtils'
+import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[]
@@ -22,7 +22,7 @@ function getLocalizedDate(date: string) {
   })
 }
 
-const Schedules = (props: Props) => {
+export const Schedules = (props: Props) => {
   const {schedules, scheduleState, sortBy, validations} = props
 
   const {deleteSchedules} = useScheduleOperation()
@@ -38,7 +38,7 @@ const Schedules = (props: Props) => {
     <>
       {sortedSchedules.length === 0 ? (
         <Box marginY={2}>
-          <CardEmptySchedules scheduleState={scheduleState} />
+          <EmptySchedules scheduleState={scheduleState} />
         </Box>
       ) : (
         <Box marginBottom={5}>
@@ -100,5 +100,3 @@ function useSortedSchedules(schedules: Schedule[], sortBy: ScheduleSort): Schedu
     [schedules, sortBy]
   )
 }
-
-export default Schedules

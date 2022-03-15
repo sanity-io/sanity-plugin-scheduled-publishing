@@ -1,8 +1,8 @@
 import {Box, Text, Tooltip} from '@sanity/ui'
 import {formatDistance} from 'date-fns'
 import React from 'react'
-import useTimeZone from '../hooks/useTimeZone'
-import formatDateTz from '../utils/formatDateTz'
+import useTimeZone from '../../../hooks/useTimeZone'
+import formatDateTz from '../../../utils/formatDateTz'
 
 interface Props {
   date: string // local date in UTC

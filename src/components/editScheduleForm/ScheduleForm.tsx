@@ -1,8 +1,8 @@
 import {Card, Stack} from '@sanity/ui'
 import React, {useState} from 'react'
-import useTimeZone from '../hooks/useTimeZone'
-import {ScheduleFormData} from '../types'
-import {DateTimeInput} from './DateInputs'
+import useTimeZone from '../../hooks/useTimeZone'
+import {ScheduleFormData} from '../../types'
+import {DateTimeInput} from '../dateInputs'
 
 interface Props {
   onChange?: (formData: ScheduleFormData) => void

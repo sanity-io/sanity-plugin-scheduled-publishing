@@ -2,8 +2,8 @@ import {black, hues} from '@sanity/color'
 import {SearchIcon} from '@sanity/icons'
 import {Autocomplete, Box, Card, Dialog, Flex, Inline, Stack, Text} from '@sanity/ui'
 import React, {useState} from 'react'
-import useTimeZone, {allTimeZones, getLocalTimeZone} from '../hooks/useTimeZone'
-import {NormalizedTimeZone} from '../types'
+import useTimeZone, {allTimeZones, getLocalTimeZone} from '../../hooks/useTimeZone'
+import {NormalizedTimeZone} from '../../types'
 import DialogFooter from './DialogFooter'
 
 interface Props {

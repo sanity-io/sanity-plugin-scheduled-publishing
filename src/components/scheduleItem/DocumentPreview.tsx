@@ -1,15 +1,15 @@
+import {SchemaType} from '@sanity/types'
 import {Box, Card, Flex} from '@sanity/ui'
 import React, {useMemo} from 'react'
 import {useDocumentActionProps} from '../../contexts/documentActionProps'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
 import {Schedule, ValidationStatus} from '../../types'
-import DateWithTooltip from '../DateWithTooltip'
-import ScheduleContextMenu from '../ScheduleContextMenu'
-import User from '../User'
-import {ValidationInfo} from '../validation/ValidationInfo'
-import {useValidationState} from '../../utils/validationUtils'
-import {SchemaType} from '@sanity/types'
 import {getScheduledDocumentId} from '../../utils/paneItemHelpers'
+import {useValidationState} from '../../utils/validationUtils'
+import {ScheduleContextMenu} from '../scheduleContextMenu'
+import {ValidationInfo} from '../validation/ValidationInfo'
+import DateWithTooltip from './dateWithTooltip/DateWithTooltip'
+import User from './User'
 
 interface Props {
   schedule: Schedule

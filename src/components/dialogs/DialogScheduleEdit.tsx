@@ -1,11 +1,11 @@
 import {Box, Dialog} from '@sanity/ui'
 import React, {useCallback} from 'react'
-import useScheduleForm from '../hooks/useScheduleForm'
-import useScheduleOperation from '../hooks/useScheduleOperation'
-import {Schedule} from '../types'
+import useScheduleForm from '../../hooks/useScheduleForm'
+import useScheduleOperation from '../../hooks/useScheduleOperation'
+import {Schedule} from '../../types'
 import DialogFooter from './DialogFooter'
 import DialogHeader from './DialogHeader'
-import {EditScheduleForm} from './EditScheduleForm'
+import {EditScheduleForm} from '../editScheduleForm/EditScheduleForm'
 
 interface Props {
   onClose: () => void

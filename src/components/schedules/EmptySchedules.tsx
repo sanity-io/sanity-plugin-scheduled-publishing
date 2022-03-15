@@ -1,15 +1,15 @@
 import {Card, Flex, Heading, Stack, Text} from '@sanity/ui'
 import React from 'react'
+import {ScheduleState} from '../../types'
 import BigIconComingSoon from './BigIconComingSoon'
-import BigIconSuccess from './BigIconSuccess'
 import BigIconScreen from './BigIconScreen'
-import {ScheduleState} from '../types'
+import BigIconSuccess from './BigIconSuccess'
 
 interface Props {
   scheduleState: ScheduleState
 }
 
-const CardEmptySchedules = (props: Props) => {
+const EmptySchedules = (props: Props) => {
   const {scheduleState} = props
 
   let BigIcon
@@ -60,4 +60,4 @@ const CardEmptySchedules = (props: Props) => {
   )
 }
 
-export default CardEmptySchedules
+export default EmptySchedules

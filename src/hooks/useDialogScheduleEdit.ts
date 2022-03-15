@@ -1,4 +1,4 @@
-import DialogScheduleEdit from '../components/DialogScheduleEdit'
+import DialogScheduleEdit from '../components/dialogs/DialogScheduleEdit'
 import {Schedule} from '../types'
 import {useDialogVisible} from './useDialogVisibile'
 

@@ -1,4 +1,4 @@
-import DialogTimeZone from '../components/DialogTimeZone'
+import DialogTimeZone from '../components/dialogs/DialogTimeZone'
 import {useDialogVisible} from './useDialogVisibile'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

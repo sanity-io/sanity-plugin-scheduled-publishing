@@ -1,7 +1,7 @@
 import {Box, Flex} from '@sanity/ui'
 import React from 'react'
-import ButtonTimeZone from './ButtonTimeZone'
-import ButtonTimeZoneElementQuery from './ButtonTimeZoneElementQuery'
+import ButtonTimeZone from '../timeZoneButton/TimeZoneButton'
+import ButtonTimeZoneElementQuery from '../timeZoneButton/TimeZoneButtonElementQuery'
 
 interface Props {
   title: string

@@ -2,10 +2,10 @@ import {useRouter} from '@sanity/base/router'
 import {CheckmarkIcon, SelectIcon} from '@sanity/icons'
 import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
 import React from 'react'
-import {SCHEDULE_FILTER_DICTIONARY, SCHEDULE_FILTERS} from '../constants'
-import {Schedule, ScheduledDocValidations, ScheduleState} from '../types'
+import {SCHEDULE_FILTERS, SCHEDULE_FILTER_DICTIONARY} from '../../constants'
+import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
+import {Schedule, ScheduledDocValidations, ScheduleState} from '../../types'
 import ScheduleFilter from './ScheduleFilter'
-import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
   schedules: Schedule[] | undefined
@@ -15,7 +15,7 @@ interface Props {
 
 const EMPTY_SCHEDULE: Schedule[] = []
 
-const ScheduleFilters = (props: Props) => {
+export const ScheduleFilters = (props: Props) => {
   const {scheduleState, schedules = EMPTY_SCHEDULE, validations} = props
 
   const {navigate} = useRouter()
@@ -81,5 +81,3 @@ const ScheduleFilters = (props: Props) => {
     </>
   )
 }
-
-export default ScheduleFilters

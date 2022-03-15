@@ -1,6 +1,6 @@
 import defaultResolve from 'part:@sanity/base/document-actions'
 import {DocumentActionProps, DocumentActionComponent} from '@sanity/base'
-import ScheduleAction from './documentActions/ScheduleAction'
+import {ScheduleAction} from './documentActions/schedule'
 
 type Action = DocumentActionComponent
 

@@ -2,9 +2,9 @@ import {StateLink} from '@sanity/base/router'
 import {red, white} from '@sanity/color'
 import {Box, Flex, Tab, Text} from '@sanity/ui'
 import React, {useMemo} from 'react'
-import {SCHEDULE_FILTER_DICTIONARY} from '../constants'
-import {Schedule, ScheduledDocValidations, ScheduleState} from '../types'
-import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
+import {SCHEDULE_FILTER_DICTIONARY} from '../../constants'
+import {Schedule, ScheduledDocValidations, ScheduleState} from '../../types'
+import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 import {ErrorOutlineIcon} from '@sanity/icons'
 
 interface Props {
