@@ -7,6 +7,7 @@ import formatDateTz from '../../utils/formatDateTz'
 import {usePublishedId} from '../../hooks/usePublishedId'
 import {useValidationState} from '../../utils/validationUtils'
 import {Marker, SchemaType} from '@sanity/types'
+import {CalendarIcon} from '@sanity/icons'
 
 interface Props {
   id: string
@@ -27,37 +28,35 @@ export function ScheduleBanner(props: Props) {
   return (
     <Box marginBottom={4}>
       <Card
-        padding={3}
-        paddingTop={2}
+        paddingBottom={2}
+        paddingTop={3}
+        paddingX={3}
         radius={1}
         shadow={1}
         tone={hasError ? 'critical' : 'primary'}
       >
-        <Stack space={3}>
-          <Flex gap={2} align="center">
-            <Badge fontSize={1} style={{flexShrink: 0}}>
-              Scheduled
+        <Stack space={2}>
+          <Flex>
+            <Badge fontSize={1} mode="outline" padding={2} style={{flexShrink: 0}}>
+              {hasError ? 'Scheduled (with errors)' : 'Scheduled'}
             </Badge>
-            <Flex gap={1} align="center">
-              <Text style={{flexShrink: 0}}>
-                <ValidationInfo markers={markers} type={type} documentId={publishedId} />
-              </Text>
-              {hasError && (
-                <Box>
-                  <Text muted textOverflow="ellipsis" size={1}>
-                    Please attend to validation issues before the scheduled time.
-                  </Text>
-                </Box>
-              )}
-            </Flex>
           </Flex>
 
-          <Box marginBottom={1}>
-            <Text size={1}>
-              This document will be published{' '}
-              <span style={{fontWeight: 500}}>{formattedDateTime}</span>
+          <Flex align="center" gap={1}>
+            {hasError ? (
+              <ValidationInfo markers={markers} type={type} documentId={publishedId} />
+            ) : (
+              <Box padding={3}>
+                <Text muted>
+                  <CalendarIcon />
+                </Text>
+              </Box>
+            )}
+            <Text muted size={1}>
+              {hasError ? 'Publishing with errors on' : 'Scheduled to publish on'}{' '}
+              <span style={{fontWeight: 500}}>{formattedDateTime}</span> (local time)
             </Text>
-          </Box>
+          </Flex>
         </Stack>
       </Card>
     </Box>
@@ -76,7 +75,7 @@ function useNextSchedule(id: string) {
     }
     return formatDateTz({
       date: upcomingSchedule.executeAt,
-      includeTimeZone: true,
+      includeTimeZone: false,
       timeZone,
     })
   }, [schedules, timeZone])

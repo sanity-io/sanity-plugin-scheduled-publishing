@@ -52,7 +52,7 @@ function ValidationInfoWithRouter(props: ValidationProps & {router: HOCRouter}) 
       id={id || ''}
       button={
         <Button
-          title="Show validation issues"
+          title="Show validation errors"
           mode="bleed"
           data-testid="schedule-validation-list-button"
           icon={hasError ? ErrorOutlineIcon : WarningOutlineIcon}
