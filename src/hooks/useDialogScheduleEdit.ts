@@ -1,25 +1,19 @@
-import {useCallback, useState} from 'react'
 import DialogScheduleEdit from '../components/DialogScheduleEdit'
 import {Schedule} from '../types'
+import {useDialogVisible} from './useDialogVisibile'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function useDialogScheduleEdit(schedule: Schedule) {
-  const [dialogVisible, setDialogVisible] = useState(false)
-
-  const hide = useCallback(() => {
-    setDialogVisible(false)
-  }, [])
-  const show = useCallback(() => {
-    setDialogVisible(true)
-  }, [])
+  const {visible, show, hide} = useDialogVisible()
 
   const dialogProps = {
     onClose: hide,
     schedule,
-    visible: dialogVisible,
+    visible,
   }
 
   return {
-    DialogScheduleEdit: dialogVisible ? DialogScheduleEdit : null,
+    DialogScheduleEdit: visible ? DialogScheduleEdit : null,
     dialogProps,
     dialogScheduleEditShow: show,
     hide,

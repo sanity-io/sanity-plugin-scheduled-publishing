@@ -1,23 +1,17 @@
-import {useCallback, useState} from 'react'
 import DialogTimeZone from '../components/DialogTimeZone'
+import {useDialogVisible} from './useDialogVisibile'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function useDialogTimeZone() {
-  const [dialogVisible, setDialogVisible] = useState(false)
-
-  const hide = useCallback(() => {
-    setDialogVisible(false)
-  }, [])
-  const show = useCallback(() => {
-    setDialogVisible(true)
-  }, [])
+  const {visible, show, hide} = useDialogVisible()
 
   const dialogProps = {
     onClose: hide,
-    visible: dialogVisible,
+    visible,
   }
 
   return {
-    DialogTimeZone: dialogVisible ? DialogTimeZone : null,
+    DialogTimeZone: visible ? DialogTimeZone : null,
     dialogProps,
     dialogTimeZoneShow: show,
     hide,

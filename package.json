@@ -29,7 +29,8 @@
     "format": "prettier src -w",
     "prepare": "npm run build && husky install",
     "release": "standard-version",
-    "watch": "rollup -c rollup.config.js --watch"
+    "watch": "rollup -c rollup.config.js --watch",
+    "verify": "tsc --noEmit && npm run lint"
   },
   "dependencies": {
     "@vvo/tzdb": "^6.35.0",
