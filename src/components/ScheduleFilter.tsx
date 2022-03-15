@@ -9,14 +9,13 @@ import {ErrorOutlineIcon} from '@sanity/icons'
 
 interface Props {
   schedules: Schedule[]
-  validations?: ScheduledDocValidations
-  critical?: boolean
   selected?: boolean
   state: ScheduleState
+  validations?: ScheduledDocValidations
 }
 
 const ScheduleFilter = (props: Props) => {
-  const {critical, selected, state, schedules, validations, ...rest} = props
+  const {selected, schedules, state, validations, ...rest} = props
 
   const count = useFilteredSchedules(schedules, state).length
   const showValidationError: boolean = useMemo(
@@ -25,9 +24,13 @@ const ScheduleFilter = (props: Props) => {
       Object.values(validations).some((v) => v.markers.some((m) => (m.level = 'error'))),
     [validations, state]
   )
+
   const title = SCHEDULE_FILTER_DICTIONARY[state]
 
   const hasItems = count > 0
+
+  const critical = showValidationError || state === 'cancelled'
+  const criticalCount = state === 'cancelled' && hasItems
 
   return (
     <Tab
@@ -52,8 +55,8 @@ const ScheduleFilter = (props: Props) => {
         <Box
           marginLeft={count > 0 ? 2 : 0}
           style={{
-            background: critical && hasItems ? red[500].hex : 'transparent',
-            color: critical && hasItems ? white.hex : 'inherit',
+            background: criticalCount ? red[500].hex : 'transparent',
+            color: criticalCount ? white.hex : 'inherit',
             border: 'none',
             boxShadow: 'none',
             borderRadius: '2px',
@@ -62,12 +65,12 @@ const ScheduleFilter = (props: Props) => {
             width: hasItems ? 'auto' : 0,
           }}
         >
-          <Text size={1} style={{color: critical && hasItems ? white.hex : 'inherit'}}>
+          <Text size={1} style={{color: criticalCount ? white.hex : 'inherit'}}>
             {count}
           </Text>
         </Box>
         {showValidationError && (
-          <Card tone="critical" marginLeft={1} style={{background: 'transparent'}}>
+          <Card tone="critical" marginX={1} style={{background: 'transparent'}}>
             <Text size={1} accent>
               <ErrorOutlineIcon />
             </Text>
