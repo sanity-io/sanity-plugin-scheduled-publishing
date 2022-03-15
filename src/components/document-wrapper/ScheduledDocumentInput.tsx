@@ -1,14 +1,8 @@
 import {SanityProps} from './helperTypes'
-import React, {forwardRef, Ref, useMemo} from 'react'
+import React, {forwardRef, Ref} from 'react'
 import {NestedFormBuilder} from './NestedFormBuilder'
 import {ObjectSchemaType} from '@sanity/types'
-import usePollSchedules from '../../hooks/usePollSchedules'
-import useTimeZone from '../../hooks/useTimeZone'
-import formatDateTz from '../../utils/formatDateTz'
-import {Badge, Box, Card, Flex, Stack, Text} from '@sanity/ui'
-import {usePublishedId} from '../../hooks/usePublishedId'
-import {useValidationState} from '../../utils/validationUtils'
-import {ValidationInfo} from '../validation/ValidationInfo'
+import {ScheduleBanner} from './ScheduleBanner'
 
 export const scheduledMarkerFieldName = 'hasScheduleWrapper'
 export const validationMarkerField = '_validationError'
@@ -23,62 +17,14 @@ export const ScheduledDocumentInput = forwardRef(function ScheduledDocumentInput
 
   const type = useTypeWithMarkerField(props.type)
   const {value, markers} = props
-  const id = value?._id
-  const publishedId = usePublishedId(id)
-  const formattedDateTime = useNextSchedule(publishedId)
 
-  const {hasError} = useValidationState(markers)
   return (
     <>
-      {formattedDateTime && (
-        <Box marginBottom={4}>
-          <Card padding={3} shadow={1} tone={hasError ? 'critical' : 'primary'}>
-            <Stack space={3}>
-              <Flex gap={2} align="center">
-                <Badge>Scheduled</Badge>
-                {hasError && (
-                  <Card tone="critical" style={{background: 'none'}}>
-                    <Flex gap={2} align="center">
-                      <Box>
-                        <Text size={2} accent>
-                          <ValidationInfo markers={markers} type={type} documentId={publishedId} />
-                        </Text>
-                      </Box>
-                      <Box>
-                        <Text>Please attend to validation issues before the scheduled time.</Text>
-                      </Box>
-                    </Flex>
-                  </Card>
-                )}
-              </Flex>
-
-              <Box>This document will be published {formattedDateTime}</Box>
-            </Stack>
-          </Card>
-        </Box>
-      )}
+      {value?._id ? <ScheduleBanner id={value._id} markers={markers} type={type} /> : null}
       <NestedFormBuilder {...props} ref={ref} type={type} />
     </>
   )
 })
-
-function useNextSchedule(id?: string) {
-  const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
-  const {timeZone} = useTimeZone()
-
-  return useMemo(() => {
-    const upcomingSchedule = schedules?.[0]
-
-    if (!upcomingSchedule) {
-      return undefined
-    }
-    return formatDateTz({
-      date: upcomingSchedule.executeAt,
-      includeTimeZone: true,
-      timeZone,
-    })
-  }, [schedules, timeZone])
-}
 
 function useTypeWithMarkerField(type: ObjectSchemaType): ObjectSchemaType {
   const t = {
