@@ -13,7 +13,7 @@ import {DraftStatus} from '../studio/DocumentStatus/DraftStatus'
 import {PublishedStatus} from '../studio/DocumentStatus/PublishedStatus'
 import User from '../User'
 import {ValidationInfo} from '../validation/ValidationInfo'
-import {useValidationState} from '../../utils/validation-utils'
+import {useValidationState} from '../../utils/validationUtils'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
 import {usePublishedId} from '../../hooks/usePublishedId'
 

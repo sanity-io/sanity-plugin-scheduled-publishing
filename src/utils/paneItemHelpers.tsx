@@ -1,4 +1,4 @@
-// Source: https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/paneItem/helpers.tsx
+// Based off: https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/paneItem/helpers.tsx
 
 // TODO: fix TS errors, consider manually declaring individual sanity parts
 

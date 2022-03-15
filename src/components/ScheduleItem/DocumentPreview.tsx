@@ -7,7 +7,7 @@ import DateWithTooltip from '../DateWithTooltip'
 import ScheduleContextMenu from '../ScheduleContextMenu'
 import User from '../User'
 import {ValidationInfo} from '../validation/ValidationInfo'
-import {useValidationState} from '../../utils/validation-utils'
+import {useValidationState} from '../../utils/validationUtils'
 import {SchemaType} from '@sanity/types'
 import {getScheduledDocumentId} from '../../utils/paneItemHelpers'
 

@@ -4,7 +4,7 @@ import React from 'react'
 import {Schedule, ScheduledDocValidations} from '../types'
 import Callout from './Callout'
 import {ScheduleItem} from './ScheduleItem'
-import {getValidationStatus} from '../utils/validation-utils'
+import {getValidationStatus} from '../utils/validationUtils'
 
 interface Props {
   publishWarning?: boolean

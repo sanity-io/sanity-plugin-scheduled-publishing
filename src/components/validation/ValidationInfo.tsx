@@ -1,7 +1,7 @@
 import React, {ReactNode, useCallback} from 'react'
 import {Button, Card, Container, Menu, MenuButton, Stack} from '@sanity/ui'
 import {Marker, ObjectSchemaType, Path, SchemaType} from '@sanity/types'
-import {useValidationState} from '../../utils/validation-utils'
+import {useValidationState} from '../../utils/validationUtils'
 import {ErrorOutlineIcon, WarningOutlineIcon} from '@sanity/icons'
 import {useId} from '@reach/auto-id'
 import {ValidationList} from '@sanity/base/components'
