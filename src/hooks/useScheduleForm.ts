@@ -1,6 +1,7 @@
 import {useCallback, useState} from 'react'
 import {Schedule, ScheduleFormData} from '../types'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function useScheduleForm(schedule?: Schedule) {
   const [isDirty, setIsDirty] = useState(false)
   const [formData, setFormData] = useState<ScheduleFormData | null>(
