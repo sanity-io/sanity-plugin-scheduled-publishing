@@ -26,7 +26,7 @@ const DocumentPreview = (props: Props) => {
   const publishedId = useMemo(() => getScheduledDocumentId(schedule), [schedule])
   return (
     <>
-      {/* Dialogs */}
+      {/* Dialogs (rendered outside of cards so they don't infer card colors) */}
       {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
 
       <Card
