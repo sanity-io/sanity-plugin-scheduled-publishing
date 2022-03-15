@@ -3,7 +3,7 @@ import React from 'react'
 import {usePublishedId} from '../hooks/usePublishedId'
 import {useSchemaType} from '../hooks/useSchemaType'
 import {useValidationStatus} from '@sanity/react-hooks'
-import {useValidationState} from '../utils/validation-utils'
+import {useValidationState} from '../utils/validationUtils'
 import {ValidationInfo} from './validation/ValidationInfo'
 import {DOCUMENT_HAS_ERRORS_TEXT} from '../constants'
 

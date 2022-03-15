@@ -7,7 +7,7 @@ import useTimeZone from '../../hooks/useTimeZone'
 import formatDateTz from '../../utils/formatDateTz'
 import {Badge, Box, Card, Flex, Stack, Text} from '@sanity/ui'
 import {usePublishedId} from '../../hooks/usePublishedId'
-import {useValidationState} from '../../utils/validation-utils'
+import {useValidationState} from '../../utils/validationUtils'
 import {ValidationInfo} from '../validation/ValidationInfo'
 
 export const scheduledMarkerFieldName = 'hasScheduleWrapper'

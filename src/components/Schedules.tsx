@@ -5,7 +5,7 @@ import useScheduleOperation from '../hooks/useScheduleOperation'
 import {Schedule, ScheduledDocValidations, ScheduleSort, ScheduleState} from '../types'
 import CardEmptySchedules from './CardEmptySchedules'
 import {ScheduleItem} from './ScheduleItem'
-import {getValidationStatus} from '../utils/validation-utils'
+import {getValidationStatus} from '../utils/validationUtils'
 import {useFilteredSchedules} from '../hooks/useFilteredSchedules'
 
 interface Props {
