@@ -78,34 +78,34 @@ const ToolPreview = (props: Props) => {
               />
             </Box>
 
-          {/* Schedule date */}
-          <Box
-            marginLeft={[3, 3, 4]}
-            style={{
-              flexShrink: 0,
-              maxWidth: '250px',
-              width: '35%',
-            }}
-          >
-            <DateWithTooltip date={schedule.executeAt} useElementQueries />
-          </Box>
+            {/* Schedule date */}
+            <Box
+              marginLeft={[3, 3, 4]}
+              style={{
+                flexShrink: 0,
+                maxWidth: '250px',
+                width: '35%',
+              }}
+            >
+              <DateWithTooltip date={schedule.executeAt} useElementQueries />
+            </Box>
 
-          {/* Avatar */}
-          <Box display={['none', 'none', 'block']} marginX={3} style={{flexShrink: 0}}>
-            <User id={schedule?.author} />
-          </Box>
+            {/* Avatar */}
+            <Box display={['none', 'none', 'block']} marginX={3} style={{flexShrink: 0}}>
+              <User id={schedule?.author} />
+            </Box>
 
-          {/* Document status */}
-          <Box marginX={[2, 2, 3]} style={{flexShrink: 0}}>
-            {!previewState.isLoading && (
-              <Inline space={4}>
-                <PublishedStatus document={previewState.published} />
-                <DraftStatus document={previewState.draft} />
-              </Inline>
-            )}
-          </Box>
-        </Flex>
-      </Card>
+            {/* Document status */}
+            <Box marginX={[2, 2, 3]} style={{flexShrink: 0}}>
+              {!previewState.isLoading && (
+                <Inline space={4}>
+                  <PublishedStatus document={previewState.published} />
+                  <DraftStatus document={previewState.draft} />
+                </Inline>
+              )}
+            </Box>
+          </Flex>
+        </Card>
 
         <Box>
           <ValidationInfo
