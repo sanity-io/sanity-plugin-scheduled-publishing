@@ -21,7 +21,6 @@ export const ScheduledDocumentInput = forwardRef(function ScheduledDocumentInput
     throw new Error(`jsonType of schema must be object, but was ${props.type.jsonType}`)
   }
 
-  // @ts-ignore
   const type = useTypeWithMarkerField(props.type)
   const {value, markers} = props
   const id = value?._id
@@ -58,7 +57,6 @@ export const ScheduledDocumentInput = forwardRef(function ScheduledDocumentInput
           </Card>
         </Box>
       )}
-      {/* @ts-ignore */}
       <NestedFormBuilder {...props} ref={ref} type={type} />
     </>
   )

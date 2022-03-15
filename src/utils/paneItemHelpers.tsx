@@ -56,13 +56,12 @@ export function getPreviewStateObservable(
   const published$ = observeForPreview({_id: getPublishedId(documentId)}, schemaType)
 
   return combineLatest([draft$, published$]).pipe(
-    // @ts-ignore
-    map(([draft, published]) => {
+    // @ts-expect-error poor typings
+    map(([draft, published]: [{snapshot: any}, snapshot: any]) => {
       return {
-        draft: draft.snapshot ? {title, ...(draft.snapshot as any)} : null,
+        draft: draft.snapshot ? {title, ...draft.snapshot} : null,
         isLoading: false,
-        // @ts-ignore
-        published: published.snapshot ? {title, ...(published.snapshot as any)} : null,
+        published: published.snapshot ? {title, ...published.snapshot} : null,
       }
     }),
     startWith({draft: null, isLoading: true, published: null})
