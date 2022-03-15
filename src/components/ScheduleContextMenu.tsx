@@ -114,7 +114,7 @@ const ScheduleContextMenu = (props: Props) => {
         </Menu>
       }
       placement="left"
-      popover={{portal: true}}
+      popover={{portal: true, tone: 'default'}}
     />
   )
 }
