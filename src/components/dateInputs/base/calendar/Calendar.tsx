@@ -17,7 +17,7 @@ export type CalendarProps = Omit<React.ComponentProps<'div'>, 'onSelect'> & {
   onSelect: (date: Date) => void
   focusedDate: Date
   onFocusedDateChange: (index: Date) => void
-  isValidDate?: (selectedDate: Date) => boolean
+  customValidation?: (selectedDate: Date) => boolean
 }
 
 // This is used to maintain focus on a child element of the calendar-grid between re-renders
@@ -48,7 +48,7 @@ export const Calendar = forwardRef(function Calendar(
     focusedDate = selectedDate,
     timeStep = 1,
     onSelect,
-    isValidDate,
+    customValidation,
     ...restProps
   } = props
 
@@ -196,7 +196,7 @@ export const Calendar = forwardRef(function Calendar(
           <CalendarMonth
             date={focusedDate}
             focused={focusedDate}
-            isValidDate={isValidDate}
+            customValidation={customValidation}
             onSelect={handleDateChange}
             selected={selectedDate}
           />

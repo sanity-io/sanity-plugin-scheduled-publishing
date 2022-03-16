@@ -28,7 +28,7 @@ const ScheduleForm = (props: Props) => {
   }
 
   // Only allow dates in the future (`selectedDate` is UTC)
-  const handleIsValidDate = (selectedDate: Date): boolean => {
+  const handleCustomValidation = (selectedDate: Date): boolean => {
     return selectedDate > getCurrentZoneDate()
   }
 
@@ -42,9 +42,10 @@ const ScheduleForm = (props: Props) => {
           type={{
             name: 'date',
             options: {
+              customValidation: handleCustomValidation,
+              customValidationMessage: 'Date cannot be in the past.',
               // date-fns format
               dateFormat: `d/MM/yyyy`,
-              isValidDate: handleIsValidDate,
               timeFormat: 'HH:mm',
             },
             title: 'Date and time',

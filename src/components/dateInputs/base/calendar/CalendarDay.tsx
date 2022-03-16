@@ -8,20 +8,20 @@ interface CalendarDayProps {
   onSelect: (date: Date) => void
   isCurrentMonth?: boolean
   isToday: boolean
-  isValidDate?: (selectedDate: Date) => boolean
+  customValidation?: (selectedDate: Date) => boolean
   selected?: boolean
 }
 
 export function CalendarDay(props: CalendarDayProps) {
-  const {date, focused, isCurrentMonth, isToday, isValidDate, onSelect, selected} = props
+  const {date, focused, isCurrentMonth, isToday, customValidation, onSelect, selected} = props
 
   // Round date to the end of day when passing to custom validate function.
   // Remember that all calendar days are in UTC, but comparison is done with 'wall clock' time.
   const isValid = useMemo(() => {
-    if (!isValidDate) {
+    if (!customValidation) {
       return true
     }
-    return isValidDate(endOfDay(date))
+    return customValidation(endOfDay(date))
   }, [date])
 
   const handleClick = useCallback(() => {

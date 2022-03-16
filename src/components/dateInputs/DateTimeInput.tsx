@@ -8,17 +8,19 @@ import {isValidDate} from './utils'
 
 type ParsedOptions = {
   calendarTodayLabel: string
+  customValidation: (selectedDate: Date) => boolean
+  customValidationMessage?: string
   dateFormat: string
-  isValidDate: (selectedDate: Date) => boolean
   timeFormat: string
   timeStep: number
 }
 type SchemaOptions = {
+  calendarTodayLabel?: string
+  customValidation?: (selectedDate: Date) => boolean
+  customValidationMessage?: string
   dateFormat?: string
-  isValidDate?: (selectedDate: Date) => boolean
   timeFormat?: string
   timeStep?: number
-  calendarTodayLabel?: string
 }
 const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd'
 const DEFAULT_TIME_FORMAT = 'HH:mm'
@@ -36,13 +38,14 @@ export type Props = CommonProps & {
 
 function parseOptions(options: SchemaOptions = {}): ParsedOptions {
   return {
-    calendarTodayLabel: options.calendarTodayLabel || 'Today',
-    dateFormat: options.dateFormat || DEFAULT_DATE_FORMAT,
-    isValidDate:
-      options.isValidDate ||
+    customValidation:
+      options.customValidation ||
       function () {
         return true
       },
+    customValidationMessage: options.customValidationMessage || 'Invalid date.',
+    calendarTodayLabel: options.calendarTodayLabel || 'Today',
+    dateFormat: options.dateFormat || DEFAULT_DATE_FORMAT,
     timeFormat: options.timeFormat || DEFAULT_TIME_FORMAT,
     timeStep: ('timeStep' in options && Number(options.timeStep)) || 1,
   }
@@ -85,14 +88,10 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
 
   const {getCurrentZoneDate, timeZone} = useTimeZone()
 
-  const {
-    dateFormat,
-    isValidDate: parsedOptionsIsValidDate,
-    timeFormat,
-    timeStep,
-  } = parseOptions(type.options)
+  const {customValidation, customValidationMessage, dateFormat, timeFormat, timeStep} =
+    parseOptions(type.options)
 
-  // Returns date in UTC
+  // Returns date in UTC string
   const handleChange = useCallback(
     (nextDate: string | null) => {
       let date = nextDate
@@ -113,15 +112,26 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
   const parseInputValue = React.useCallback(
     (inputValue: string) => {
       const parsed = parse(inputValue, `${dateFormat} ${timeFormat}`, getCurrentZoneDate())
-      if (isValid(parsed)) {
+
+      // Check is value is a valid date
+      if (!isValid(parsed)) {
         return {
-          isValid: true,
-          date: parsed,
+          isValid: false,
+          error: `Invalid date. Must be on the format "${dateFormat} ${timeFormat}"`,
         } as ParseResult
       }
+
+      // Check if value adheres to custom validation rules
+      if (!customValidation(parsed)) {
+        return {
+          isValid: false,
+          error: customValidationMessage,
+        } as ParseResult
+      }
+
       return {
-        isValid: false,
-        error: `Invalid date. Must be on the format "${dateFormat} ${timeFormat}"`,
+        isValid: true,
+        date: parsed,
       } as ParseResult
     },
     [dateFormat, getCurrentZoneDate, timeFormat]
@@ -140,7 +150,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
       serialize={serialize}
       deserialize={deserialize}
       formatInputValue={formatInputValue}
-      isValidDate={parsedOptionsIsValidDate}
+      customValidation={customValidation}
       parseInputValue={parseInputValue}
     />
   )

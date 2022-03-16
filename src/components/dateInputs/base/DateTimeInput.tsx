@@ -16,15 +16,23 @@ type Props = {
   onInputChange?: (event: React.FocusEvent<HTMLInputElement>) => void
   inputValue?: string
   onChange: (date: Date | null) => void
-  isValidDate?: (selectedDate: Date) => boolean
+  customValidation?: (selectedDate: Date) => boolean
 }
 
 export const DateTimeInput = React.forwardRef(function DateTimeInput(
   props: Props,
   forwardedRef: React.ForwardedRef<HTMLInputElement>
 ) {
-  const {value, inputValue, isValidDate, onInputChange, onChange, selectTime, timeStep, ...rest} =
-    props
+  const {
+    value,
+    inputValue,
+    customValidation,
+    onInputChange,
+    onChange,
+    selectTime,
+    timeStep,
+    ...rest
+  } = props
 
   const [popoverRef, setPopoverRef] = React.useState<HTMLElement | null>(null)
 
@@ -87,7 +95,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
                       onKeyUp={handleKeyUp}
                       value={value}
                       onChange={onChange}
-                      isValidDate={isValidDate}
+                      customValidation={customValidation}
                     />
                   </FocusLock>
                 </Box>

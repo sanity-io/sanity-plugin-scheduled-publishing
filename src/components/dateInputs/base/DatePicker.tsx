@@ -8,12 +8,12 @@ export const DatePicker = React.forwardRef(function DatePicker(
     onChange: (nextDate: Date) => void
     selectTime?: boolean
     timeStep?: number
-    isValidDate?: (selectedDate: Date) => boolean
+    customValidation?: (selectedDate: Date) => boolean
   },
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   const {utcToCurrentZoneDate} = useTimeZone()
-  const {value = new Date(), onChange, isValidDate, ...rest} = props
+  const {value = new Date(), onChange, customValidation, ...rest} = props
   const [focusedDate, setFocusedDay] = React.useState<Date>()
 
   const handleSelect = React.useCallback(
@@ -32,7 +32,7 @@ export const DatePicker = React.forwardRef(function DatePicker(
       onSelect={handleSelect}
       focusedDate={utcToCurrentZoneDate(focusedDate || value)}
       onFocusedDateChange={setFocusedDay}
-      isValidDate={isValidDate}
+      customValidation={customValidation}
     />
   )
 })

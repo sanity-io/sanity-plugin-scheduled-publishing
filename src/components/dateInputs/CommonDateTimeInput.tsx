@@ -19,7 +19,7 @@ type Props = CommonProps & {
   selectTime?: boolean
   placeholder?: string
   timeStep?: number
-  isValidDate?: (selectedDate: Date) => boolean
+  customValidation?: (selectedDate: Date) => boolean
 }
 
 export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput(
@@ -41,7 +41,7 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
     readOnly,
     level,
     onChange,
-    isValidDate,
+    customValidation,
     ...rest
   } = props
 
@@ -132,7 +132,7 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
           onInputChange={handleDatePickerInputChange}
           onChange={handleDatePickerChange}
           customValidity={parseResult?.error}
-          isValidDate={isValidDate}
+          customValidation={customValidation}
         />
       )}
     </FormField>
