@@ -1,7 +1,6 @@
 import {WarningOutlineIcon} from '@sanity/icons'
 import {Card, Flex} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
-import schema from 'part:@sanity/base/schema'
 import React, {PropsWithChildren, useMemo} from 'react'
 import usePreviewState from '../../hooks/usePreviewState'
 import {Schedule, ValidationStatus} from '../../types'
@@ -9,9 +8,8 @@ import DateWithTooltipElementQuery from '../DateWithTooltipElementQuery'
 import ScheduleContextMenu from '../ScheduleContextMenu'
 import DocumentPreview from './DocumentPreview'
 import ToolPreview from './ToolPreview'
-import {useScheduleSchemaType} from '../../hooks/useSchemaType'
+import {useScheduleSchemaName, useScheduleSchemaType} from '../../hooks/useSchemaType'
 import {getScheduledDocument} from '../../utils/paneItemHelpers'
-import {SchemaType} from '@sanity/types'
 
 interface Props {
   schedule: Schedule
@@ -25,16 +23,14 @@ export const ScheduleItem = (props: Props) => {
   const firstDocument = getScheduledDocument(schedule)
 
   const schemaType = useScheduleSchemaType(schedule)
-
   const previewState = usePreviewState(firstDocument?.documentId, schemaType)
 
   const visibleDocument = previewState.draft || previewState.published
   const invalidDocument = !visibleDocument && !previewState.isLoading
 
   const preview = useMemo(() => {
-    const hasSchemaType = Boolean(schemaType?.name && schema.get(schemaType.name))
-    if (!hasSchemaType) {
-      return <NoSchemaItem schemaType={schemaType} />
+    if (!schemaType) {
+      return <NoSchemaItem schedule={schedule} />
     }
     if (invalidDocument) {
       return <InvalidDocument schedule={schedule} />
@@ -68,7 +64,8 @@ export const ScheduleItem = (props: Props) => {
   return <DateWithTooltipElementQuery>{preview}</DateWithTooltipElementQuery>
 }
 
-function NoSchemaItem({schemaType}: {schemaType: SchemaType}) {
+function NoSchemaItem({schedule}: {schedule: Schedule}) {
+  const schemaName = useScheduleSchemaName(schedule)
   return (
     <PreviewWrapper>
       <Card padding={1}>
@@ -76,9 +73,16 @@ function NoSchemaItem({schemaType}: {schemaType: SchemaType}) {
           icon={WarningOutlineIcon}
           layout="default"
           value={{
+            subtitle: <em>It may have been deleted</em>,
             title: (
               <em>
-                No schema found for type <code>{schemaType.name}</code>
+                Document schema not found
+                {schemaName && (
+                  <>
+                    {' '}
+                    for type <code>{schemaName}</code>
+                  </>
+                )}
               </em>
             ),
           }}
@@ -96,7 +100,7 @@ function InvalidDocument({schedule}: {schedule: Schedule}) {
           icon={WarningOutlineIcon}
           layout="default"
           value={{
-            subtitle: <em>It may have been since been deleted</em>,
+            subtitle: <em>It may have been deleted</em>,
             title: <em>Document not found</em>,
           }}
         />

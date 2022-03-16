@@ -39,24 +39,34 @@ export function ValidateScheduleDoc({
   schedule: Schedule
   updateValidation: UpdateValidation
 }) {
+  const schemaType = useScheduleSchemaType(schedule)
   const id = getScheduledDocumentId(schedule)
-  if (!id) {
+
+  if (!id || !schemaType?.name) {
     return null
   }
-  return <ValidationRunner id={id} schedule={schedule} updateValidation={updateValidation} />
+  return (
+    <ValidationRunner
+      id={id}
+      schedule={schedule}
+      schemaName={schemaType.name}
+      updateValidation={updateValidation}
+    />
+  )
 }
 
 function ValidationRunner({
   id,
   schedule,
+  schemaName,
   updateValidation,
 }: {
   id: string
   schedule: Schedule
+  schemaName: string
   updateValidation: UpdateValidation
 }) {
-  const schemaType = useScheduleSchemaType(schedule)
-  const validationStatus = useValidationStatus(id, schemaType.name)
+  const validationStatus = useValidationStatus(id, schemaName)
 
   useEffect(() => {
     if (!validationStatus.isValidating) {

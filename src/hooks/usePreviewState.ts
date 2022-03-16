@@ -4,7 +4,7 @@ import {getPreviewStateObservable, PaneItemPreviewState} from '../utils/paneItem
 
 export default function usePreviewState(
   documentId: string,
-  schemaType: SchemaType
+  schemaType?: SchemaType
 ): PaneItemPreviewState {
   const [paneItemPreview, setPaneItemPreview] = useState<PaneItemPreviewState>({})
 
