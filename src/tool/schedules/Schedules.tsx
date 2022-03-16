@@ -4,7 +4,7 @@ import React, {Fragment, useMemo} from 'react'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
 import {Schedule, ScheduledDocValidations, ScheduleSort, ScheduleState} from '../../types'
 import EmptySchedules from './EmptySchedules'
-import {ScheduleItem} from '../scheduleItem'
+import {ScheduleItem} from '../../components/scheduleItem'
 import {getValidationStatus} from '../../utils/validationUtils'
 import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 

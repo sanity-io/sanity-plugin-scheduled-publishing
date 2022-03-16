@@ -13,7 +13,7 @@ import ButtonTimeZone from '../components/timeZoneButton/TimeZoneButton'
 import ButtonTimeZoneElementQuery from '../components/timeZoneButton/TimeZoneButtonElementQuery'
 import ErrorCallout from '../components/errorCallout/ErrorCallout'
 import {ScheduleFilters} from './scheduleFilters'
-import {Schedules} from '../components/schedules'
+import {Schedules} from './schedules'
 import {ToolCalendar} from './toolCalendar'
 import {SchedulesValidation} from '../components/validation/SchedulesValidation'
 
