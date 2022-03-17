@@ -12,7 +12,7 @@ import {usePublishedId} from '../../hooks/usePublishedId'
 interface ValidationProps {
   documentId?: string
   markers: Marker[]
-  type: SchemaType
+  type?: SchemaType
   menuHeader?: ReactNode
 }
 
@@ -52,7 +52,7 @@ function ValidationInfoWithRouter(props: ValidationProps & {router: HOCRouter}) 
       id={id || ''}
       button={
         <Button
-          title="Show validation errors"
+          title="Show validation issues"
           mode="bleed"
           data-testid="schedule-validation-list-button"
           icon={hasError ? ErrorOutlineIcon : WarningOutlineIcon}

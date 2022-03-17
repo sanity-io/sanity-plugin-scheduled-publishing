@@ -1,6 +1,6 @@
 import {
-  useCurrentUser,
   unstable_useDocumentPairPermissions as useDocumentPairPermissions,
+  useCurrentUser,
 } from '@sanity/base/hooks'
 import {
   CalendarIcon,
@@ -9,13 +9,13 @@ import {
   PublishIcon,
   TrashIcon,
 } from '@sanity/icons'
+import {SchemaType} from '@sanity/types'
 import {Button, Menu, MenuButton} from '@sanity/ui'
-import schema from 'part:@sanity/base/schema'
-import React, {useMemo} from 'react'
+import React from 'react'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
 import {Schedule} from '../../types'
-import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
 import {getScheduledDocument} from '../../utils/paneItemHelpers'
+import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
 
 interface Props {
   actions?: {
@@ -27,14 +27,13 @@ interface Props {
   onDelete?: () => void
   onEdit?: () => void
   schedule: Schedule
+  schemaType: SchemaType
 }
 
 export const ScheduleContextMenu = (props: Props) => {
-  const {actions, onDelete, onEdit, schedule} = props
+  const {actions, onDelete, onEdit, schedule, schemaType} = props
 
   const firstDocument = getScheduledDocument(schedule)
-
-  const schemaType = useMemo(() => schema.get(firstDocument.documentType), [])
 
   // Studio hooks
   const {value: currentUser} = useCurrentUser()

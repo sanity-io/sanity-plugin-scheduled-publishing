@@ -4,11 +4,6 @@ import schema from 'part:@sanity/base/schema'
 import {SchemaType} from '@sanity/types'
 import {getScheduledDocument} from '../utils/paneItemHelpers'
 
-export function useScheduleSchemaName(schedule: Schedule): string | undefined {
-  const firstDocument = getScheduledDocument(schedule)
-  return firstDocument?.documentType
-}
-
 export function useScheduleSchemaType(schedule: Schedule): SchemaType | undefined {
   const firstDocument = getScheduledDocument(schedule)
   return firstDocument.documentType ? useSchemaType(firstDocument.documentType) : undefined
