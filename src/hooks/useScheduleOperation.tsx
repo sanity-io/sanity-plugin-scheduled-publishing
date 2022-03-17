@@ -105,12 +105,12 @@ function _deleteMultiple({scheduleIds}: {scheduleIds: string[]}) {
   return Promise.allSettled(requests)
 }
 
-function _publish({documentIds}: {documentIds: string[]}) {
-  debug('_publish:', documentIds)
+function _publish({scheduleId}: {scheduleId: string}) {
+  debug('_publish:', scheduleId)
 
   return axios.post<{transactionId: string}>(
-    `${url}/publish/${projectId}/${dataset}`,
-    documentIds.map((documentId) => ({documentId})),
+    `${url}/schedules/${projectId}/${dataset}/${scheduleId}/publish`,
+    null,
     {withCredentials: true}
   )
 }
@@ -309,8 +309,6 @@ export default function useScheduleOperation() {
     }
   }
 
-  // TODO: this currently deletes the previous schedule, since it's not yet possible to update a schedule's state
-  // from 'scheduled' to 'succeeded'. Update this endpoint when the above has been rectified by CL.
   async function executeSchedule({
     displayToast = true,
     schedule,
@@ -319,8 +317,7 @@ export default function useScheduleOperation() {
     schedule: Schedule
   }) {
     try {
-      await _publish({documentIds: schedule?.documents?.map((document) => document.documentId)})
-      await deleteSchedule({displayToast: false, schedule})
+      await _publish({scheduleId: schedule.id})
 
       window.dispatchEvent(scheduleCustomEvent(ScheduleEvents.execute, {detail: {schedule}}))
 
