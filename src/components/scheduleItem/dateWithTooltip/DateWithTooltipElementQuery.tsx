@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const DateWithTooltipElementQuery = styled(ElementQuery)`
   .date-small {
-    display: block;
+    display: inline;
   }
   .date-medium {
     display: none;
@@ -17,7 +17,7 @@ const DateWithTooltipElementQuery = styled(ElementQuery)`
       display: none;
     }
     .date-medium {
-      display: block;
+      display: inline;
     }
     .date-large {
       display: none;
@@ -32,7 +32,7 @@ const DateWithTooltipElementQuery = styled(ElementQuery)`
       display: none;
     }
     .date-large {
-      display: block;
+      display: inline;
     }
   }
 `

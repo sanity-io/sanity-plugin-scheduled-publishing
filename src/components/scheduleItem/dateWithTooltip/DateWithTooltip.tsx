@@ -9,6 +9,10 @@ interface Props {
   useElementQueries?: boolean
 }
 
+/**
+ * If `useElementQueries` is enabled, dates will be conditionally toggled at different element
+ * breakpoints, provided this `<DateWithTooltip>` is wrapped in a `<DateElementQuery>` component.
+ */
 const DateWithTooltip = (props: Props) => {
   const {date, useElementQueries} = props
 
@@ -24,32 +28,30 @@ const DateWithTooltip = (props: Props) => {
   const dateTimeSmall = formatDateTz({date, mode: 'small', timeZone})
 
   return (
-    <Tooltip
-      content={
-        <Box padding={2}>
-          <Text muted size={1}>
-            {distance}
-          </Text>
-        </Box>
-      }
-      portal
-    >
-      <Text size={1}>
-        {/*
-          If `useElementQueries` is enabled, dates will be conditionally toggled at different element
-          breakpoints - provided this `<DateWithTooltip>` is wrapped in a `<DateElementQuery>` component.
-        */}
-        {useElementQueries ? (
-          <>
-            <Box className="date-small">{dateTimeSmall}</Box>
-            <Box className="date-medium">{dateTimeMedium}</Box>
-            <Box className="date-large">{dateTimeLarge}</Box>
-          </>
-        ) : (
-          dateTimeLarge
-        )}
-      </Text>
-    </Tooltip>
+    <Text size={1} textOverflow="ellipsis">
+      <Tooltip
+        content={
+          <Box padding={2}>
+            <Text muted size={1}>
+              {distance}
+            </Text>
+          </Box>
+        }
+        portal
+      >
+        <span>
+          {useElementQueries ? (
+            <>
+              <span className="date-small">{dateTimeSmall}</span>
+              <span className="date-medium">{dateTimeMedium}</span>
+              <span className="date-large">{dateTimeLarge}</span>
+            </>
+          ) : (
+            dateTimeLarge
+          )}
+        </span>
+      </Tooltip>
+    </Text>
   )
 }
 

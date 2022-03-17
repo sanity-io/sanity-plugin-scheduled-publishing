@@ -23,6 +23,7 @@ interface Props {
   publishedDocumentId?: string
   schedule: Schedule
   schemaType?: SchemaType
+  useElementQueries?: boolean
 }
 
 const PreviewWrapper = (props: Props) => {
@@ -36,6 +37,7 @@ const PreviewWrapper = (props: Props) => {
     publishedDocumentId,
     schedule,
     schemaType,
+    useElementQueries,
   } = props
 
   const {hasError, validationTone} = useValidationState(markers)
@@ -63,10 +65,10 @@ const PreviewWrapper = (props: Props) => {
               style={{
                 flexShrink: 0,
                 maxWidth: '250px',
-                width: '35%',
+                width: children ? '35%' : 'auto',
               }}
             >
-              <DateWithTooltip date={schedule.executeAt} useElementQueries />
+              <DateWithTooltip date={schedule.executeAt} useElementQueries={useElementQueries} />
             </Box>
 
             {!children && (

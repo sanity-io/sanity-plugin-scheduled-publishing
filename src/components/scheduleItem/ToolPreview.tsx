@@ -67,6 +67,7 @@ const ToolPreview = (props: Props) => {
         publishedDocumentId={publishedId}
         schedule={schedule}
         schemaType={schemaType}
+        useElementQueries
       >
         <SanityDefaultPreview
           icon={schemaType?.icon}
