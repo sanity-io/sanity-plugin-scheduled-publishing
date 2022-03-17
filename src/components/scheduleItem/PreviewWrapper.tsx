@@ -75,7 +75,7 @@ const PreviewWrapper = (props: Props) => {
               </Box>
             )}
 
-            <Flex align="center">
+            <Flex align="center" style={{flexShrink: 0}}>
               {/* Avatar */}
               <Box display={['none', 'none', 'block']} marginX={3} style={{flexShrink: 0}}>
                 <User id={schedule?.author} />
