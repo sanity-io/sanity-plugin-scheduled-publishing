@@ -4,21 +4,19 @@ import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/u
 import React from 'react'
 import {SCHEDULE_FILTERS, SCHEDULE_FILTER_DICTIONARY} from '../../constants'
 import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
-import {Schedule, ScheduledDocValidations, ScheduleState} from '../../types'
+import {ScheduledDocValidations} from '../../types'
+import {useSchedules} from '../contexts/schedules'
 import ScheduleFilter from './ScheduleFilter'
 
 interface Props {
-  schedules: Schedule[] | undefined
-  scheduleState: ScheduleState
   validations: ScheduledDocValidations
 }
 
-const EMPTY_SCHEDULE: Schedule[] = []
-
 export const ScheduleFilters = (props: Props) => {
-  const {scheduleState, schedules = EMPTY_SCHEDULE, validations} = props
+  const {validations} = props
 
   const {navigate} = useRouter()
+  const {schedules, scheduleState} = useSchedules()
 
   const handleMenuClick = (state: Record<string, unknown>) => {
     navigate(state)

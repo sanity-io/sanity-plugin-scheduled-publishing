@@ -1,17 +1,14 @@
 import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex, Label, Stack} from '@sanity/ui'
-import React, {Fragment, useMemo} from 'react'
-import useScheduleOperation from '../../hooks/useScheduleOperation'
-import {Schedule, ScheduledDocValidations, ScheduleSort, ScheduleState} from '../../types'
-import EmptySchedules from './EmptySchedules'
+import React, {Fragment} from 'react'
 import {ScheduleItem} from '../../components/scheduleItem'
+import useScheduleOperation from '../../hooks/useScheduleOperation'
+import {ScheduledDocValidations} from '../../types'
 import {getValidationStatus} from '../../utils/validationUtils'
-import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
+import {useSchedules} from '../contexts/schedules'
+import EmptySchedules from './EmptySchedules'
 
 interface Props {
-  schedules: Schedule[]
-  scheduleState: ScheduleState
-  sortBy: ScheduleSort
   validations: ScheduledDocValidations
 }
 
@@ -23,30 +20,28 @@ function getLocalizedDate(date: string) {
 }
 
 export const Schedules = (props: Props) => {
-  const {schedules, scheduleState, sortBy, validations} = props
+  const {validations} = props
 
   const {deleteSchedules} = useScheduleOperation()
-
-  const activeSchedules = useFilteredSchedules(schedules, scheduleState)
-  const sortedSchedules = useSortedSchedules(activeSchedules, sortBy)
+  const {activeSchedules, scheduleState, sortBy} = useSchedules()
 
   const handleClearSchedules = () => {
-    deleteSchedules({schedules: activeSchedules})
+    deleteSchedules({schedules: activeSchedules || []})
   }
 
   return (
     <>
-      {sortedSchedules.length === 0 ? (
+      {activeSchedules.length === 0 ? (
         <Box marginY={2}>
           <EmptySchedules scheduleState={scheduleState} />
         </Box>
       ) : (
         <Box marginBottom={5}>
           <Stack space={2}>
-            {sortedSchedules.map((schedule, index) => {
+            {activeSchedules.map((schedule, index) => {
               // Get localised date string for current and previous schedules (e.g. 'February 2025')
               const datePrevious =
-                index > 0 ? getLocalizedDate(sortedSchedules[index - 1].executeAt) : null
+                index > 0 ? getLocalizedDate(activeSchedules[index - 1].executeAt) : null
               const dateCurrent = getLocalizedDate(schedule.executeAt)
               return (
                 <Fragment key={schedule.id}>
@@ -82,21 +77,5 @@ export const Schedules = (props: Props) => {
         </Box>
       )}
     </>
-  )
-}
-
-function useSortedSchedules(schedules: Schedule[], sortBy: ScheduleSort): Schedule[] {
-  return useMemo(
-    () =>
-      schedules.sort((a, b) => {
-        if (sortBy === 'createdAt') {
-          return a[sortBy] < b[sortBy] ? 1 : -1
-        }
-        if (sortBy === 'executeAt') {
-          return a[sortBy] > b[sortBy] ? 1 : -1
-        }
-        return 1
-      }),
-    [schedules, sortBy]
   )
 }
