@@ -7,3 +7,4 @@ This folder contains a customised version of the Sanity Studio's [DateInput cale
 - larger calendar day buttons
 - no time (HH:MM) dropdowns
 - stripped 'features' (day + time presets)
+- pips (and tooltips) on calendar days that contain schedules
