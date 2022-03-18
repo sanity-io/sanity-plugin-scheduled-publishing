@@ -6,7 +6,7 @@ import ToastDescription from '../components/toastDescription/ToastDescription'
 import {LOCAL_STORAGE_TZ_KEY} from '../constants'
 import {NormalizedTimeZone} from '../types'
 import {debugWithName} from '../utils/debug'
-import getErrorMessage from '../utils/getErrorMessage'
+import getAxiosErrorMessage from '../utils/getErrorMessage'
 
 enum TimeZoneEvents {
   update = 'timeZoneEventUpdate',
@@ -109,7 +109,7 @@ const useTimeZone = (): UseTimeZoneReturn => {
         toast.push({
           closable: true,
           description: (
-            <ToastDescription body={getErrorMessage(err)} title="Unable to update time zone" />
+            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to update time zone" />
           ),
           status: 'error',
         })

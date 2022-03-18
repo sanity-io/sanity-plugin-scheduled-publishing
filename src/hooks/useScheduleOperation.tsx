@@ -7,7 +7,7 @@ import ToastDescription from '../components/toastDescription/ToastDescription'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
 import formatDateTz from '../utils/formatDateTz'
-import getAxiosErrorMessage from '../utils/getAxiosErrorMessage'
+import getAxiosErrorMessage from '../utils/getErrorMessage'
 import useTimeZone from './useTimeZone'
 
 const debug = debugWithName('useScheduleOperation')
