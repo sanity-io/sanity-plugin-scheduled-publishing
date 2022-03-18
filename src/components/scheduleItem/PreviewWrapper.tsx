@@ -5,6 +5,7 @@ import React, {ElementType, ReactNode} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
 import {Schedule} from '../../types'
 import {PaneItemPreviewState} from '../../utils/paneItemHelpers'
+import {getLastExecuteDate} from '../../utils/scheduleUtils'
 import {useValidationState} from '../../utils/validationUtils'
 import {ValidationInfo} from '../validation/ValidationInfo'
 import DateWithTooltip from './dateWithTooltip/DateWithTooltip'
@@ -68,7 +69,10 @@ const PreviewWrapper = (props: Props) => {
                 width: children ? '35%' : 'auto',
               }}
             >
-              <DateWithTooltip date={schedule.executeAt} useElementQueries={useElementQueries} />
+              <DateWithTooltip
+                date={getLastExecuteDate(schedule)}
+                useElementQueries={useElementQueries}
+              />
             </Box>
 
             {!children && (

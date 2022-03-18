@@ -1,6 +1,7 @@
 import {isSameDay} from 'date-fns'
 import React, {createContext, ReactNode, useCallback, useContext, useMemo, useState} from 'react'
 import {Schedule, ScheduleSort, ScheduleState} from '../../types'
+import {getLastExecuteDate} from '../../utils/scheduleUtils'
 
 type State = {
   activeSchedules: Schedule[]
@@ -41,11 +42,16 @@ function SchedulesProvider({
           if (sortBy === 'createdAt') {
             return a[sortBy] < b[sortBy] ? 1 : -1
           }
+          /**
+           * By default, all schedules are displayed in reverse chronlogical order
+           * except when displaying 'scheduled' (or upcoming) items.
+           * If a schedule as an `executedAt` date, sort by that instead.
+           * This is because schedules may have differing values for `executeAt` and `executedAt` if
+           * they've been force-published ahead of time, and we only care about the final execution date.
+           */
           if (sortBy === 'executeAt') {
-            // By default, all schedules are displayed in reverse chronlogical order,
-            // except when displayed 'scheduled' (or upcoming) items.
             const invertOrder = value.scheduleState === 'scheduled' ? -1 : 1
-            return (a[sortBy] > b[sortBy] ? -1 : 1) * invertOrder
+            return (getLastExecuteDate(a) > getLastExecuteDate(b) ? -1 : 1) * invertOrder
           }
           return 1
         }) || []

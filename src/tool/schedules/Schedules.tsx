@@ -4,6 +4,7 @@ import React, {Fragment} from 'react'
 import {ScheduleItem} from '../../components/scheduleItem'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
 import {ScheduledDocValidations} from '../../types'
+import {getLastExecuteDate} from '../../utils/scheduleUtils'
 import {getValidationStatus} from '../../utils/validationUtils'
 import {useSchedules} from '../contexts/schedules'
 import EmptySchedules from './EmptySchedules'
@@ -40,9 +41,11 @@ export const Schedules = (props: Props) => {
           <Stack space={2}>
             {activeSchedules.map((schedule, index) => {
               // Get localised date string for current and previous schedules (e.g. 'February 2025')
+              const previousSchedule = activeSchedules[index - 1]
               const datePrevious =
-                index > 0 ? getLocalizedDate(activeSchedules[index - 1].executeAt) : null
-              const dateCurrent = getLocalizedDate(schedule.executeAt)
+                index > 0 ? getLocalizedDate(getLastExecuteDate(previousSchedule)) : null
+              const dateCurrent = getLocalizedDate(getLastExecuteDate(schedule))
+
               return (
                 <Fragment key={schedule.id}>
                   {/* Render date subheaders (only when sorting by execution / publish date) */}

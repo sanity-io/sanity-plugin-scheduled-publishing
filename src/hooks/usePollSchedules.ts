@@ -86,7 +86,6 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   // Immediately update schedule in SWR cache and revalidate
   const handleUpdate = useCallback((event: CustomEvent<ScheduleUpdateEvent>) => {
     mutate(
-      // (schedules = []) => {
       (currentData) => {
         const currentSchedules = currentData?.schedules || []
         const index = currentSchedules.findIndex(

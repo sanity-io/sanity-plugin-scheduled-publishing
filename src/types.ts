@@ -20,6 +20,7 @@ export interface Schedule {
     documentType?: string
   }[]
   executeAt: string
+  executedAt?: string
   id: string
   // name: string  // TODO: deprecate
   projectId: string
