@@ -7,7 +7,11 @@ import PreviewWrapper from './PreviewWrapper'
 
 const NoSchemaItem = ({schedule}: {schedule: Schedule}) => {
   return (
-    <PreviewWrapper contextMenu={<FallbackContextMenu schedule={schedule} />} schedule={schedule}>
+    <PreviewWrapper
+      contextMenu={<FallbackContextMenu schedule={schedule} />}
+      schedule={schedule}
+      useElementQueries
+    >
       <SanityDefaultPreview
         icon={WarningOutlineIcon}
         layout="default"

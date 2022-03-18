@@ -52,6 +52,7 @@ export function CalendarDay(props: CalendarDayProps) {
           />
         }
         disabled={!hasSchedules}
+        portal
       >
         <Card
           aria-label={date.toDateString()}
