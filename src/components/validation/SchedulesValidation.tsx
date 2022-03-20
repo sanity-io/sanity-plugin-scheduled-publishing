@@ -3,42 +3,19 @@ import {getScheduledDocumentId} from '../../utils/paneItemHelpers'
 import {useScheduleSchemaType} from '../../hooks/useSchemaType'
 import {useValidationStatus} from '@sanity/react-hooks'
 import React, {useEffect} from 'react'
-import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 
 interface Props {
-  schedules: Schedule[]
-  updateValidation: UpdateValidation
-}
-
-export type UpdateValidation = (schedule: Schedule, validationStatus: ValidationStatus) => void
-
-export function SchedulesValidation(props: Props) {
-  const {schedules, updateValidation} = props
-  const validatedSchedules = useFilteredSchedules(schedules, 'scheduled')
-  return (
-    <>
-      {validatedSchedules.map((schedule) => (
-        <ValidateScheduleDoc
-          key={schedule.id}
-          schedule={schedule}
-          updateValidation={updateValidation}
-        />
-      ))}
-    </>
-  )
+  schedule: Schedule
+  updateValidation: (status: ValidationStatus) => void
 }
 
 /**
- * useValidationStatus is sweet, but a hook, so this a boilerplate wrapper component around it,
- * so we get a callback when the hook returns new values
+ * useValidationStatus requires a published id, and we dont always have that
+ *
+ * This a boilerplate wrapper component around it,
+ * so we conditionally call back with updated status whenver it is possible.
  * */
-export function ValidateScheduleDoc({
-  schedule,
-  updateValidation,
-}: {
-  schedule: Schedule
-  updateValidation: UpdateValidation
-}) {
+export function ValidateScheduleDoc({schedule, updateValidation}: Props) {
   const schemaType = useScheduleSchemaType(schedule)
   const id = getScheduledDocumentId(schedule)
 
@@ -46,33 +23,26 @@ export function ValidateScheduleDoc({
     return null
   }
   return (
-    <ValidationRunner
-      id={id}
-      schedule={schedule}
-      schemaName={schemaType.name}
-      updateValidation={updateValidation}
-    />
+    <ValidationRunner id={id} schemaName={schemaType.name} updateValidation={updateValidation} />
   )
 }
 
 function ValidationRunner({
   id,
-  schedule,
   schemaName,
   updateValidation,
 }: {
   id: string
-  schedule: Schedule
   schemaName: string
-  updateValidation: UpdateValidation
+  updateValidation: (status: ValidationStatus) => void
 }) {
   const validationStatus = useValidationStatus(id, schemaName)
 
   useEffect(() => {
     if (!validationStatus.isValidating) {
-      updateValidation(schedule, validationStatus)
+      updateValidation(validationStatus)
     }
-  }, [schedule, validationStatus])
+  }, [validationStatus])
 
   return null
 }

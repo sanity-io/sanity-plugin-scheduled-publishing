@@ -1,33 +1,24 @@
 import {StateLink} from '@sanity/base/router'
 import {red, white} from '@sanity/color'
 import {Box, Flex, Tab, Text} from '@sanity/ui'
-import React, {useMemo} from 'react'
+import React from 'react'
 import {SCHEDULE_STATE_DICTIONARY} from '../../constants'
-import {Schedule, ScheduledDocValidations, ScheduleState} from '../../types'
+import {Schedule, ScheduleState} from '../../types'
 import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
-import {ErrorOutlineIcon} from '@sanity/icons'
-
 interface Props {
   schedules: Schedule[]
   selected?: boolean
   state: ScheduleState
-  validations?: ScheduledDocValidations
 }
 
 const ScheduleFilter = (props: Props) => {
-  const {selected, schedules, state, validations, ...rest} = props
+  const {selected, schedules, state, ...rest} = props
 
   const count = useFilteredSchedules(schedules, state).length
-  const showValidationError: boolean = useMemo(
-    () =>
-      !!validations &&
-      Object.values(validations).some((v) => v.markers.some((m) => (m.level = 'error'))),
-    [validations, state]
-  )
 
   const hasItems = count > 0
 
-  const critical = showValidationError || state === 'cancelled'
+  const critical = state === 'cancelled'
   const criticalCount = state === 'cancelled' && hasItems
 
   return (
@@ -67,13 +58,6 @@ const ScheduleFilter = (props: Props) => {
             {count}
           </Text>
         </Box>
-        {showValidationError && (
-          <Box marginX={1}>
-            <Text size={1}>
-              <ErrorOutlineIcon />
-            </Text>
-          </Box>
-        )}
       </Flex>
     </Tab>
   )

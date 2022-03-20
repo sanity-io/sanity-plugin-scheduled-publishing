@@ -5,7 +5,7 @@ import {getPublishedId} from 'part:@sanity/base/util/draft-utils'
 import React, {forwardRef, useMemo} from 'react'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
 import {usePublishedId} from '../../hooks/usePublishedId'
-import {Schedule, ValidationStatus} from '../../types'
+import {Schedule} from '../../types'
 import {PaneItemPreviewState} from '../../utils/paneItemHelpers'
 import {ScheduleContextMenu} from '../scheduleContextMenu'
 import PreviewWrapper from './PreviewWrapper'
@@ -14,11 +14,10 @@ interface Props {
   previewState: PaneItemPreviewState
   schedule: Schedule
   schemaType: SchemaType
-  validationStatus: ValidationStatus
 }
 
 const ToolPreview = (props: Props) => {
-  const {previewState, schedule, schemaType, validationStatus} = props
+  const {previewState, schedule, schemaType} = props
 
   const visibleDocument = previewState.draft || previewState.published
   const isCompleted = schedule.state === 'succeeded'
@@ -46,7 +45,6 @@ const ToolPreview = (props: Props) => {
     <>
       {/* Dialogs (rendered outside of cards so they don't infer card colors) */}
       {DialogScheduleEdit && <DialogScheduleEdit {...dialogProps} />}
-
       <PreviewWrapper
         contextMenu={
           <ScheduleContextMenu
@@ -62,7 +60,6 @@ const ToolPreview = (props: Props) => {
           />
         }
         linkComponent={LinkComponent}
-        markers={validationStatus?.markers}
         previewState={previewState}
         publishedDocumentId={publishedId}
         schedule={schedule}

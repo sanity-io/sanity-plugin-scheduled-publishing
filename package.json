@@ -40,6 +40,7 @@
     "debug": "^4.3.3",
     "pluralize": "^8.0.0",
     "react-focus-lock": "^2.7.1",
+    "react-virtual": "^2.10.4",
     "rxjs": "^7.5.2",
     "swr": "^1.2.0"
   },

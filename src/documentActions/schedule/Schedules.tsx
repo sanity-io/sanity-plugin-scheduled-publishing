@@ -1,16 +1,14 @@
 import {Box, Stack, Text} from '@sanity/ui'
 import React from 'react'
-import {Schedule, ScheduledDocValidations} from '../../types'
+import {Schedule} from '../../types'
 import {ScheduleItem} from '../../components/scheduleItem'
-import {getValidationStatus} from '../../utils/validationUtils'
 
 interface Props {
   schedules: Schedule[]
-  validations: ScheduledDocValidations
 }
 
 const Schedules = (props: Props) => {
-  const {schedules, validations} = props
+  const {schedules} = props
 
   return (
     <Stack space={4}>
@@ -21,12 +19,7 @@ const Schedules = (props: Props) => {
       ) : (
         <Stack space={2}>
           {schedules.map((schedule) => (
-            <ScheduleItem
-              key={schedule.id}
-              schedule={schedule}
-              type="document"
-              validationStatus={getValidationStatus(schedule, validations)}
-            />
+            <ScheduleItem key={schedule.id} schedule={schedule} type="document" />
           ))}
         </Stack>
       )}

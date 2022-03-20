@@ -1,24 +1,24 @@
-import {Marker, SchemaType} from '@sanity/types'
+import {SchemaType} from '@sanity/types'
 import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
-import React, {ElementType, ReactNode} from 'react'
+import React, {ElementType, ReactNode, useState} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
 import {Schedule} from '../../types'
 import {PaneItemPreviewState} from '../../utils/paneItemHelpers'
+import {EMPTY_VALIDATION_STATUS, useValidationState} from '../../utils/validationUtils'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
-import {useValidationState} from '../../utils/validationUtils'
 import {ValidationInfo} from '../validation/ValidationInfo'
 import DateWithTooltip from './dateWithTooltip/DateWithTooltip'
 import {DraftStatus} from './documentStatus/DraftStatus'
 import {PublishedStatus} from './documentStatus/PublishedStatus'
 import User from './User'
+import {ValidateScheduleDoc} from '../validation/SchedulesValidation'
 
 interface Props {
   children?: ReactNode
   contextMenu?: ReactNode
   // eslint-disable-next-line no-undef
   linkComponent?: ElementType | keyof JSX.IntrinsicElements
-  markers?: Marker[]
   onClick?: () => void
   previewState?: PaneItemPreviewState
   publishedDocumentId?: string
@@ -32,7 +32,6 @@ const PreviewWrapper = (props: Props) => {
     children,
     contextMenu,
     linkComponent,
-    markers = [],
     onClick,
     previewState,
     publishedDocumentId,
@@ -41,6 +40,8 @@ const PreviewWrapper = (props: Props) => {
     useElementQueries,
   } = props
 
+  const [validationStatus, setValidationStatus] = useState(EMPTY_VALIDATION_STATUS)
+  const {markers} = validationStatus
   const {hasError, validationTone} = useValidationState(markers)
 
   return (
@@ -100,6 +101,7 @@ const PreviewWrapper = (props: Props) => {
 
         {/* Validation status */}
         <Box>
+          <ValidateScheduleDoc schedule={schedule} updateValidation={setValidationStatus} />
           <ValidationInfo
             markers={markers}
             type={schemaType}
