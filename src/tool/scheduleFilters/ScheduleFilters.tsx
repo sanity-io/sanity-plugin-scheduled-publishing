@@ -4,17 +4,10 @@ import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/u
 import React from 'react'
 import {SCHEDULE_FILTERS, SCHEDULE_STATE_DICTIONARY} from '../../constants'
 import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
-import {ScheduledDocValidations} from '../../types'
 import {useSchedules} from '../contexts/schedules'
 import ScheduleFilter from './ScheduleFilter'
 
-interface Props {
-  validations: ScheduledDocValidations
-}
-
-export const ScheduleFilters = (props: Props) => {
-  const {validations} = props
-
+export const ScheduleFilters = () => {
   const {navigate} = useRouter()
   const {schedules, scheduleState} = useSchedules()
 
@@ -71,7 +64,6 @@ export const ScheduleFilters = (props: Props) => {
               schedules={schedules}
               selected={scheduleState === filter}
               state={filter}
-              validations={filter === 'scheduled' ? validations : undefined}
             />
           ))}
         </TabList>

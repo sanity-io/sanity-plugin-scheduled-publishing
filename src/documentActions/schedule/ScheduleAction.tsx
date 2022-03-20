@@ -9,14 +9,12 @@ import {Box} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
 import DialogFooter from '../../components/dialogs/DialogFooter'
 import DialogHeader from '../../components/dialogs/DialogHeader'
-import {EditScheduleForm} from '../../components/editScheduleForm/EditScheduleForm'
+import {EditScheduleForm} from '../../components/editScheduleForm'
 import ErrorCallout from '../../components/errorCallout/ErrorCallout'
-import {SchedulesValidation} from '../../components/validation/SchedulesValidation'
 import {DocumentActionPropsProvider} from '../../contexts/documentActionProps'
 import usePollSchedules from '../../hooks/usePollSchedules'
 import useScheduleForm from '../../hooks/useScheduleForm'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
-import {useValidations} from '../../hooks/useValidations'
 import {debugWithName} from '../../utils/debug'
 import {NewScheduleInfo} from './NewScheduleInfo'
 import Schedules from './Schedules'
@@ -57,8 +55,6 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
     documentId: id,
     state: 'scheduled',
   })
-
-  const [validations, updateValidation] = useValidations()
 
   debug('schedules', schedules)
 
@@ -120,9 +116,8 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
       ) : (
         <DocumentActionPropsProvider value={props}>
           <>
-            <SchedulesValidation schedules={schedules} updateValidation={updateValidation} />
             {hasExistingSchedules ? (
-              <Schedules schedules={schedules} validations={validations} />
+              <Schedules schedules={schedules} />
             ) : (
               <EditScheduleForm onChange={onFormChange} value={formData}>
                 <NewScheduleInfo id={id} schemaType={type} />

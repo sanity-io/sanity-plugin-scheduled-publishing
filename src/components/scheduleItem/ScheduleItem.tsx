@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react'
 import usePreviewState from '../../hooks/usePreviewState'
 import {useScheduleSchemaType} from '../../hooks/useSchemaType'
-import {Schedule, ValidationStatus} from '../../types'
+import {Schedule} from '../../types'
 import {getScheduledDocument} from '../../utils/paneItemHelpers'
 import DateWithTooltipElementQuery from './dateWithTooltip/DateWithTooltipElementQuery'
 import DocumentPreview from './DocumentPreview'
@@ -10,12 +10,11 @@ import ToolPreview from './ToolPreview'
 
 interface Props {
   schedule: Schedule
-  validationStatus: ValidationStatus
   type: 'document' | 'tool'
 }
 
 export const ScheduleItem = (props: Props) => {
-  const {schedule, type, validationStatus} = props
+  const {schedule, type} = props
 
   const firstDocument = getScheduledDocument(schedule)
 
@@ -31,28 +30,15 @@ export const ScheduleItem = (props: Props) => {
     }
 
     if (type === 'document') {
-      return (
-        <DocumentPreview
-          schedule={schedule}
-          schemaType={schemaType}
-          validationStatus={validationStatus}
-        />
-      )
+      return <DocumentPreview schedule={schedule} schemaType={schemaType} />
     }
 
     if (type === 'tool') {
-      return (
-        <ToolPreview
-          previewState={previewState}
-          schedule={schedule}
-          schemaType={schemaType}
-          validationStatus={validationStatus}
-        />
-      )
+      return <ToolPreview previewState={previewState} schedule={schedule} schemaType={schemaType} />
     }
 
     return null
-  }, [previewState, schedule, schemaType, validationStatus])
+  }, [previewState, schedule, schemaType])
 
   return <DateWithTooltipElementQuery>{preview}</DateWithTooltipElementQuery>
 }

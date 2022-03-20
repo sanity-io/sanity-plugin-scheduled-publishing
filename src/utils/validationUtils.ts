@@ -1,19 +1,12 @@
-import {Schedule, ScheduledDocValidations, ValidationStatus} from '../types'
 import {useMemo} from 'react'
 import {isValidationErrorMarker, isValidationWarningMarker} from '@sanity/types'
 import {ButtonTone} from '@sanity/ui'
 import {Marker} from '@sanity/types'
+import {ValidationStatus} from '../types'
 
 export const EMPTY_VALIDATION_STATUS: ValidationStatus = {
   markers: [],
   isValidating: false,
-}
-
-export function getValidationStatus(
-  schedule: Schedule,
-  validations: ScheduledDocValidations
-): ValidationStatus {
-  return validations[schedule.id] ?? EMPTY_VALIDATION_STATUS
 }
 
 interface ValidationState {

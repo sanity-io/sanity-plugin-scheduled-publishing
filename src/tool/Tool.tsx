@@ -6,10 +6,8 @@ import styled from 'styled-components'
 import ErrorCallout from '../components/errorCallout/ErrorCallout'
 import ButtonTimeZone from '../components/timeZoneButton/TimeZoneButton'
 import ButtonTimeZoneElementQuery from '../components/timeZoneButton/TimeZoneButtonElementQuery'
-import {SchedulesValidation} from '../components/validation/SchedulesValidation'
 import {SCHEDULE_FILTERS, TOOL_HEADER_HEIGHT} from '../constants'
 import usePollSchedules from '../hooks/usePollSchedules'
-import {useValidations} from '../hooks/useValidations'
 import {Schedule, ScheduleState} from '../types'
 import {debugWithName} from '../utils/debug'
 import {SchedulesProvider} from './contexts/schedules'
@@ -35,7 +33,6 @@ const NO_SCHEDULE: Schedule[] = []
 function Tool(props: Props) {
   const {router} = props
 
-  const [validations, updateValidation] = useValidations()
   const {error, isInitialLoading, schedules = NO_SCHEDULE} = usePollSchedules()
 
   const scheduleState: ScheduleState = router.state.state || 'scheduled'
@@ -43,17 +40,11 @@ function Tool(props: Props) {
 
   useFallbackNavigation(router, scheduleState)
 
-  const schedulesContext = useMemo(
-    () => ({
-      schedules,
-      scheduleState,
-    }),
-    [schedules, scheduleState]
-  )
+  const schedulesContext = useMemo(() => ({schedules, scheduleState}), [schedules, scheduleState])
 
   return (
     <SchedulesProvider value={schedulesContext}>
-      <Card display="flex" flex={1} height="fill" overflow="auto">
+      <Card display="flex" flex={1} height="fill" overflow="hidden">
         {/* LHS Column */}
         <Column
           display={['none', null, null, 'flex'] as any}
@@ -66,7 +57,7 @@ function Tool(props: Props) {
           <ToolCalendar />
         </Column>
         {/* RHS Column */}
-        <Column flex={1} overflow="auto">
+        <Column flex={1} overflow="hidden">
           <ButtonTimeZoneElementQuery
             style={{
               background: white.hex,
@@ -87,7 +78,7 @@ function Tool(props: Props) {
             >
               <Flex align="center" flex={1} justify="space-between">
                 {/* Filters */}
-                <ScheduleFilters validations={validations} />
+                <ScheduleFilters />
 
                 {/* Time zone select + context menu */}
                 <Flex align="center" gap={1}>
@@ -97,7 +88,7 @@ function Tool(props: Props) {
               </Flex>
             </Flex>
           </ButtonTimeZoneElementQuery>
-          <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={4}>
+          <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={4} paddingRight={0}>
             {/* Error */}
             {error && (
               <Box marginBottom={4}>
@@ -112,10 +103,7 @@ function Tool(props: Props) {
               <Text muted>Loading...</Text>
             ) : (
               // Loaded schedules
-              <>
-                <SchedulesValidation schedules={schedules} updateValidation={updateValidation} />
-                <Schedules validations={validations} />
-              </>
+              <Schedules />
             )}
           </Box>
         </Column>
