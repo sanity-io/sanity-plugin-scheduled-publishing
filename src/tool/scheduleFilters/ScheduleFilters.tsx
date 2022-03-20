@@ -2,7 +2,7 @@ import {useRouter} from '@sanity/base/router'
 import {CheckmarkIcon, SelectIcon} from '@sanity/icons'
 import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
 import React from 'react'
-import {SCHEDULE_FILTERS, SCHEDULE_FILTER_DICTIONARY} from '../../constants'
+import {SCHEDULE_FILTERS, SCHEDULE_STATE_DICTIONARY} from '../../constants'
 import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 import {ScheduledDocValidations} from '../../types'
 import {useSchedules} from '../contexts/schedules'
@@ -34,7 +34,7 @@ export const ScheduleFilters = (props: Props) => {
               fontSize={1}
               iconRight={SelectIcon}
               mode="ghost"
-              text={`${SCHEDULE_FILTER_DICTIONARY[scheduleState]} (${
+              text={`${SCHEDULE_STATE_DICTIONARY[scheduleState].title} (${
                 currentSchedules?.length || 0
               })`}
               tone="default"
@@ -53,7 +53,7 @@ export const ScheduleFilters = (props: Props) => {
                   iconRight={filter === scheduleState ? CheckmarkIcon : undefined}
                   key={filter}
                   onClick={handleMenuClick.bind(undefined, {state: filter})}
-                  text={SCHEDULE_FILTER_DICTIONARY[filter]}
+                  text={SCHEDULE_STATE_DICTIONARY[filter].title}
                 />
               ))}
             </Menu>

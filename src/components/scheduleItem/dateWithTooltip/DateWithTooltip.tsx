@@ -1,6 +1,7 @@
 import {Box, Text, Tooltip} from '@sanity/ui'
 import {formatDistance} from 'date-fns'
 import React from 'react'
+import {DATE_FORMAT} from '../../../constants'
 import useTimeZone from '../../../hooks/useTimeZone'
 
 interface Props {
@@ -22,9 +23,9 @@ const DateWithTooltip = (props: Props) => {
     addSuffix: true,
   })
 
-  const dateTimeLarge = formatDateTz({date, mode: 'large'})
-  const dateTimeMedium = formatDateTz({date, mode: 'medium'})
-  const dateTimeSmall = formatDateTz({date, mode: 'small'})
+  const dateTimeLarge = formatDateTz({date: new Date(date), format: DATE_FORMAT.LARGE})
+  const dateTimeMedium = formatDateTz({date: new Date(date), format: DATE_FORMAT.MEDIUM})
+  const dateTimeSmall = formatDateTz({date: new Date(date), format: DATE_FORMAT.SMALL})
 
   return (
     <Text size={1} textOverflow="ellipsis">

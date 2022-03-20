@@ -1,14 +1,16 @@
-import type {BadgeTone, CardTone} from '@sanity/ui'
+import type {CardTone} from '@sanity/ui'
 import {Badge, Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
-import {isWeekend} from 'date-fns'
-import React, {useCallback} from 'react'
+import {format, isWeekend} from 'date-fns'
+import React, {useCallback, useMemo} from 'react'
+import {SCHEDULE_STATE_DICTIONARY} from '../../constants'
 import useTimeZone from '../../hooks/useTimeZone'
 import type {Schedule} from '../../types'
+import {getLastExecuteDate} from '../../utils/scheduleUtils'
 import {useSchedules} from '../contexts/schedules'
 import Pip from './Pip'
 
 interface CalendarDayProps {
-  date: Date
+  date: Date // clock time
   focused?: boolean
   onSelect: (date: Date) => void
   isCurrentMonth?: boolean
@@ -20,9 +22,8 @@ export function CalendarDay(props: CalendarDayProps) {
   const {date, focused, isCurrentMonth, isToday, onSelect, selected} = props
 
   const {schedulesByDate} = useSchedules()
-  const {zoneDateToUtc} = useTimeZone()
 
-  const {completed, failed, invalid, upcoming} = schedulesByDate(zoneDateToUtc(date))
+  const schedules = schedulesByDate(date)
 
   const handleClick = useCallback(() => {
     onSelect(date)
@@ -37,19 +38,21 @@ export function CalendarDay(props: CalendarDayProps) {
     tone = 'default'
   }
 
-  const hasSchedules = completed.length + failed.length + invalid.length + upcoming.length > 0
+  const hasSchedules = schedules.length > 0
+
+  // Parition schedules by state
+  const {completed, failed, upcoming} = useMemo(() => {
+    return {
+      completed: schedules.filter((s) => s.state === 'succeeded'),
+      failed: schedules.filter((s) => s.state === 'cancelled'),
+      upcoming: schedules.filter((s) => s.state === 'scheduled'),
+    }
+  }, [schedules])
 
   return (
     <div aria-selected={selected} data-ui="CalendarDay">
       <Tooltip
-        content={
-          <TooltipContent
-            completed={completed}
-            failed={failed}
-            invalid={invalid}
-            upcoming={upcoming}
-          />
-        }
+        content={<TooltipContent date={date} schedules={schedules} />}
         disabled={!hasSchedules}
         portal
       >
@@ -82,15 +85,16 @@ export function CalendarDay(props: CalendarDayProps) {
           {/* Pips */}
           <Box
             style={{
-              bottom: '6px',
-              left: 0,
+              bottom: 2,
+              left: 2,
               position: 'absolute',
-              width: '100%',
+              right: 2,
             }}
           >
             <Flex align="center" gap={1} justify="center">
-              {completed.length + upcoming.length > 0 && <Pip selected={selected} />}
-              {failed.length + invalid.length > 0 && <Pip mode="failed" selected={selected} />}
+              {completed.length > 0 && <Pip selected={selected} />}
+              {upcoming.length > 0 && <Pip selected={selected} />}
+              {failed.length > 0 && <Pip mode="failed" selected={selected} />}
             </Flex>
           </Box>
         </Card>
@@ -100,53 +104,37 @@ export function CalendarDay(props: CalendarDayProps) {
 }
 
 interface TooltipContentProps {
-  completed?: Schedule[]
-  failed?: Schedule[]
-  invalid?: Schedule[]
-  upcoming?: Schedule[]
+  date: Date
+  schedules?: Schedule[]
 }
 
 function TooltipContent(props: TooltipContentProps) {
-  const {completed = [], failed = [], invalid = [], upcoming = []} = props
-
-  return (
-    <Box padding={2}>
-      <Stack space={4}>
-        <ScheduleGroup schedules={completed} title="Completed" tone="positive" />
-        <ScheduleGroup schedules={upcoming} title="Upcoming" tone="primary" />
-        <ScheduleGroup schedules={failed} title="Failed" tone="critical" />
-        <ScheduleGroup schedules={invalid} title="Invalid" tone="critical" />
-      </Stack>
-    </Box>
-  )
-}
-
-interface ScheduleGroupProps {
-  schedules: Schedule[]
-  title: string
-  tone: BadgeTone
-}
-
-function ScheduleGroup(props: ScheduleGroupProps) {
-  const {schedules, title, tone = 'default'} = props
+  const {date, schedules = []} = props
   const {formatDateTz} = useTimeZone()
 
-  if (!schedules || schedules.length === 0) {
-    return null
-  }
-
   return (
-    <Box>
-      <Flex>
-        <Badge fontSize={0} mode="outline" tone={tone}>
-          {title}
-        </Badge>
-      </Flex>
-      <Stack marginTop={3} space={3}>
+    <Box padding={3}>
+      <Box marginBottom={3}>
+        <Text muted size={1} weight="regular">
+          {format(date, 'd MMMM yyyy')}
+        </Text>
+      </Box>
+      <Stack space={2}>
         {schedules?.map((schedule) => (
-          <Text key={schedule.id} size={1}>
-            {formatDateTz({date: schedule.executeAt, mode: 'medium'})}
-          </Text>
+          <Flex align="center" gap={3} justify="space-between" key={schedule.id}>
+            <Box>
+              <Text size={1} weight="semibold">
+                {formatDateTz({date: new Date(getLastExecuteDate(schedule)), format: 'p'})}
+              </Text>
+            </Box>
+            <Badge
+              fontSize={0}
+              mode="outline"
+              tone={SCHEDULE_STATE_DICTIONARY[schedule.state].badgeTone}
+            >
+              {SCHEDULE_STATE_DICTIONARY[schedule.state].title}
+            </Badge>
+          </Flex>
         ))}
       </Stack>
     </Box>

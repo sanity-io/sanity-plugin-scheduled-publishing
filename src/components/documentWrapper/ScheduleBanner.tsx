@@ -73,7 +73,7 @@ function useNextSchedule(id: string) {
       return undefined
     }
     return formatDateTz({
-      date: upcomingSchedule.executeAt,
+      date: new Date(upcomingSchedule.executeAt),
       includeTimeZone: false,
     })
   }, [schedules])

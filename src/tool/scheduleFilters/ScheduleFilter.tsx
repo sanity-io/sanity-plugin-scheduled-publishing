@@ -2,7 +2,7 @@ import {StateLink} from '@sanity/base/router'
 import {red, white} from '@sanity/color'
 import {Box, Flex, Tab, Text} from '@sanity/ui'
 import React, {useMemo} from 'react'
-import {SCHEDULE_FILTER_DICTIONARY} from '../../constants'
+import {SCHEDULE_STATE_DICTIONARY} from '../../constants'
 import {Schedule, ScheduledDocValidations, ScheduleState} from '../../types'
 import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 import {ErrorOutlineIcon} from '@sanity/icons'
@@ -25,8 +25,6 @@ const ScheduleFilter = (props: Props) => {
     [validations, state]
   )
 
-  const title = SCHEDULE_FILTER_DICTIONARY[state]
-
   const hasItems = count > 0
 
   const critical = showValidationError || state === 'cancelled'
@@ -46,7 +44,7 @@ const ScheduleFilter = (props: Props) => {
     >
       <Flex align="center" paddingX={1}>
         <Text size={2} weight="medium">
-          {title}
+          {SCHEDULE_STATE_DICTIONARY[state].title}
         </Text>
         {/*
         HACK: when there are no items, we still render in with hidden visibility to

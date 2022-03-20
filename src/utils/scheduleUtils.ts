@@ -7,6 +7,6 @@ import type {Schedule} from '../types'
  * `executedAt` (e.g. schedules force-published ahead of time), for the purposes of
  * rendering and sorting we only care about the _final_ date a schedule was executed.
  */
-export function getLastExecuteDate(schedule: Schedule) {
+export function getLastExecuteDate(schedule: Schedule): string {
   return schedule?.executedAt || schedule.executeAt
 }

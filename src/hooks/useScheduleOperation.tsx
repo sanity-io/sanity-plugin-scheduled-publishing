@@ -160,7 +160,7 @@ export default function useScheduleOperation() {
           description: (
             <ToastDescription
               body={formatDateTz({
-                date: data.executeAt,
+                date: new Date(data.executeAt),
                 includeTimeZone: true,
                 prefix: 'Publishing on ',
               })}
@@ -360,7 +360,7 @@ export default function useScheduleOperation() {
           description: (
             <ToastDescription
               body={formatDateTz({
-                date,
+                date: new Date(date),
                 includeTimeZone: true,
                 prefix: 'Publishing on ',
               })}

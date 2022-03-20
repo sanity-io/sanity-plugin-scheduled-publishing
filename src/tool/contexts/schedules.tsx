@@ -1,17 +1,13 @@
 import {isSameDay} from 'date-fns'
 import React, {createContext, ReactNode, useCallback, useContext, useMemo, useState} from 'react'
+import useTimeZone from '../../hooks/useTimeZone'
 import {Schedule, ScheduleSort, ScheduleState} from '../../types'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
 
 type State = {
   activeSchedules: Schedule[]
   schedules: Schedule[]
-  schedulesByDate: (date: Date) => {
-    completed: Schedule[]
-    failed: Schedule[]
-    invalid: Schedule[]
-    upcoming: Schedule[]
-  }
+  schedulesByDate: (date: Date) => Schedule[]
   scheduleState: ScheduleState
   setSortBy: (sortBy: ScheduleSort) => void
   sortBy?: ScheduleSort
@@ -33,6 +29,7 @@ function SchedulesProvider({
   }
 }) {
   const [sortBy, setSortBy] = useState<ScheduleSort>(value.sortBy || 'executeAt')
+  const {timeZone, utcToCurrentZoneDate} = useTimeZone()
 
   const activeSchedules = useMemo(() => {
     return (
@@ -58,36 +55,21 @@ function SchedulesProvider({
     )
   }, [value.schedules, value.scheduleState, sortBy])
 
-  // Date must be in UTC
+  /**
+   * Return all matching schedules with specified date (in clock time).
+   * Scheduled are sorted chronologically by executed + execute date.
+   */
   const schedulesByDate = useCallback(
-    (date: Date) => {
-      return {
-        completed: value.schedules.filter(
-          (schedule) =>
-            schedule.state === 'succeeded' &&
-            schedule.documents.findIndex((d) => !!d.documentType) >= 0 &&
-            isSameDay(new Date(schedule.executeAt), date)
-        ),
-        failed: value.schedules.filter(
-          (schedule) =>
-            schedule.state === 'cancelled' &&
-            schedule.documents.findIndex((d) => !!d.documentType) >= 0 &&
-            isSameDay(new Date(schedule.executeAt), date)
-        ),
-        invalid: value.schedules.filter(
-          (schedule) =>
-            schedule.documents.findIndex((d) => !!d.documentType) === -1 &&
-            isSameDay(new Date(schedule.executeAt), date)
-        ),
-        upcoming: value.schedules.filter(
-          (schedule) =>
-            schedule.state === 'scheduled' &&
-            schedule.documents.findIndex((d) => !!d.documentType) >= 0 &&
-            isSameDay(new Date(schedule.executeAt), date)
-        ),
-      }
+    (clockDate: Date) => {
+      return value.schedules
+        .filter((schedule) => {
+          const scheduleDate = new Date(getLastExecuteDate(schedule)) // UTC
+          const zonedScheduleDate = utcToCurrentZoneDate(scheduleDate)
+          return isSameDay(zonedScheduleDate, clockDate)
+        })
+        .sort((a, b) => (getLastExecuteDate(a) > getLastExecuteDate(b) ? 1 : -1))
     },
-    [value.schedules]
+    [timeZone, value.schedules]
   )
 
   return (

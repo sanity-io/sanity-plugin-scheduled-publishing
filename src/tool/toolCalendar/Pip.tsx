@@ -1,4 +1,4 @@
-import {gray, red, white} from '@sanity/color'
+import {gray, red} from '@sanity/color'
 import {Box} from '@sanity/ui'
 import React from 'react'
 
@@ -13,20 +13,17 @@ const Pip = (props: Props) => {
       style={{
         ...(mode === 'default'
           ? {
-              background: gray[selected ? 100 : 500].hex,
-              height: selected ? '5px' : '4px',
-              width: selected ? '5px' : '4px',
+              background: gray[selected ? 100 : 300].hex,
             }
           : {}),
         ...(mode === 'failed'
           ? {
-              background: selected ? 'transparent' : red[500].hex,
-              outline: selected ? `1px solid ${white.hex}` : 'transparent',
-              height: selected ? '3px' : '4px',
-              width: selected ? '3px' : '4px',
+              background: red[500].hex,
             }
           : {}),
-        borderRadius: '100%',
+        borderRadius: '2px',
+        height: '2px',
+        width: '100%',
       }}
     />
   )

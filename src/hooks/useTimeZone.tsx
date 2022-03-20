@@ -3,7 +3,7 @@ import {getTimeZones} from '@vvo/tzdb'
 import {formatInTimeZone, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz'
 import React, {useEffect, useState} from 'react'
 import ToastDescription from '../components/toastDescription/ToastDescription'
-import {LOCAL_STORAGE_TZ_KEY} from '../constants'
+import {DATE_FORMAT, LOCAL_STORAGE_TZ_KEY} from '../constants'
 import {NormalizedTimeZone} from '../types'
 import {debugWithName} from '../utils/debug'
 import getAxiosErrorMessage from '../utils/getErrorMessage'
@@ -70,40 +70,27 @@ const useTimeZone = () => {
   }, [])
 
   /**
-   * Return time-zone adjusted date in the format 'Fri 24 Dec 2021 at 6:00 AM'
+   * Return time-zone adjusted date in a date-fns supported format
    */
   const formatDateTz = ({
     date,
+    format = DATE_FORMAT.LARGE,
     includeTimeZone,
-    mode = 'large',
     prefix,
   }: {
-    date: string
+    date: Date
+    format?: string
     includeTimeZone?: boolean
-    mode?: 'small' | 'medium' | 'large'
     prefix?: string
   }) => {
-    let format
-    switch (mode) {
-      case 'small':
-        format = `d MMM yy',' p` // 1 Oct 22, 10:00 PM
-        break
-      case 'medium':
-        format = `d MMMM yyyy',' p` // 1 October 2022, 10:00 PM
-        break
-      case 'large':
-        format = `iiii',' d MMMM yyyy',' p` // Saturday, 1 October 2022, 10:00 PM
-        break
-      default:
-        throw new Error('Unhandled mode')
-    }
+    let dateFormat = format
     if (prefix) {
-      format = `'${prefix}'${format}`
+      dateFormat = `'${prefix}'${format}`
     }
     if (includeTimeZone) {
-      format = `${format} (zzzz)`
+      dateFormat = `${format} (zzzz)`
     }
-    return formatInTimeZone(date, timeZone.name, format)
+    return formatInTimeZone(date, timeZone.name, dateFormat)
   }
 
   const getCurrentZoneDate = () => {

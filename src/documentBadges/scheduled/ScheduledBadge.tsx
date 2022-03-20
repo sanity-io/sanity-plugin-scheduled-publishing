@@ -19,7 +19,7 @@ export const ScheduledBadge: DocumentBadgeComponent = (props) => {
   }
 
   const formattedDateTime = formatDateTz({
-    date: upcomingSchedule.executeAt,
+    date: new Date(upcomingSchedule.executeAt),
     includeTimeZone: true,
   })
 
