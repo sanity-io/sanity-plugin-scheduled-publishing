@@ -1,6 +1,6 @@
 import {useToast} from '@sanity/ui'
 import {getTimeZones} from '@vvo/tzdb'
-import {utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz'
+import {formatInTimeZone, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz'
 import React, {useEffect, useState} from 'react'
 import ToastDescription from '../components/toastDescription/ToastDescription'
 import {LOCAL_STORAGE_TZ_KEY} from '../constants'
@@ -10,14 +10,6 @@ import getAxiosErrorMessage from '../utils/getErrorMessage'
 
 enum TimeZoneEvents {
   update = 'timeZoneEventUpdate',
-}
-interface UseTimeZoneReturn {
-  getCurrentZoneDate: () => Date
-  setTimeZone: (timeZone: NormalizedTimeZone) => void
-  timeIsLocal: boolean
-  timeZone: NormalizedTimeZone
-  utcToCurrentZoneDate: (date: Date) => Date
-  zoneDateToUtc: (date: Date) => Date
 }
 
 const debug = debugWithName('useScheduleOperation')
@@ -61,7 +53,7 @@ function getStoredTimeZone(): NormalizedTimeZone {
   return getLocalTimeZone()
 }
 
-const useTimeZone = (): UseTimeZoneReturn => {
+const useTimeZone = () => {
   const [timeZone, setTimeZone] = useState<NormalizedTimeZone>(getStoredTimeZone())
   const toast = useToast()
 
@@ -77,11 +69,48 @@ const useTimeZone = (): UseTimeZoneReturn => {
     }
   }, [])
 
+  /**
+   * Return time-zone adjusted date in the format 'Fri 24 Dec 2021 at 6:00 AM'
+   */
+  const formatDateTz = ({
+    date,
+    includeTimeZone,
+    mode = 'large',
+    prefix,
+  }: {
+    date: string
+    includeTimeZone?: boolean
+    mode?: 'small' | 'medium' | 'large'
+    prefix?: string
+  }) => {
+    let format
+    switch (mode) {
+      case 'small':
+        format = `d MMM yy',' p` // 1 Oct 22, 10:00 PM
+        break
+      case 'medium':
+        format = `d MMMM yyyy',' p` // 1 October 2022, 10:00 PM
+        break
+      case 'large':
+        format = `iiii',' d MMMM yyyy',' p` // Saturday, 1 October 2022, 10:00 PM
+        break
+      default:
+        throw new Error('Unhandled mode')
+    }
+    if (prefix) {
+      format = `'${prefix}'${format}`
+    }
+    if (includeTimeZone) {
+      format = `${format} (zzzz)`
+    }
+    return formatInTimeZone(date, timeZone.name, format)
+  }
+
   const getCurrentZoneDate = () => {
     return utcToZonedTime(new Date(), timeZone.name)
   }
 
-  const handleNewValue: UseTimeZoneReturn['setTimeZone'] = (tz) => {
+  const handleNewValue = (tz: NormalizedTimeZone) => {
     debug('handleNewValue:', tz)
 
     setTimeZone((prevTz) => {
@@ -128,6 +157,7 @@ const useTimeZone = (): UseTimeZoneReturn => {
   }
 
   return {
+    formatDateTz,
     getCurrentZoneDate,
     setTimeZone: handleNewValue,
     timeIsLocal: getLocalTimeZone().name === timeZone.name,

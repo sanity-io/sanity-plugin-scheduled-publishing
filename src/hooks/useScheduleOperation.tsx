@@ -6,7 +6,6 @@ import client from '../client'
 import ToastDescription from '../components/toastDescription/ToastDescription'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
-import formatDateTz from '../utils/formatDateTz'
 import getAxiosErrorMessage from '../utils/getErrorMessage'
 import useTimeZone from './useTimeZone'
 
@@ -132,7 +131,7 @@ function _update({
 
 export default function useScheduleOperation() {
   const toast = useToast()
-  const {timeZone} = useTimeZone()
+  const {formatDateTz} = useTimeZone()
 
   async function createSchedule({
     date,
@@ -164,7 +163,6 @@ export default function useScheduleOperation() {
                 date: data.executeAt,
                 includeTimeZone: true,
                 prefix: 'Publishing on ',
-                timeZone,
               })}
               title="Schedule created"
             />
@@ -365,7 +363,6 @@ export default function useScheduleOperation() {
                 date,
                 includeTimeZone: true,
                 prefix: 'Publishing on ',
-                timeZone,
               })}
               title="Schedule updated"
             />

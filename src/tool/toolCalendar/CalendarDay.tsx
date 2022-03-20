@@ -4,7 +4,6 @@ import {isWeekend} from 'date-fns'
 import React, {useCallback} from 'react'
 import useTimeZone from '../../hooks/useTimeZone'
 import type {Schedule} from '../../types'
-import formatDateTz from '../../utils/formatDateTz'
 import {useSchedules} from '../contexts/schedules'
 import Pip from './Pip'
 
@@ -130,7 +129,7 @@ interface ScheduleGroupProps {
 
 function ScheduleGroup(props: ScheduleGroupProps) {
   const {schedules, title, tone = 'default'} = props
-  const {timeZone} = useTimeZone()
+  const {formatDateTz} = useTimeZone()
 
   if (!schedules || schedules.length === 0) {
     return null
@@ -146,7 +145,7 @@ function ScheduleGroup(props: ScheduleGroupProps) {
       <Stack marginTop={3} space={3}>
         {schedules?.map((schedule) => (
           <Text key={schedule.id} size={1}>
-            {formatDateTz({date: schedule.executeAt, mode: 'medium', timeZone})}
+            {formatDateTz({date: schedule.executeAt, mode: 'medium'})}
           </Text>
         ))}
       </Stack>

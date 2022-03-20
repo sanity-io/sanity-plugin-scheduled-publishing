@@ -3,7 +3,6 @@ import {ValidationInfo} from '../validation/ValidationInfo'
 import React, {useMemo} from 'react'
 import usePollSchedules from '../../hooks/usePollSchedules'
 import useTimeZone from '../../hooks/useTimeZone'
-import formatDateTz from '../../utils/formatDateTz'
 import {usePublishedId} from '../../hooks/usePublishedId'
 import {useValidationState} from '../../utils/validationUtils'
 import {Marker, SchemaType} from '@sanity/types'
@@ -65,7 +64,7 @@ export function ScheduleBanner(props: Props) {
 
 function useNextSchedule(id: string) {
   const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
-  const {timeZone} = useTimeZone()
+  const {formatDateTz} = useTimeZone()
 
   return useMemo(() => {
     const upcomingSchedule = schedules?.[0]
@@ -76,7 +75,6 @@ function useNextSchedule(id: string) {
     return formatDateTz({
       date: upcomingSchedule.executeAt,
       includeTimeZone: false,
-      timeZone,
     })
-  }, [schedules, timeZone])
+  }, [schedules])
 }

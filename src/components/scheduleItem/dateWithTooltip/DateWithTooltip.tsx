@@ -2,7 +2,6 @@ import {Box, Text, Tooltip} from '@sanity/ui'
 import {formatDistance} from 'date-fns'
 import React from 'react'
 import useTimeZone from '../../../hooks/useTimeZone'
-import formatDateTz from '../../../utils/formatDateTz'
 
 interface Props {
   date: string // local date in UTC
@@ -16,16 +15,16 @@ interface Props {
 const DateWithTooltip = (props: Props) => {
   const {date, useElementQueries} = props
 
-  const {timeZone} = useTimeZone()
+  const {formatDateTz} = useTimeZone()
 
   // Get distance between both dates
   const distance = formatDistance(new Date(date), new Date(), {
     addSuffix: true,
   })
 
-  const dateTimeLarge = formatDateTz({date, mode: 'large', timeZone})
-  const dateTimeMedium = formatDateTz({date, mode: 'medium', timeZone})
-  const dateTimeSmall = formatDateTz({date, mode: 'small', timeZone})
+  const dateTimeLarge = formatDateTz({date, mode: 'large'})
+  const dateTimeMedium = formatDateTz({date, mode: 'medium'})
+  const dateTimeSmall = formatDateTz({date, mode: 'small'})
 
   return (
     <Text size={1} textOverflow="ellipsis">
