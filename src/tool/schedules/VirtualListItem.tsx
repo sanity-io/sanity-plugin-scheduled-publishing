@@ -1,6 +1,6 @@
 import {Schedule} from '../../types'
 import React, {CSSProperties, useEffect, useMemo, useState} from 'react'
-import {Card, Flex, Label} from '@sanity/ui'
+import {Box, Card, Flex, Label} from '@sanity/ui'
 import {ScheduleItem} from '../../components/scheduleItem'
 import {VirtualItem} from 'react-virtual'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
@@ -13,6 +13,9 @@ export interface ListItem {
 interface Props {
   item: ListItem
 }
+
+/** First month header is not as high, to reduce whitespace */
+export const FIRST_MONTH_HEADER_PX = 39
 
 /** Accounts for row height and spacing between rows */
 export const ITEM_HEIGHT_PX = 59
@@ -79,10 +82,12 @@ function DelayedScheduleItem({schedule, style}: {schedule: Schedule; style: CSSP
 
 function MonthHeading({content, style}: {content: string; style: CSSProperties}) {
   return (
-    <Flex paddingBottom={3} paddingTop={1} style={style} align="center">
-      <Label muted size={1}>
-        {content}
-      </Label>
+    <Flex style={style} align="flex-end">
+      <Box paddingBottom={3}>
+        <Label muted size={1}>
+          {content}
+        </Label>
+      </Box>
     </Flex>
   )
 }
