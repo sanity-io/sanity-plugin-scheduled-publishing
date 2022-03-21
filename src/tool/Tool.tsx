@@ -44,7 +44,19 @@ function Tool(props: Props) {
 
   return (
     <SchedulesProvider value={schedulesContext}>
-      <Card display="flex" flex={1} height="fill" overflow="hidden">
+      <Card
+        display="flex"
+        flex={1}
+        height="fill"
+        overflow="hidden"
+        style={{
+          bottom: 0,
+          left: 0,
+          position: 'absolute',
+          right: 0,
+          top: 0,
+        }}
+      >
         {/* LHS Column */}
         <Column
           display={['none', null, null, 'flex'] as any}
@@ -57,7 +69,7 @@ function Tool(props: Props) {
           <ToolCalendar />
         </Column>
         {/* RHS Column */}
-        <Column flex={1} overflow="hidden">
+        <Column display="flex" flex={1} overflow="hidden">
           <ButtonTimeZoneElementQuery
             style={{
               background: white.hex,
@@ -88,10 +100,10 @@ function Tool(props: Props) {
               </Flex>
             </Flex>
           </ButtonTimeZoneElementQuery>
-          <Box style={{overflowX: 'hidden', overflowY: 'auto'}}>
+          <Flex direction="column" flex={1}>
             {/* Error */}
             {error && (
-              <Box marginBottom={4} padding={4}>
+              <Box paddingTop={4} paddingX={4}>
                 <ErrorCallout
                   description="More information in the developer console."
                   title="Something went wrong, unable to retrieve schedules."
@@ -99,18 +111,17 @@ function Tool(props: Props) {
               </Box>
             )}
 
-            {isInitialLoading ? (
-              <Box padding={4}>
-                <Text muted>Loading...</Text>
-              </Box>
-            ) : (
-              // Loaded schedules
-
-              <Box paddingLeft={4}>
+            <Box flex={1}>
+              {isInitialLoading ? (
+                <Box padding={4}>
+                  <Text muted>Loading...</Text>
+                </Box>
+              ) : (
+                // Loaded schedules
                 <Schedules />
-              </Box>
-            )}
-          </Box>
+              )}
+            </Box>
+          </Flex>
         </Column>
       </Card>
     </SchedulesProvider>

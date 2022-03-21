@@ -1,12 +1,13 @@
 import {Schedule} from '../../types'
 import React, {CSSProperties, useEffect, useMemo, useState} from 'react'
-import {Box, Card, Flex, Label} from '@sanity/ui'
+import {Card, Flex, Label} from '@sanity/ui'
 import {ScheduleItem} from '../../components/scheduleItem'
 import {VirtualItem} from 'react-virtual'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 
 export interface ListItem {
   content: Schedule | string
+  key: string
   virtualRow: VirtualItem
 }
 
@@ -15,16 +16,13 @@ interface Props {
 }
 
 /** First month header is not as high, to reduce whitespace */
-export const FIRST_MONTH_HEADER_PX = 39
+const MONTH_HEADER_PX = 30
 
 /** Accounts for row height and spacing between rows */
-export const ITEM_HEIGHT_PX = 59
+const ITEM_HEIGHT_PX = 59
 
 /** Putting this too low will result in 429 too many requests when scrolling in big lists */
 const SCHEDULE_RENDER_DELAY_MS = 200
-
-const alignPlaceholder: CSSProperties = {marginTop: 4, marginLeft: 4}
-const deferredItemSize: CSSProperties = {height: ITEM_HEIGHT_PX - 16}
 
 export function VirtualListItem(props: Props) {
   const {
@@ -36,27 +34,38 @@ export function VirtualListItem(props: Props) {
       top: 0,
       left: 0,
       width: '100%',
-      height: `${virtualRow.size}px`,
       transform: `translateY(${virtualRow.start}px)`,
     }),
     [virtualRow]
   )
 
   if (typeof content === 'string') {
-    return <MonthHeading style={style} content={content} />
+    return (
+      <div
+        ref={virtualRow.measureRef}
+        style={{
+          ...style,
+          height: virtualRow.index === 0 ? MONTH_HEADER_PX : MONTH_HEADER_PX * 2,
+        }}
+      >
+        <MonthHeading content={content} />
+      </div>
+    )
   }
 
-  return <DelayedScheduleItem style={style} schedule={content} />
+  return (
+    <div ref={virtualRow.measureRef} style={{...style, height: ITEM_HEIGHT_PX}}>
+      <DelayedScheduleItem schedule={content} />
+    </div>
+  )
 }
 
 /**
  * ScheduleItem is a bit on the heavy side for rendering speed. This component defers rendering ScheduleItem
  * until "some time after" mounting, so scrolling in the virtualized Schedule-list gives better UX.
  */
-function DelayedScheduleItem({schedule, style}: {schedule: Schedule; style: CSSProperties}) {
-  const [delayedScheduleItem, setDelayedScheduleItem] = useState(
-    <PlaceholderScheduleItem style={style} />
-  )
+function DelayedScheduleItem({schedule}: {schedule: Schedule}) {
+  const [delayedScheduleItem, setDelayedScheduleItem] = useState(<PlaceholderScheduleItem />)
 
   useEffect(() => {
     let canUpdate = true
@@ -64,11 +73,7 @@ function DelayedScheduleItem({schedule, style}: {schedule: Schedule; style: CSSP
       if (!canUpdate) {
         return
       }
-      setDelayedScheduleItem(
-        <div style={style}>
-          <ScheduleItem schedule={schedule} type="tool" />
-        </div>
-      )
+      setDelayedScheduleItem(<ScheduleItem schedule={schedule} type="tool" />)
     }, SCHEDULE_RENDER_DELAY_MS)
 
     return () => {
@@ -80,26 +85,29 @@ function DelayedScheduleItem({schedule, style}: {schedule: Schedule; style: CSSP
   return delayedScheduleItem
 }
 
-function MonthHeading({content, style}: {content: string; style: CSSProperties}) {
+function MonthHeading({content}: {content: string}) {
   return (
-    <Flex style={style} align="flex-end">
-      <Box paddingBottom={3}>
-        <Label muted size={1}>
-          {content}
-        </Label>
-      </Box>
+    <Flex
+      align="flex-end"
+      paddingBottom={4}
+      style={{
+        bottom: 0,
+        position: 'absolute',
+      }}
+    >
+      <Label muted size={1}>
+        {content}
+      </Label>
     </Flex>
   )
 }
 
-function PlaceholderScheduleItem({style}: {style: CSSProperties}) {
+function PlaceholderScheduleItem() {
   return (
-    <div style={style}>
-      <Card padding={1} radius={2} shadow={1} style={deferredItemSize}>
-        <div style={alignPlaceholder}>
-          <SanityDefaultPreview isPlaceholder />
-        </div>
+    <Card padding={1} radius={2} shadow={1}>
+      <Card padding={1}>
+        <SanityDefaultPreview isPlaceholder />
       </Card>
-    </div>
+    </Card>
   )
 }
