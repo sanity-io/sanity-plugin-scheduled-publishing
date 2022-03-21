@@ -147,7 +147,6 @@ const useTimeZone = () => {
     formatDateTz,
     getCurrentZoneDate,
     setTimeZone: handleNewValue,
-    timeIsLocal: getLocalTimeZone().name === timeZone.name,
     timeZone,
     utcToCurrentZoneDate,
     zoneDateToUtc,
