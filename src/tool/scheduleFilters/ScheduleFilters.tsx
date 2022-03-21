@@ -31,9 +31,8 @@ export const ScheduleFilters = (props: Props) => {
       <Box display={['block', 'block', 'none']}>
         {selectedDate && (
           <Button
-            fontSize={1}
+            fontSize={2}
             iconRight={CloseIcon}
-            mode="ghost"
             onClick={onClearDate}
             text={format(selectedDate, 'd MMMM yyyy')}
             tone="primary"
@@ -44,7 +43,7 @@ export const ScheduleFilters = (props: Props) => {
           <MenuButton
             button={
               <Button
-                fontSize={1}
+                fontSize={2}
                 iconRight={SelectIcon}
                 mode="ghost"
                 text={`${SCHEDULE_STATE_DICTIONARY[scheduleState].title} (${

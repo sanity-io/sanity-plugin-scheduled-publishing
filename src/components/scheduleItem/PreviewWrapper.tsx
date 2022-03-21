@@ -1,5 +1,6 @@
 import {SchemaType} from '@sanity/types'
-import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
+import {Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
+import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import React, {ElementType, ReactNode, useState} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
 import {Schedule} from '../../types'
@@ -12,6 +13,7 @@ import {DraftStatus} from './documentStatus/DraftStatus'
 import {PublishedStatus} from './documentStatus/PublishedStatus'
 import User from './User'
 import {ValidateScheduleDoc} from '../validation/SchedulesValidation'
+import useTimeZone from '../../hooks/useTimeZone'
 
 interface Props {
   children?: ReactNode
@@ -42,6 +44,9 @@ const PreviewWrapper = (props: Props) => {
   const [validationStatus, setValidationStatus] = useState(EMPTY_VALIDATION_STATUS)
   const {markers} = validationStatus
   const {hasError, validationTone} = useValidationState(markers)
+  const {formatDateTz} = useTimeZone()
+
+  const scheduleDate = new Date(getLastExecuteDate(schedule))
 
   return (
     <Card padding={1} radius={2} shadow={1} tone={validationTone}>
@@ -61,19 +66,39 @@ const PreviewWrapper = (props: Props) => {
             {children && <Box style={{flexBasis: 'auto', flexGrow: 1}}>{children}</Box>}
 
             {/* Schedule date */}
-            <Box
-              marginLeft={children ? [3, 3, 4] : 2}
-              style={{
-                flexShrink: 0,
-                maxWidth: '250px',
-                width: children ? '35%' : 'auto',
-              }}
-            >
-              <DateWithTooltip
-                date={getLastExecuteDate(schedule)}
-                useElementQueries={useElementQueries}
-              />
-            </Box>
+            <>
+              <Box
+                display={['block', 'none']}
+                marginLeft={children ? [3, 3, 4] : 2}
+                style={{
+                  flexShrink: 0,
+                  width: '90px',
+                }}
+              >
+                <Stack space={2}>
+                  <Text size={1}>{formatDateTz({date: scheduleDate, format: 'dd/MM/yyyy'})}</Text>
+                  <Text size={1}>{formatDateTz({date: scheduleDate, format: 'p'})}</Text>
+                </Stack>
+              </Box>
+              <Box
+                display={['none', 'block']}
+                marginLeft={children ? [3, 3, 4] : 2}
+                style={{
+                  flexShrink: 0,
+                  maxWidth: '250px',
+                  width: children ? '35%' : 'auto',
+                }}
+              >
+                <DateWithTooltip date={scheduleDate} useElementQueries={useElementQueries} />
+              </Box>
+            </>
+
+            {/* HACK: render invisible preview wrapper when no children are provided to ensure consistent height */}
+            {!children && (
+              <Box style={{visibility: 'hidden'}}>
+                <SanityDefaultPreview />
+              </Box>
+            )}
 
             <Flex align="center" style={{flexShrink: 0}}>
               {/* Avatar */}

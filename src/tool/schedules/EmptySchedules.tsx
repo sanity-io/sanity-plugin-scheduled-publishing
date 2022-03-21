@@ -42,7 +42,7 @@ const EmptySchedules = (props: Props) => {
   }
 
   if (selectedDate) {
-    heading = 'No schedules today!'
+    heading = 'No schedules for this date!'
     BigIcon = BigIconScreen
   }
 
