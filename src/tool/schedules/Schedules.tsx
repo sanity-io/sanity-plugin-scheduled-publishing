@@ -5,8 +5,8 @@ import useScheduleOperation from '../../hooks/useScheduleOperation'
 import {useSchedules} from '../contexts/schedules'
 import EmptySchedules from './EmptySchedules'
 import {useVirtual} from 'react-virtual'
-import {ITEM_HEIGHT_PX, ListItem, VirtualListItem} from './VirtualListItem'
-import {Schedule, ScheduleSort} from '../../types'
+import {FIRST_MONTH_HEADER_PX, ITEM_HEIGHT_PX, ListItem, VirtualListItem} from './VirtualListItem'
+import {Schedule, ScheduleSort, ScheduleState} from '../../types'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
 
 function getLocalizedDate(date: string) {
@@ -18,20 +18,24 @@ function getLocalizedDate(date: string) {
 
 // Limit concurrent listeners
 const MAX_VISIBLE_ITEMS = 20
-const HEADERS_AND_PADDING = 182 //px
+const HEADERS_AND_PADDING = 142 //px
 
 export const Schedules = () => {
   const {deleteSchedules} = useScheduleOperation()
   const {activeSchedules, scheduleState, sortBy} = useSchedules()
 
-  const {virtualList, totalSize, containerRef} = useVirtualizedSchedules(activeSchedules, sortBy)
+  const {virtualList, totalSize, containerRef} = useVirtualizedSchedules(
+    activeSchedules,
+    scheduleState,
+    sortBy
+  )
   const handleClearSchedules = () => {
     deleteSchedules({schedules: activeSchedules || []})
   }
 
   return (
     <Box
-      padding={2}
+      paddingX={2}
       ref={containerRef}
       height="fill"
       style={{
@@ -75,7 +79,11 @@ export const Schedules = () => {
   )
 }
 
-function useVirtualizedSchedules(activeSchedules: Schedule[], sortBy?: ScheduleSort) {
+function useVirtualizedSchedules(
+  activeSchedules: Schedule[],
+  scheduledState: ScheduleState,
+  sortBy?: ScheduleSort
+) {
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   const listSourceItems = useMemo(() => {
@@ -102,7 +110,13 @@ function useVirtualizedSchedules(activeSchedules: Schedule[], sortBy?: ScheduleS
   const {virtualItems, totalSize} = useVirtual({
     size: scheduleCount,
     parentRef: containerRef,
-    estimateSize: useCallback(() => ITEM_HEIGHT_PX, []),
+
+    estimateSize: useCallback(
+      (index: number) =>
+        /* Spagetti warning: First month header is not as high, to reduce whitespace */
+        scheduledState === 'scheduled' && index === 0 ? FIRST_MONTH_HEADER_PX : ITEM_HEIGHT_PX,
+      []
+    ),
     overscan: 0,
   })
 

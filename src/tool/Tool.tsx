@@ -88,10 +88,10 @@ function Tool(props: Props) {
               </Flex>
             </Flex>
           </ButtonTimeZoneElementQuery>
-          <Box style={{overflowX: 'hidden', overflowY: 'auto'}} padding={4} paddingRight={0}>
+          <Box style={{overflowX: 'hidden', overflowY: 'auto'}}>
             {/* Error */}
             {error && (
-              <Box marginBottom={4}>
+              <Box marginBottom={4} padding={4}>
                 <ErrorCallout
                   description="More information in the developer console."
                   title="Something went wrong, unable to retrieve schedules."
@@ -100,10 +100,15 @@ function Tool(props: Props) {
             )}
 
             {isInitialLoading ? (
-              <Text muted>Loading...</Text>
+              <Box padding={4}>
+                <Text muted>Loading...</Text>
+              </Box>
             ) : (
               // Loaded schedules
-              <Schedules />
+
+              <Box paddingLeft={4}>
+                <Schedules />
+              </Box>
             )}
           </Box>
         </Column>
