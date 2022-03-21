@@ -1,6 +1,5 @@
 import {SchemaType} from '@sanity/types'
 import {Box, Card, Flex, Inline, Text} from '@sanity/ui'
-import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import React, {ElementType, ReactNode, useState} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
 import {Schedule} from '../../types'
@@ -75,12 +74,6 @@ const PreviewWrapper = (props: Props) => {
                 useElementQueries={useElementQueries}
               />
             </Box>
-
-            {!children && (
-              <Box style={{visibility: 'hidden'}}>
-                <SanityDefaultPreview />
-              </Box>
-            )}
 
             <Flex align="center" style={{flexShrink: 0}}>
               {/* Avatar */}
