@@ -6,6 +6,6 @@ export default {
   component: Tool,
   icon: CalendarIcon,
   name: 'schedules',
-  router: route('/:state'),
+  router: route('/', [route('/state/:state'), route('/date/:date')]),
   title: 'Schedules',
 }

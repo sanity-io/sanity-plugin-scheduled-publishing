@@ -12,7 +12,7 @@ import Pip from './Pip'
 interface CalendarDayProps {
   date: Date // clock time
   focused?: boolean
-  onSelect: (date: Date) => void
+  onSelect: (date?: Date) => void
   isCurrentMonth?: boolean
   isToday: boolean
   selected?: boolean
@@ -26,7 +26,11 @@ export function CalendarDay(props: CalendarDayProps) {
   const schedules = schedulesByDate(date)
 
   const handleClick = useCallback(() => {
-    onSelect(date)
+    if (selected) {
+      onSelect(undefined)
+    } else {
+      onSelect(date)
+    }
   }, [date, onSelect])
 
   let tone: CardTone

@@ -6,11 +6,12 @@ import BigIconScreen from './BigIconScreen'
 import BigIconSuccess from './BigIconSuccess'
 
 interface Props {
-  scheduleState: ScheduleState
+  scheduleState?: ScheduleState
+  selectedDate?: Date
 }
 
 const EmptySchedules = (props: Props) => {
-  const {scheduleState} = props
+  const {scheduleState, selectedDate} = props
 
   let BigIcon
   let description
@@ -36,24 +37,30 @@ const EmptySchedules = (props: Props) => {
       BigIcon = BigIconScreen
       break
     }
-    default: {
-      throw new Error(`Unhandled scheduleState: ${scheduleState}`)
-    }
+    default:
+      break
+  }
+
+  if (selectedDate) {
+    heading = 'No schedules today!'
+    BigIcon = BigIconScreen
   }
 
   return (
     <Card paddingX={6} paddingBottom={8} paddingTop={7} radius={2} shadow={1}>
       <Stack space={4}>
-        <Flex justify="center">
-          <BigIcon />
-        </Flex>
+        <Flex justify="center">{BigIcon && <BigIcon />}</Flex>
         <Stack space={4}>
-          <Heading align="center" size={1}>
-            {heading}
-          </Heading>
-          <Text align="center" size={1}>
-            {description}
-          </Text>
+          {heading && (
+            <Heading align="center" size={1}>
+              {heading}
+            </Heading>
+          )}
+          {description && (
+            <Text align="center" size={1}>
+              {description}
+            </Text>
+          )}
         </Stack>
       </Stack>
     </Card>

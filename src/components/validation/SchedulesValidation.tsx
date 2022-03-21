@@ -1,8 +1,8 @@
-import {Schedule, ValidationStatus} from '../../types'
-import {getScheduledDocumentId} from '../../utils/paneItemHelpers'
-import {useScheduleSchemaType} from '../../hooks/useSchemaType'
 import {useValidationStatus} from '@sanity/react-hooks'
 import React, {useEffect, useState} from 'react'
+import {useScheduleSchemaType} from '../../hooks/useSchemaType'
+import {Schedule, ValidationStatus} from '../../types'
+import {getScheduledDocumentId} from '../../utils/paneItemHelpers'
 
 interface Props {
   schedule: Schedule

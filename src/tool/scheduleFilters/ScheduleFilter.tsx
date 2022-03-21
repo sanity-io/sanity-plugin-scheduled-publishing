@@ -5,6 +5,7 @@ import React from 'react'
 import {SCHEDULE_STATE_DICTIONARY} from '../../constants'
 import {Schedule, ScheduleState} from '../../types'
 import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
+
 interface Props {
   schedules: Schedule[]
   selected?: boolean

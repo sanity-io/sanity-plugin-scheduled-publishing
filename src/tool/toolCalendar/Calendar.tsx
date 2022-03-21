@@ -9,9 +9,9 @@ import useTimeZone from '../../hooks/useTimeZone'
 
 export type CalendarProps = Omit<React.ComponentProps<'div'>, 'onSelect'> & {
   focusedDate: Date
-  onSelect: (date: Date) => void
+  onSelect: (date?: Date) => void
   onFocusedDateChange: (index: Date) => void
-  selectedDate: Date
+  selectedDate?: Date
 }
 
 // This is used to maintain focus on a child element of the calendar-grid between re-renders
@@ -33,13 +33,7 @@ export const Calendar = forwardRef(function Calendar(
   props: CalendarProps,
   forwardedRef: React.ForwardedRef<HTMLDivElement>
 ) {
-  const {
-    onFocusedDateChange,
-    selectedDate,
-    focusedDate = selectedDate,
-    onSelect,
-    ...restProps
-  } = props
+  const {focusedDate, onFocusedDateChange, onSelect, selectedDate, ...restProps} = props
 
   const {zoneDateToUtc} = useTimeZone()
 
@@ -54,14 +48,14 @@ export const Calendar = forwardRef(function Calendar(
   )
 
   const handleDateChange = useCallback(
-    (date: Date) => {
+    (date?: Date) => {
       onSelect(
-        zoneDateToUtc(
-          setMinutes(setHours(date, selectedDate.getHours()), selectedDate.getMinutes())
-        )
+        date
+          ? zoneDateToUtc(setMinutes(setHours(date, date.getHours()), date.getMinutes()))
+          : undefined
       )
     },
-    [onSelect, selectedDate, zoneDateToUtc]
+    [onSelect, zoneDateToUtc]
   )
 
   const ref = useForwardedRef(forwardedRef)

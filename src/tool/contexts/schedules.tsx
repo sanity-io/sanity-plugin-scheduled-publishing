@@ -8,7 +8,8 @@ type State = {
   activeSchedules: Schedule[]
   schedules: Schedule[]
   schedulesByDate: (date: Date) => Schedule[]
-  scheduleState: ScheduleState
+  scheduleState?: ScheduleState
+  selectedDate?: Date
   setSortBy: (sortBy: ScheduleSort) => void
   sortBy?: ScheduleSort
 }
@@ -25,16 +26,36 @@ function SchedulesProvider({
   value: {
     schedules: Schedule[]
     scheduleState: ScheduleState
+    selectedDate?: Date
     sortBy?: ScheduleSort
   }
 }) {
   const [sortBy, setSortBy] = useState<ScheduleSort>(value.sortBy || 'executeAt')
   const {timeZone, utcToCurrentZoneDate} = useTimeZone()
 
+  function filterByDate(clockDate: Date) {
+    return function (schedule: Schedule) {
+      const scheduleDate = new Date(getLastExecuteDate(schedule)) // UTC
+      const zonedScheduleDate = utcToCurrentZoneDate(scheduleDate)
+      return isSameDay(zonedScheduleDate, clockDate)
+    }
+  }
+
+  function filterByState(scheduleState: ScheduleState) {
+    return function (schedule: Schedule) {
+      return schedule.state === scheduleState
+    }
+  }
+
   const activeSchedules = useMemo(() => {
     return (
       value.schedules
-        .filter((schedule) => schedule.state === value.scheduleState)
+        .filter((scheduleState) => {
+          if (value.selectedDate) {
+            return filterByDate(value.selectedDate)(scheduleState)
+          }
+          return filterByState(value.scheduleState)(scheduleState)
+        })
         .sort((a, b) => {
           if (sortBy === 'createdAt') {
             return a[sortBy] < b[sortBy] ? 1 : -1
@@ -53,7 +74,7 @@ function SchedulesProvider({
           return 1
         }) || []
     )
-  }, [value.schedules, value.scheduleState, sortBy])
+  }, [value.schedules, value.scheduleState, value.selectedDate, sortBy])
 
   /**
    * Return all matching schedules with specified date (in clock time).
@@ -62,11 +83,7 @@ function SchedulesProvider({
   const schedulesByDate = useCallback(
     (clockDate: Date) => {
       return value.schedules
-        .filter((schedule) => {
-          const scheduleDate = new Date(getLastExecuteDate(schedule)) // UTC
-          const zonedScheduleDate = utcToCurrentZoneDate(scheduleDate)
-          return isSameDay(zonedScheduleDate, clockDate)
-        })
+        .filter(filterByDate(clockDate))
         .sort((a, b) => (getLastExecuteDate(a) > getLastExecuteDate(b) ? 1 : -1))
     },
     [timeZone, value.schedules]
@@ -79,6 +96,7 @@ function SchedulesProvider({
         schedules: value.schedules || EMPTY_SCHEDULE,
         schedulesByDate,
         scheduleState: value.scheduleState,
+        selectedDate: value.selectedDate,
         setSortBy,
         sortBy,
       }}

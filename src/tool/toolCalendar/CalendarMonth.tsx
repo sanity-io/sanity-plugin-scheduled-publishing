@@ -10,7 +10,7 @@ interface CalendarMonthProps {
   date: Date
   focused?: Date
   selected?: Date
-  onSelect: (date: Date) => void
+  onSelect: (date?: Date) => void
   hidden?: boolean
 }
 
