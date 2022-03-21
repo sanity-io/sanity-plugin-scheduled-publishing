@@ -90,9 +90,8 @@ function useVirtualizedSchedules(activeSchedules: Schedule[], sortBy?: ScheduleS
     return items
   }, [activeSchedules, sortBy])
 
-  const scheduleCount = activeSchedules.length
   const {virtualItems, totalSize} = useVirtual({
-    size: scheduleCount,
+    size: listSourceItems.length,
     parentRef: containerRef,
     overscan: 5,
   })
