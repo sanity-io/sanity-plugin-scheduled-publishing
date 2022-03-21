@@ -19,7 +19,12 @@ export function CalendarMonth(props: CalendarMonthProps) {
 
   return (
     <Box aria-hidden={props.hidden || false} data-ui="CalendarMonth">
-      <Grid style={{gridTemplateColumns: 'repeat(7, 1fr)'}}>
+      <Grid
+        style={{
+          gridGap: '1px',
+          gridTemplateColumns: 'repeat(7, 1fr)',
+        }}
+      >
         {/* Header */}
         {WEEK_DAY_NAMES.map((weekday) => {
           // Convert day name string into date.

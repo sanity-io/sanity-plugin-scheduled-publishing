@@ -1,3 +1,4 @@
+import {CloseIcon} from '@sanity/icons'
 import type {CardTone} from '@sanity/ui'
 import {Badge, Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
 import {format, isWeekend} from 'date-fns'
@@ -83,7 +84,7 @@ export function CalendarDay(props: CalendarDayProps) {
               textAlign: 'center',
             }}
           >
-            {date.getDate()}
+            {selected ? <CloseIcon /> : date.getDate()}
           </Text>
 
           {/* Pips */}
