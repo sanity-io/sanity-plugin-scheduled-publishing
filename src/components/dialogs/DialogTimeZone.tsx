@@ -90,6 +90,7 @@ const DialogTimeZone = (props: Props) => {
             padding={4}
             placeholder="Search for a city or time zone"
             popover={{
+              boundaryElement: document.querySelector('body'),
               constrainSize: true,
               placement: 'bottom-start',
             }}
