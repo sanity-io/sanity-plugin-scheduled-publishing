@@ -26,7 +26,8 @@ const EmptySchedules = (props: Props) => {
       break
     }
     case 'cancelled': {
-      description = `When a scheduled publication fails because it's document is deleted, or by other errors, they show up here.`
+      description =
+        'Schedules can fail for several reasons, for example when their documents are deleted. When they do, they show up here.'
       heading = 'No failed scheduled publications'
       BigIcon = BigIconSuccess
       break
