@@ -153,7 +153,14 @@ export const Calendar = forwardRef(function Calendar(
       {/* Select date */}
       <Box>
         {/* Selected month (grid of days) */}
-        <Box data-calendar-grid onKeyDown={handleKeyDown} overflow="hidden" tabIndex={0}>
+        <Box
+          data-calendar-grid
+          onKeyDown={handleKeyDown}
+          overflow="hidden"
+          paddingBottom={1}
+          paddingX={1}
+          tabIndex={0}
+        >
           <CalendarMonth
             date={focusedDate}
             focused={focusedDate}

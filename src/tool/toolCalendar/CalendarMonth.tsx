@@ -1,5 +1,5 @@
 import {Box, Card, Grid, Label} from '@sanity/ui'
-import {isSameDay, isSameMonth, isWeekend, parse} from 'date-fns'
+import {isSameDay, isSameMonth} from 'date-fns'
 import React from 'react'
 import useTimeZone from '../../hooks/useTimeZone'
 import {CalendarDay} from './CalendarDay'
@@ -29,9 +29,13 @@ export function CalendarMonth(props: CalendarMonthProps) {
         {WEEK_DAY_NAMES.map((weekday) => {
           // Convert day name string into date.
           // `eee` assumes days are in the format 'Mon', 'Tues' etc.
-          const date = parse(weekday, 'eee', new Date())
+          // const date = parse(weekday, 'eee', new Date())
           return (
-            <Card key={weekday} paddingY={3} tone={isWeekend(date) ? 'transparent' : 'default'}>
+            <Card
+              key={weekday}
+              paddingY={3}
+              // tone={isWeekend(date) ? 'transparent' : 'default'}
+            >
               <Label size={1} style={{textAlign: 'center'}}>
                 {weekday.substring(0, 1)}
               </Label>

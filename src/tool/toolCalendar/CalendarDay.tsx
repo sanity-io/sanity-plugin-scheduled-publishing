@@ -38,7 +38,8 @@ export function CalendarDay(props: CalendarDayProps) {
   if (isToday || selected) {
     tone = 'primary'
   } else if (isWeekend(date)) {
-    tone = 'transparent'
+    // tone = 'transparent'
+    tone = 'default'
   } else {
     tone = 'default'
   }
@@ -73,6 +74,7 @@ export function CalendarDay(props: CalendarDayProps) {
           onClick={handleClick}
           paddingX={3}
           paddingY={4}
+          radius={2}
           selected={selected}
           style={{position: 'relative'}}
           tone={tone}
