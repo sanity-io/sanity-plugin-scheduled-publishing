@@ -2,7 +2,7 @@
 
 Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
-> This plugin uses Sanity's ~~[Scheduled Publishing API][scheduled-publishing-api]~~ which is avaiable to customers on enterprise or custom plans. Please visit our ~~[Scheduled Publishing][scheduled-publishing]~~ feature page for more information.
+> This plugin uses Sanity's ~~[Scheduled Publishing API][scheduled-publishing-api]~~ which is available to customers on enterprise or custom plans. Please visit our ~~[Scheduled Publishing][scheduled-publishing]~~ feature page for more information.
 
 ![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
@@ -12,15 +12,15 @@ Schedule your content for future publication and organise upcoming releases – 
 
 ### Create and edit schedules directly from the document editor
 
-- Create and edit schedules for the current document you're working on
-- See a clear banner that displays current schedule status (and potential validation issues)
+- Create and edit schedules for the document you're working on
+- See current schedule status and potential validation issues
 
 ### View all your schedules with our dedicated tool
 
-- Filter all schedules by status or use the calendar to browse schedules by date
-- Edit, delete and immediately publish schedules
-- Automatically validate upcoming schedules and identify issues before they're published
-- Easily identify which Sanity user created a schedule
+- Filter all schedules by status or use the calendar to browse by date
+- Edit, delete, and immediately publish schedules
+- Automatically validate upcoming schedules, and identify issues before they're published
+- Easily identify who created a schedule
 
 ### View schedule dates in any remote time zone
 
