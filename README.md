@@ -1,6 +1,6 @@
 # Scheduled Publishing plugin for Sanity.io
 
-Schedule your content for future publication and organise upcoming releases – **no custom tasks or serverless functions required!**
+Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
 > This plugin uses Sanity's ~~[Scheduled Publishing API][scheduled-publishing-api]~~ which is avaiable to customers on enterprise or custom plans. Please visit our ~~[Scheduled Publishing][scheduled-publishing]~~ feature page for more information.
 
@@ -15,19 +15,20 @@ Schedule your content for future publication and organise upcoming releases – 
 - Create and edit schedules for the current document you're working on
 - See a clear banner that displays current schedule status (and potential validation issues)
 
-### View all your schedules with a dedicated tool
+### View all your schedules with our dedicated tool
 
 - Filter all schedules by status or use the calendar to browse schedules by date
 - Edit, delete and immediately publish schedules
 - Automatically validate upcoming schedules and identify issues before they're published
-- Easily identify which Sanity user created an upcoming schedule
+- Easily identify which Sanity user created a schedule
 
 ### View schedule dates in any remote time zone
 
 <img src="https://user-images.githubusercontent.com/209129/159458620-ce6b8112-c19a-4c24-a2d5-f79798d1e6f7.png" width="600" />
 
-- Change the time zone you want to preview schedules in by clicking the 🌎 **Time Zone** button when visible.
-- Select using the dropdown menu or alternatively search by city, time zone abbreviation or name.
+- Change the time zone you want to preview schedules in by clicking the 🌎 **Time Zone** button when visible. Great when you need to co-ordinate with a global team or want to time publication to specific regions.
+- Easily select time zones by city, time zone abbreviation or name search.
+- Selected time zones are automatically stored in your local storage for future use.
 
 ## Getting started
 
@@ -37,13 +38,13 @@ In your Sanity studio folder:
 sanity install @sanity/scheduled-publishing
 ```
 
-This will:
+This will automatically:
 
 - Add a Schedule [document action][document-actions] to _all document types_
 - Display a Scheduled [document badge][document-badges] to _all document types_
 - Add the dedicated Schedules _tool_ in your navigation bar
 
-Please see [Custom setup](#custom-setup) for more fine grained control on limiting scheduling to specific document types, or working with existing custom document actions and badges.
+Please see [Custom setup](#custom-setup) for more fine grained control on limiting schedule buttons to specific document types and working with existing custom document actions or badges.
 
 ### Custom setup
 
@@ -53,11 +54,17 @@ This plugin also exports both the **Schedule document action** and **Scheduled b
 
 This example assumes [you've customised your own document actions][document-actions] and would like to only show the Schedule button on `movie` documents only.
 
-> Please note that whilst this will only alter the _visibility_ of the button in the studio. Users with document publish permissions will be able to create schedules directly via the Scheduled Publishing API.
+The Schedule document action allows users to both create and edit existing schedules directly from the form editor.
 
 ```js
 import {ScheduleAction} from '@sanity/scheduled-publishing'
 import defaultResolve from 'part:@sanity/base/document-actions'
+
+/*
+ * Please note that this will only alter the visibility of the button in the studio.
+ * Users with document publish permissions will be able to create schedules directly
+ * via the Scheduled Publishing API.
+ */
 
 export default function resolveDocumentActions(props) {
   // Default document actions
@@ -78,6 +85,8 @@ export default function resolveDocumentActions(props) {
 #### Manually adding the Scheduled document badge
 
 This example assumes [you've customised your own document badges][document-badges] and would like to only show the Scheduled badge on `movie` documents only.
+
+The Scheduled document badge displays whether the current document is scheduled and when it will be published if so.
 
 ```js
 import {ScheduledBadge} from '@sanity/scheduled-publishing'

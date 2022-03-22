@@ -11,6 +11,7 @@ export default {
     'src/documentActions.ts', //
     'src/documentBadges.ts',
     'src/inputResolver.ts',
+    'src/index.ts',
     'src/tool.ts',
   ],
   output: [
