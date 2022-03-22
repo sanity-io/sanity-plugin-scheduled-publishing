@@ -1,6 +1,7 @@
 import type {DocumentBadgeComponent} from '@sanity/base'
+import {format} from 'date-fns'
+import {DATE_FORMAT} from '../../constants'
 import usePollSchedules from '../../hooks/usePollSchedules'
-import useTimeZone from '../../hooks/useTimeZone'
 import {debugWithName} from '../../utils/debug'
 
 const debug = debugWithName('ScheduledBadge')
@@ -10,22 +11,17 @@ export const ScheduledBadge: DocumentBadgeComponent = (props) => {
   const {schedules} = usePollSchedules({documentId: props.id, state: 'scheduled'})
   debug('schedules', schedules)
 
-  const {formatDateTz} = useTimeZone()
-
   const upcomingSchedule = schedules?.[0]
 
   if (!upcomingSchedule) {
     return null
   }
 
-  const formattedDateTime = formatDateTz({
-    date: new Date(upcomingSchedule.executeAt),
-    includeTimeZone: true,
-  })
+  const formattedDateTime = format(new Date(upcomingSchedule.executeAt), DATE_FORMAT.LARGE)
 
   return {
     color: 'primary',
     label: `Scheduled`,
-    title: `Publishing on ${formattedDateTime}`,
+    title: `Publishing on ${formattedDateTime} (local time)`,
   }
 }

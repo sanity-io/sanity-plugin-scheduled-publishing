@@ -1,12 +1,13 @@
+import {CalendarIcon} from '@sanity/icons'
+import {Marker, SchemaType} from '@sanity/types'
 import {Badge, Box, Card, Flex, Stack, Text} from '@sanity/ui'
-import {ValidationInfo} from '../validation/ValidationInfo'
+import {format} from 'date-fns'
 import React, {useMemo} from 'react'
+import {DATE_FORMAT} from '../../constants'
 import usePollSchedules from '../../hooks/usePollSchedules'
-import useTimeZone from '../../hooks/useTimeZone'
 import {usePublishedId} from '../../hooks/usePublishedId'
 import {useValidationState} from '../../utils/validationUtils'
-import {Marker, SchemaType} from '@sanity/types'
-import {CalendarIcon} from '@sanity/icons'
+import {ValidationInfo} from '../validation/ValidationInfo'
 
 interface Props {
   id: string
@@ -64,7 +65,6 @@ export function ScheduleBanner(props: Props) {
 
 function useNextSchedule(id: string) {
   const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
-  const {formatDateTz} = useTimeZone()
 
   return useMemo(() => {
     const upcomingSchedule = schedules?.[0]
@@ -72,9 +72,6 @@ function useNextSchedule(id: string) {
     if (!upcomingSchedule) {
       return undefined
     }
-    return formatDateTz({
-      date: new Date(upcomingSchedule.executeAt),
-      includeTimeZone: false,
-    })
+    return format(new Date(upcomingSchedule.executeAt), DATE_FORMAT.LARGE)
   }, [schedules])
 }
