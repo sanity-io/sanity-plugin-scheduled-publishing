@@ -1,4 +1,5 @@
-import {WarningOutlineIcon} from '@sanity/icons'
+import {red} from '@sanity/color'
+import {UnknownIcon} from '@sanity/icons'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import React from 'react'
 import {Schedule} from '../../types'
@@ -13,11 +14,11 @@ const NoSchemaItem = ({schedule}: {schedule: Schedule}) => {
       useElementQueries
     >
       <SanityDefaultPreview
-        icon={WarningOutlineIcon}
+        icon={UnknownIcon}
         layout="default"
         value={{
           subtitle: <em>It may have been deleted</em>,
-          title: <em>Document not found</em>,
+          title: <em style={{color: red[600].hex}}>Document not found</em>,
         }}
       />
     </PreviewWrapper>
