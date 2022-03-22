@@ -4,7 +4,7 @@ Schedule your content for future publication and organise upcoming releases – 
 
 > This plugin uses Sanity's ~~[Scheduled Publishing API][scheduled-publishing-api]~~ which is avaiable to customers on enterprise or custom plans. Please visit our ~~[Scheduled Publishing][scheduled-publishing]~~ feature page for more information.
 
-![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159479829-a3072b0f-1c32-4f96-9fb9-1b7614ab0eb1.png)
+![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
 ![Scheduled Publishing document view](https://user-images.githubusercontent.com/209129/159463180-703d557a-cfe6-4ff0-970f-b33eea048e87.png)
 
