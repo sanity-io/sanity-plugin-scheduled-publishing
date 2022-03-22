@@ -62,13 +62,13 @@ function SchedulesProvider({
           }
           /**
            * By default, all schedules are displayed in reverse chronlogical order
-           * except when displaying 'scheduled' (or upcoming) items.
+           * except when filtering by upcoming schedules, or a date has been selected in the calendar.
            * If a schedule as an `executedAt` date, sort by that instead.
            * This is because schedules may have differing values for `executeAt` and `executedAt` if
            * they've been force-published ahead of time, and we only care about the final execution date.
            */
           if (sortBy === 'executeAt') {
-            const invertOrder = value.scheduleState === 'scheduled' ? -1 : 1
+            const invertOrder = value.scheduleState === 'scheduled' || value.selectedDate ? -1 : 1
             return (getLastExecuteDate(a) > getLastExecuteDate(b) ? -1 : 1) * invertOrder
           }
           return 1

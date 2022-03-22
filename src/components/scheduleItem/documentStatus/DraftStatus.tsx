@@ -1,4 +1,4 @@
-// https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/DraftStatus.tsx
+// Based on https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/DraftStatus.tsx
 
 import React from 'react'
 import {Box, Text, Tooltip} from '@sanity/ui'
@@ -20,6 +20,7 @@ export const DraftStatus = ({document}: {document?: SanityDocument | null}) => (
         </Text>
       </Box>
     }
+    portal
   >
     <TextWithTone tone="caution" dimmed={!document} muted={!document} size={1}>
       <EditIcon />

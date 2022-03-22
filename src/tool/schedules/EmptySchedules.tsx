@@ -1,4 +1,5 @@
 import {Card, Flex, Heading, Stack, Text} from '@sanity/ui'
+import {format} from 'date-fns'
 import React from 'react'
 import {ScheduleState} from '../../types'
 import BigIconComingSoon from './BigIconComingSoon'
@@ -42,7 +43,8 @@ const EmptySchedules = (props: Props) => {
   }
 
   if (selectedDate) {
-    heading = 'No schedules for this date!'
+    description = 'No schedules for this date.'
+    heading = format(selectedDate, 'd MMMM yyyy')
     BigIcon = BigIconScreen
   }
 
