@@ -1,6 +1,6 @@
 import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex} from '@sanity/ui'
-import React, {useMemo} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {useVirtual} from 'react-virtual'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
 import {Schedule, ScheduleSort} from '../../types'
@@ -24,8 +24,14 @@ const VirtualList = () => {
     deleteSchedules({schedules: activeSchedules || []})
   }
 
+  // Reset virtual list scroll position on state changes
+  useEffect(() => {
+    containerRef?.current?.scrollTo(0, 0)
+  }, [scheduleState, sortBy])
+
   return (
     <Box
+      paddingBottom={6}
       paddingX={4}
       paddingTop={4}
       ref={containerRef}
@@ -34,12 +40,10 @@ const VirtualList = () => {
         overflowX: 'hidden',
         overflowY: 'auto',
         height: '100%',
-        // border: '10px solid red',
         boxSizing: 'border-box',
       }}
     >
       <Box
-        paddingBottom={5}
         style={{
           height: `${totalSize}px`,
           width: '100%',

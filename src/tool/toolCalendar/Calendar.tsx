@@ -49,11 +49,15 @@ export const Calendar = forwardRef(function Calendar(
 
   const handleDateChange = useCallback(
     (date?: Date) => {
-      onSelect(
-        date
-          ? zoneDateToUtc(setMinutes(setHours(date, date.getHours()), date.getMinutes()))
-          : undefined
-      )
+      if (date) {
+        const targetDate = zoneDateToUtc(
+          setMinutes(setHours(date, date.getHours()), date.getMinutes())
+        )
+        onSelect(targetDate)
+        onFocusedDateChange(targetDate)
+      } else {
+        onSelect(undefined)
+      }
     },
     [onSelect, zoneDateToUtc]
   )
@@ -108,7 +112,12 @@ export const Calendar = forwardRef(function Calendar(
     }
   }, [ref, focusCurrentWeekDay, focusedDate])
 
-  const handleNowClick = useCallback(() => onSelect(new Date()), [onSelect])
+  // Select AND focus current date when 'today' is pressed
+  const handleNowClick = useCallback(() => {
+    const now = new Date()
+    onSelect(now)
+    onFocusedDateChange(now)
+  }, [onSelect])
 
   const handlePrevMonthClick = useCallback(() => moveFocusedDate(-1), [moveFocusedDate])
 
