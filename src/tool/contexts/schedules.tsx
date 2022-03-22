@@ -33,11 +33,11 @@ function SchedulesProvider({
   const [sortBy, setSortBy] = useState<ScheduleSort>(value.sortBy || 'executeAt')
   const {timeZone, utcToCurrentZoneDate} = useTimeZone()
 
-  function filterByDate(clockDate: Date) {
+  function filterByDate(wallDate: Date) {
     return function (schedule: Schedule) {
       const scheduleDate = new Date(getLastExecuteDate(schedule)) // UTC
       const zonedScheduleDate = utcToCurrentZoneDate(scheduleDate)
-      return isSameDay(zonedScheduleDate, clockDate)
+      return isSameDay(zonedScheduleDate, wallDate)
     }
   }
 
@@ -81,9 +81,9 @@ function SchedulesProvider({
    * Scheduled are sorted chronologically by executed + execute date.
    */
   const schedulesByDate = useCallback(
-    (clockDate: Date) => {
+    (wallDate: Date) => {
       return value.schedules
-        .filter(filterByDate(clockDate))
+        .filter(filterByDate(wallDate))
         .sort((a, b) => (getLastExecuteDate(a) > getLastExecuteDate(b) ? 1 : -1))
     },
     [timeZone, value.schedules]

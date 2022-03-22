@@ -1,7 +1,7 @@
 import {HOCRouter, withRouterHOC} from '@sanity/base/router'
 import {white} from '@sanity/color'
 import {Box, Card, Flex, Text} from '@sanity/ui'
-import {format, parse} from 'date-fns'
+import {parse} from 'date-fns'
 import React, {useEffect, useMemo, useRef} from 'react'
 import styled from 'styled-components'
 import ErrorCallout from '../components/errorCallout/ErrorCallout'
@@ -9,6 +9,7 @@ import ButtonTimeZone from '../components/timeZoneButton/TimeZoneButton'
 import ButtonTimeZoneElementQuery from '../components/timeZoneButton/TimeZoneButtonElementQuery'
 import {SCHEDULE_FILTERS, TOOL_HEADER_HEIGHT} from '../constants'
 import usePollSchedules from '../hooks/usePollSchedules'
+import useTimeZone from '../hooks/useTimeZone'
 import {Schedule, ScheduleState} from '../types'
 import {SchedulesProvider} from './contexts/schedules'
 import {ScheduleFilters} from './scheduleFilters'
@@ -52,6 +53,8 @@ function Tool(props: Props) {
   // selected date can be inferred from current route.
   useFallbackNavigation(router, scheduleState, selectedDate)
 
+  const {formatDateTz} = useTimeZone()
+
   const schedulesContext = useMemo(
     () => ({
       schedules,
@@ -67,7 +70,7 @@ function Tool(props: Props) {
 
   const handleSelectDate = (date?: Date) => {
     if (date) {
-      router.navigate({date: format(date, DATE_SLUG_FORMAT)})
+      router.navigate({date: formatDateTz({date, format: DATE_SLUG_FORMAT})})
     } else {
       router.navigate({state: lastScheduleState?.current || SCHEDULE_FILTERS[0]})
     }
