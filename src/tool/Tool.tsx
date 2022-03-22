@@ -165,7 +165,7 @@ function Tool(props: Props) {
 function useFallbackNavigation(router: HOCRouter, filter?: ScheduleState, selectedDate?: Date) {
   useEffect(() => {
     if (!filter && !selectedDate) {
-      router.navigate({state: SCHEDULE_FILTERS[0]})
+      router.navigate({state: SCHEDULE_FILTERS[0]}, {replace: true})
     }
   }, [router, filter])
 }
