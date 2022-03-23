@@ -1,18 +1,16 @@
 import {useToast} from '@sanity/ui'
-import axios from 'axios'
 import pluralize from 'pluralize'
 import React from 'react'
-import client from '../client'
 import ToastDescription from '../components/toastDescription/ToastDescription'
+import client from '../lib/client'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
-import getAxiosErrorMessage from '../utils/getErrorMessage'
+import getErrorMessage from '../utils/getErrorMessage'
 import useTimeZone from './useTimeZone'
 
 const debug = debugWithName('useScheduleOperation')
 
-// @ts-expect-error
-const {dataset, projectId, url} = client.config()
+const {dataset, projectId} = client.config()
 
 // Custom events
 export enum ScheduleEvents {
@@ -79,23 +77,23 @@ function _create({date, documentId}: {date: string; documentId: string}) {
   roundedDate.setSeconds(0)
   roundedDate.setMilliseconds(0)
 
-  return axios.post<Schedule>(
-    `${url}/schedules/${projectId}/${dataset}`,
-    {
+  return client.request<Schedule>({
+    body: {
       documents: [{documentId}],
       executeAt: roundedDate,
       name: roundedDate,
     },
-    {withCredentials: true}
-  )
+    method: 'POST',
+    uri: `/schedules/${projectId}/${dataset}`,
+  })
 }
 
 function _delete({scheduleId}: {scheduleId: string}) {
   debug('_delete:', scheduleId)
-  return axios.delete<void>(
-    `${url}/schedules/${projectId}/${dataset}/${scheduleId}`, //
-    {withCredentials: true}
-  )
+  return client.request<void>({
+    method: 'DELETE',
+    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
+  })
 }
 
 function _deleteMultiple({scheduleIds}: {scheduleIds: string[]}) {
@@ -107,11 +105,10 @@ function _deleteMultiple({scheduleIds}: {scheduleIds: string[]}) {
 function _publish({scheduleId}: {scheduleId: string}) {
   debug('_publish:', scheduleId)
 
-  return axios.post<{transactionId: string}>(
-    `${url}/schedules/${projectId}/${dataset}/${scheduleId}/publish`,
-    null,
-    {withCredentials: true}
-  )
+  return client.request<{transactionId: string}>({
+    method: 'POST',
+    uri: `/schedules/${projectId}/${dataset}/${scheduleId}/publish`,
+  })
 }
 
 function _update({
@@ -122,11 +119,11 @@ function _update({
   scheduleId: string
 }) {
   debug('_update:', scheduleId, documentSchedule)
-  return axios.patch<void>(
-    `${url}/schedules/${projectId}/${dataset}/${scheduleId}`,
-    documentSchedule,
-    {withCredentials: true}
-  )
+  return client.request<{transactionId: string}>({
+    body: documentSchedule,
+    method: 'PATCH',
+    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
+  })
 }
 
 export default function useScheduleOperation() {
@@ -143,7 +140,7 @@ export default function useScheduleOperation() {
     documentId: string
   }) {
     try {
-      const {data} = await _create({date, documentId})
+      const data = await _create({date, documentId})
 
       window.dispatchEvent(
         scheduleCustomEvent(ScheduleEvents.create, {
@@ -176,7 +173,7 @@ export default function useScheduleOperation() {
         toast.push({
           closable: true,
           description: (
-            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to create schedule" />
+            <ToastDescription body={getErrorMessage(err)} title="Unable to create schedule" />
           ),
           duration: 15000, // 15s
           status: 'error',
@@ -215,7 +212,7 @@ export default function useScheduleOperation() {
         toast.push({
           closable: true,
           description: (
-            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to delete schedule" />
+            <ToastDescription body={getErrorMessage(err)} title="Unable to delete schedule" />
           ),
           duration: 15000, // 15s
           status: 'error',
@@ -292,7 +289,7 @@ export default function useScheduleOperation() {
         toast.push({
           closable: true,
           description: (
-            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to delete schedules" />
+            <ToastDescription body={getErrorMessage(err)} title="Unable to delete schedules" />
           ),
           duration: 15000, // 15s
           status: 'error',
@@ -325,7 +322,7 @@ export default function useScheduleOperation() {
         toast.push({
           closable: true,
           description: (
-            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to publish schedule" />
+            <ToastDescription body={getErrorMessage(err)} title="Unable to publish schedule" />
           ),
           duration: 15000, // 15s
           status: 'error',
@@ -370,7 +367,7 @@ export default function useScheduleOperation() {
         toast.push({
           closable: true,
           description: (
-            <ToastDescription body={getAxiosErrorMessage(err)} title="Unable to update schedule" />
+            <ToastDescription body={getErrorMessage(err)} title="Unable to update schedule" />
           ),
           duration: 15000, // 15s
           status: 'error',

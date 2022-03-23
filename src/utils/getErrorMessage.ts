@@ -1,25 +1,23 @@
-import axios from 'axios'
+import type {ClientError} from '@sanity/client'
 import {FORBIDDEN_RESPONSE_TEXT} from '../constants'
 
-export default function getAxiosErrorMessage(err: unknown): string {
+// this is used in place of `instanceof` so the matching can be more robust and
+// won't have any issues with dual packages etc
+// https://nodejs.org/api/packages.html#dual-package-hazard
+function isClientError(e: unknown): e is ClientError {
+  if (typeof e !== 'object') return false
+  if (!e) return false
+  return 'statusCode' in e && 'response' in e
+}
+
+export default function getErrorMessage(err: unknown): string {
   let message
 
-  if (axios.isAxiosError(err)) {
-    if (err.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      if (err.response.status === 403) {
-        message = FORBIDDEN_RESPONSE_TEXT
-      } else {
-        message = err.response.data.message || err.message
-      }
-    } else if (err.request) {
-      // The request was made but no response was received
-      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-      // http.ClientRequest in node.js
-      message = err.request || err.message
+  if (isClientError(err)) {
+    // The request was made and the server responded with a status code
+    if (err.response.statusCode === 403) {
+      message = FORBIDDEN_RESPONSE_TEXT
     } else {
-      // Something happened in setting up the request that triggered an Error
       message = err.message
     }
   } else {

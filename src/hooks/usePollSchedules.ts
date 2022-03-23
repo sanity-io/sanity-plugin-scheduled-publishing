@@ -1,7 +1,6 @@
-import axios from 'axios'
 import {useCallback, useEffect} from 'react'
 import useSWR from 'swr'
-import client from '../client'
+import client from '../lib/client'
 import {Schedule, ScheduleState} from '../types'
 import {
   ScheduleDeleteEvent,
@@ -10,9 +9,8 @@ import {
   ScheduleUpdateEvent,
 } from './useScheduleOperation'
 
-// @ts-expect-error
-const {dataset, projectId, url} = client.config()
-const scheduleBaseUrl = `${url}/schedules/${projectId}/${dataset}`
+const {dataset, projectId} = client.config()
+const scheduleBaseUrl = `/schedules/${projectId}/${dataset}`
 
 type QueryKey = {
   params?: {
@@ -23,12 +21,11 @@ type QueryKey = {
 }
 
 const fetcher = (queryKey: QueryKey) =>
-  axios
-    .get<{schedules: Schedule[] | undefined}>(queryKey.url, {
-      params: queryKey.params,
-      withCredentials: true,
-    })
-    .then((response) => response.data)
+  client.request<{schedules: Schedule[] | undefined}>({
+    query: queryKey.params,
+    method: 'GET',
+    uri: queryKey.url,
+  })
 
 const SWR_OPTIONS = {
   refreshInterval: 10000, // 10s
