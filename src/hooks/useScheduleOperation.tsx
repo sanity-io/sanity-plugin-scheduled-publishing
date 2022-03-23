@@ -17,7 +17,7 @@ export enum ScheduleEvents {
   create = 'scheduleCreate',
   delete = 'scheduleDelete',
   deleteMultiple = 'scheduleDeleteMultiple',
-  execute = 'scheduleExecute',
+  publish = 'schedulePublish',
   update = 'scheduleUpdate',
 }
 
@@ -34,8 +34,8 @@ export type ScheduleDeleteMultipleEvent = {
   scheduleIds: string[]
 }
 
-export type ScheduleExecuteEvent = {
-  schedule: Schedule
+export type SchedulePublishEvent = {
+  scheduleId: string
 }
 
 export type ScheduleUpdateEvent = {
@@ -49,7 +49,7 @@ declare global {
     [ScheduleEvents.create]: CustomEvent<ScheduleCreateEvent>
     [ScheduleEvents.delete]: CustomEvent<ScheduleDeleteEvent>
     [ScheduleEvents.deleteMultiple]: CustomEvent<ScheduleDeleteMultipleEvent>
-    [ScheduleEvents.execute]: CustomEvent<ScheduleExecuteEvent>
+    [ScheduleEvents.publish]: CustomEvent<SchedulePublishEvent>
     [ScheduleEvents.update]: CustomEvent<ScheduleUpdateEvent>
   }
 }
@@ -298,7 +298,7 @@ export default function useScheduleOperation() {
     }
   }
 
-  async function executeSchedule({
+  async function publishSchedule({
     displayToast = true,
     schedule,
   }: {
@@ -306,9 +306,10 @@ export default function useScheduleOperation() {
     schedule: Schedule
   }) {
     try {
-      await _publish({scheduleId: schedule.id})
+      const scheduleId = schedule.id
+      await _publish({scheduleId})
 
-      window.dispatchEvent(scheduleCustomEvent(ScheduleEvents.execute, {detail: {schedule}}))
+      window.dispatchEvent(scheduleCustomEvent(ScheduleEvents.publish, {detail: {scheduleId}}))
 
       if (displayToast) {
         toast.push({
@@ -380,7 +381,7 @@ export default function useScheduleOperation() {
     createSchedule,
     deleteSchedule,
     deleteSchedules,
-    executeSchedule,
+    publishSchedule,
     updateSchedule,
   }
 }

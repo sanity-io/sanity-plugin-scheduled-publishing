@@ -34,7 +34,7 @@ const ContextMenuItems = (props: Props) => {
     type: schemaType?.name,
     permission: 'publish',
   })
-  const {deleteSchedule, executeSchedule} = useScheduleOperation()
+  const {deleteSchedule, publishSchedule} = useScheduleOperation()
 
   const insufficientPermissions = !isPermissionsLoading && !permissions?.granted
 
@@ -48,7 +48,7 @@ const ContextMenuItems = (props: Props) => {
   }
 
   const handleExecute = () => {
-    executeSchedule({schedule})
+    publishSchedule({schedule})
   }
 
   return (

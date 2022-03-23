@@ -6,6 +6,7 @@ import {
   ScheduleDeleteEvent,
   ScheduleDeleteMultipleEvent,
   ScheduleEvents,
+  SchedulePublishEvent,
   ScheduleUpdateEvent,
 } from './useScheduleOperation'
 
@@ -80,6 +81,30 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
     )
   }, [])
 
+  // Immediately publish schedule in SWR cache and revalidate
+  const handlePublish = useCallback((event: CustomEvent<SchedulePublishEvent>) => {
+    mutate(
+      (currentData) => {
+        const currentSchedules = currentData?.schedules || []
+        const index = currentSchedules.findIndex(
+          (schedule) => schedule.id === event.detail.scheduleId
+        )
+        return {
+          schedules: [
+            ...currentSchedules?.slice(0, index),
+            {
+              ...currentSchedules[index],
+              executeAt: new Date().toISOString(),
+              state: 'succeeded',
+            },
+            ...currentSchedules?.slice(index + 1),
+          ],
+        }
+      },
+      true // revalidate SWR
+    )
+  }, [])
+
   // Immediately update schedule in SWR cache and revalidate
   const handleUpdate = useCallback((event: CustomEvent<ScheduleUpdateEvent>) => {
     mutate(
@@ -107,10 +132,12 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   useEffect(() => {
     window.addEventListener(ScheduleEvents.delete, handleDelete)
     window.addEventListener(ScheduleEvents.deleteMultiple, handleDeleteMultiple)
+    window.addEventListener(ScheduleEvents.publish, handlePublish)
     window.addEventListener(ScheduleEvents.update, handleUpdate)
     return () => {
       window.removeEventListener(ScheduleEvents.delete, handleDelete)
       window.removeEventListener(ScheduleEvents.deleteMultiple, handleDeleteMultiple)
+      window.removeEventListener(ScheduleEvents.publish, handlePublish)
       window.removeEventListener(ScheduleEvents.update, handleUpdate)
     }
   }, [])
