@@ -193,12 +193,6 @@ export default function useScheduleOperation() {
     schedule: Schedule
   }) {
     try {
-      if (schedule.state === 'scheduled') {
-        await _update({
-          documentSchedule: {state: 'cancelled'},
-          scheduleId: schedule.id,
-        })
-      }
       await _delete({scheduleId: schedule?.id})
 
       window.dispatchEvent(
