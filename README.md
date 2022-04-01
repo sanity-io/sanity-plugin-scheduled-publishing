@@ -117,6 +117,20 @@ export default function resolveDocumentBadges(props) {
 
 </details>
 
+<details>
+<summary>Where is time zone data pulled from?</summary>
+
+- Time zones and their corresponding cities, regions and daylight savings offsets are directly sourced from the [@vvo/dztb](https://github.com/vvo/tzdb) library, which is automatically updated with data from [geonames.org](https://www.geonames.org/).
+
+</details>
+
+<details>
+<summary>Will scheduled documents with validation errors publish?</summary>
+
+- **Yes.** Documents scheduled to publish in future will do so, even if they contain validation errors. This also applies to scheduled documents that you manually opt to publish immediately via the tool.
+
+</details>
+
 ## License
 
 This repository is published under the [MIT](LICENSE) license.
