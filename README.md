@@ -138,7 +138,17 @@ More information can be found on the [Scheduled Publishing][scheduled-publishing
 <details>
 <summary>Where is time zone data pulled from?</summary>
 
-- Time zones and their corresponding cities, regions and daylight savings offsets are directly sourced from the [@vvo/dztb](https://github.com/vvo/tzdb) library, which is automatically updated with data from [geonames.org](https://www.geonames.org/).
+- Time zones and their corresponding cities, regions and daylight savings offsets are directly sourced from the [@vvo/dztb][@vvo/dztb] library, which is automatically updated with data from [geonames.org](https://www.geonames.org/).
+- Latest time zone + region data from [@vvo/dztb][@vvo/dztb] is pulled in when first installing this plugin.
+- In the event you need to bring in upstream time zone and region data, run:
+
+  ```sh
+  # Yarn
+  yarn upgrade @sanity/scheduled-publishing
+
+  # NPM
+  npm update @vvo/tzdb --legacy-peer-deps
+  ```
 
 </details>
 
@@ -157,3 +167,4 @@ This repository is published under the [MIT](LICENSE) license.
 [document-badges]: https://www.sanity.io/docs/custom-document-badges
 [scheduled-publishing]: https://sanity.io
 [scheduled-publishing-api]: https://sanity.io
+[@vvo/dztb]: https://github.com/vvo/tzdb
