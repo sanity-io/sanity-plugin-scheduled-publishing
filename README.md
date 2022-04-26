@@ -2,7 +2,7 @@
 
 Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
-> This plugin uses Sanity's ~~[Scheduled Publishing API][scheduled-publishing-api]~~ which is available to customers on enterprise or custom plans. Please visit our ~~[Scheduled Publishing][scheduled-publishing]~~ feature page for more information.
+> This plugin uses Sanity's ~~[Scheduled Publishing API][scheduled-publishing-api]~~ which is available to customers on Team or higher plans. Please visit our ~~[Scheduled Publishing][scheduled-publishing]~~ feature page for more information.
 
 ![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
@@ -108,6 +108,24 @@ export default function resolveDocumentBadges(props) {
 ```
 
 ## FAQ
+
+<details>
+<summary>What's the relationship between Schedules and my dataset?</summary>
+
+Schedules sit adjacent to your dataset and can be managed using the [Scheduled Publishing API][scheduled-publishing-api] (which this plugin does for you).
+
+As Schedules aren't stored within your dataset, it's important to understand the following behavior:
+
+- Deleting a dataset will immediately delete all schedules.
+- Deleting a project will immediately delete all schedules.
+- `sanity dataset export` will not include schedules and `sanity dataset import` does not support importing schedules.
+- Server-side copying of datasets does not include schedules.
+- Downgrading your project to a plan which does not include the feature will leave the schedules in-place.
+- When a project is disabled or blocked, all scheduled publishes will invariably fail as mutations will not be allowed on the dataset.
+
+More information can be found on the [Scheduled Publishing][scheduled-publishing] page.
+
+</details>
 
 <details>
 <summary>How are schedule permissions handled?</summary>
