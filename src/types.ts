@@ -14,7 +14,7 @@ export interface Schedule {
   author: string
   createdAt: string
   dataset: string
-  // description: string // TODO: deprecate
+  description: string
   documents: {
     documentId: string
     documentType?: string
@@ -22,7 +22,7 @@ export interface Schedule {
   executeAt: string
   executedAt?: string
   id: string
-  // name: string  // TODO: deprecate
+  name: string
   projectId: string
   state: ScheduleState
 }
