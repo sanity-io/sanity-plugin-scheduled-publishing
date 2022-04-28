@@ -2,7 +2,7 @@
 
 Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
-> This plugin uses Sanity's ~~[Scheduled Publishing API][scheduled-publishing-api]~~ which is available to customers on Team or higher plans. Please visit our ~~[Scheduled Publishing][scheduled-publishing]~~ feature page for more information.
+> This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on Team or higher plans. Please visit our [Scheduled Publishing][scheduled-publishing] blog post for more information.
 
 ![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
@@ -112,26 +112,18 @@ export default function resolveDocumentBadges(props) {
 <details>
 <summary>What's the relationship between Schedules and my dataset?</summary>
 
-Schedules sit adjacent to your dataset and can be managed using the [Scheduled Publishing API][scheduled-publishing-api] (which this plugin does for you).
+Schedules sit adjacent to your dataset and can be managed using the [Scheduling API][scheduling-api] (which this plugin does for you).
 
-As Schedules aren't stored within your dataset, it's important to understand the following behavior:
+Schedules are a unique resource and are linked to, but do not exist within your Sanity project and dataset. It's important to understand the following behavior:
 
+- As schedules are not contained within a project’s dataset, you cannot query them via GROQ or GraphQL.
 - Deleting a dataset will immediately delete all schedules.
 - Deleting a project will immediately delete all schedules.
 - `sanity dataset export` will not include schedules and `sanity dataset import` does not support importing schedules.
 - Server-side copying of datasets does not include schedules.
-- Downgrading your project to a plan which does not include the feature will leave the schedules in-place.
 - When a project is disabled or blocked, all scheduled publishes will invariably fail as mutations will not be allowed on the dataset.
 
-More information can be found on the [Scheduled Publishing][scheduled-publishing] page.
-
-</details>
-
-<details>
-<summary>How are schedule permissions handled?</summary>
-
-- If you have `publish` access to a document, you'll be able to create, edit or delete any schedule linked to it.
-- All schedules are viewable by all project users.
+More information can be found on the [Scheduling API][scheduling-api] page.
 
 </details>
 
@@ -165,6 +157,6 @@ This repository is published under the [MIT](LICENSE) license.
 
 [document-actions]: https://www.sanity.io/docs/document-actions
 [document-badges]: https://www.sanity.io/docs/custom-document-badges
-[scheduled-publishing]: https://sanity.io
-[scheduled-publishing-api]: https://sanity.io
+[scheduled-publishing]: https://www.sanity.io/blog/publishing-scheduled
+[scheduling-api]: https://www.sanity.io/docs/scheduling-api
 [@vvo/dztb]: https://github.com/vvo/tzdb
