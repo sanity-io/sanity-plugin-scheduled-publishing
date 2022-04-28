@@ -69,7 +69,7 @@ function useNextSchedule(id: string) {
   return useMemo(() => {
     const upcomingSchedule = schedules?.[0]
 
-    if (!upcomingSchedule) {
+    if (!upcomingSchedule || !upcomingSchedule.executeAt) {
       return undefined
     }
     return format(new Date(upcomingSchedule.executeAt), DATE_FORMAT.LARGE)

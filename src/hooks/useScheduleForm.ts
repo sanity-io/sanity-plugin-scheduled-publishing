@@ -5,9 +5,9 @@ import {Schedule, ScheduleFormData} from '../types'
 export default function useScheduleForm(schedule?: Schedule) {
   const [isDirty, setIsDirty] = useState(false)
   const [formData, setFormData] = useState<ScheduleFormData | null>(
-    schedule
+    schedule && schedule?.executeAt
       ? {
-          date: schedule?.executeAt,
+          date: schedule.executeAt,
         }
       : null
   )

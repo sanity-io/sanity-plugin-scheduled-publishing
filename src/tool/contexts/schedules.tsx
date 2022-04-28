@@ -35,7 +35,11 @@ function SchedulesProvider({
 
   function filterByDate(wallDate: Date) {
     return function (schedule: Schedule) {
-      const scheduleDate = new Date(getLastExecuteDate(schedule)) // UTC
+      const executeDate = getLastExecuteDate(schedule)
+      if (!executeDate) {
+        return false
+      }
+      const scheduleDate = new Date(executeDate) // UTC
       const zonedScheduleDate = utcToCurrentZoneDate(scheduleDate)
       return isSameDay(zonedScheduleDate, wallDate)
     }
@@ -47,6 +51,20 @@ function SchedulesProvider({
     }
   }
 
+  /**
+   * Return all schedules if no date is currently selected, otherwise return all schedules for the
+   * selected calendar date.
+   *
+   * By default, all schedules are displayed in reverse chronlogical order
+   * except when filtering by upcoming schedules, or a date has been selected in the calendar.
+   *
+   * If a schedule as an `executedAt` date, sort by that instead.
+   * This is because schedules may have differing values for `executeAt` and `executedAt` if
+   * they've been force-published ahead of time, and we only care about the final execution date.
+   *
+   * Schedules with a null value for `executeAt` (possible if created externally via the Scheduling API)
+   * should always be placed after all other results.
+   */
   const activeSchedules = useMemo(() => {
     return (
       value.schedules
@@ -60,16 +78,21 @@ function SchedulesProvider({
           if (sortBy === 'createdAt') {
             return a[sortBy] < b[sortBy] ? 1 : -1
           }
-          /**
-           * By default, all schedules are displayed in reverse chronlogical order
-           * except when filtering by upcoming schedules, or a date has been selected in the calendar.
-           * If a schedule as an `executedAt` date, sort by that instead.
-           * This is because schedules may have differing values for `executeAt` and `executedAt` if
-           * they've been force-published ahead of time, and we only care about the final execution date.
-           */
           if (sortBy === 'executeAt') {
             const invertOrder = value.scheduleState === 'scheduled' || value.selectedDate ? -1 : 1
-            return (getLastExecuteDate(a) > getLastExecuteDate(b) ? -1 : 1) * invertOrder
+            const aExecuteDate = getLastExecuteDate(a)
+            const bExecuteDate = getLastExecuteDate(b)
+
+            if (aExecuteDate === bExecuteDate) {
+              return 0
+            }
+            if (aExecuteDate === null) {
+              return 1
+            }
+            if (bExecuteDate === null) {
+              return -1
+            }
+            return (aExecuteDate > bExecuteDate ? -1 : 1) * invertOrder
           }
           return 1
         }) || []
@@ -78,13 +101,29 @@ function SchedulesProvider({
 
   /**
    * Return all matching schedules with specified date (in clock time).
+   *
    * Scheduled are sorted chronologically by executed + execute date.
+   *
+   * Schedules with a null value for `executeAt` (possible if created externally via the Scheduling API)
+   * should always be placed after all other results.
    */
   const schedulesByDate = useCallback(
     (wallDate: Date) => {
-      return value.schedules
-        .filter(filterByDate(wallDate))
-        .sort((a, b) => (getLastExecuteDate(a) > getLastExecuteDate(b) ? 1 : -1))
+      return value.schedules.filter(filterByDate(wallDate)).sort((a, b) => {
+        const aExecuteDate = getLastExecuteDate(a)
+        const bExecuteDate = getLastExecuteDate(b)
+
+        if (aExecuteDate === bExecuteDate) {
+          return 0
+        }
+        if (aExecuteDate === null) {
+          return 1
+        }
+        if (bExecuteDate === null) {
+          return -1
+        }
+        return aExecuteDate > bExecuteDate ? 1 : -1
+      })
     },
     [timeZone, value.schedules]
   )

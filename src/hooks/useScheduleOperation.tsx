@@ -151,7 +151,7 @@ export default function useScheduleOperation() {
         })
       )
 
-      if (displayToast) {
+      if (displayToast && data?.executeAt) {
         toast.push({
           closable: true,
           description: (

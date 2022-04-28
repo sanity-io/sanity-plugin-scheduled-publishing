@@ -19,7 +19,7 @@ export interface Schedule {
     documentId: string
     documentType?: string
   }[]
-  executeAt: string
+  executeAt: string | null
   executedAt?: string
   id: string
   name: string

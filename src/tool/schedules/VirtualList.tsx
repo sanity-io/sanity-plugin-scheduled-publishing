@@ -81,11 +81,15 @@ function useVirtualizedSchedules(activeSchedules: Schedule[], sortBy?: ScheduleS
       if (sortBy == 'executeAt') {
         // Get localised date string for current and previous schedules (e.g. 'February 2025')
         const previousSchedule = activeSchedules[index - 1]
+        const previousExecuteDate = getLastExecuteDate(previousSchedule)
         const datePrevious =
-          index > 0 ? getLocalizedDate(getLastExecuteDate(previousSchedule)) : null
-        const dateCurrent = getLocalizedDate(getLastExecuteDate(schedule))
+          index > 0 && previousExecuteDate ? getLocalizedDate(previousExecuteDate) : null
+
+        const currentExecuteDate = getLastExecuteDate(schedule)
+        const dateCurrent = currentExecuteDate ? getLocalizedDate(currentExecuteDate) : null
+
         if (dateCurrent !== datePrevious) {
-          items.push(dateCurrent)
+          items.push(dateCurrent ? dateCurrent : 'No date specified')
         }
       }
       items.push(schedule)

@@ -127,22 +127,31 @@ function TooltipContent(props: TooltipContentProps) {
         </Text>
       </Box>
       <Stack space={2}>
-        {schedules?.map((schedule) => (
-          <Flex align="center" gap={3} justify="space-between" key={schedule.id}>
-            <Box>
-              <Text size={1} weight="semibold">
-                {formatDateTz({date: new Date(getLastExecuteDate(schedule)), format: 'p'})}
-              </Text>
-            </Box>
-            <Badge
-              fontSize={0}
-              mode="outline"
-              tone={SCHEDULE_STATE_DICTIONARY[schedule.state].badgeTone}
-            >
-              {SCHEDULE_STATE_DICTIONARY[schedule.state].title}
-            </Badge>
-          </Flex>
-        ))}
+        {schedules
+          .filter((schedule) => schedule.executeAt)
+          .map((schedule) => {
+            const executeDate = getLastExecuteDate(schedule)
+            if (!executeDate) {
+              return null
+            }
+
+            return (
+              <Flex align="center" gap={3} justify="space-between" key={schedule.id}>
+                <Box>
+                  <Text size={1} weight="semibold">
+                    {formatDateTz({date: new Date(executeDate), format: 'p'})}
+                  </Text>
+                </Box>
+                <Badge
+                  fontSize={0}
+                  mode="outline"
+                  tone={SCHEDULE_STATE_DICTIONARY[schedule.state].badgeTone}
+                >
+                  {SCHEDULE_STATE_DICTIONARY[schedule.state].title}
+                </Badge>
+              </Flex>
+            )
+          })}
       </Stack>
     </Box>
   )

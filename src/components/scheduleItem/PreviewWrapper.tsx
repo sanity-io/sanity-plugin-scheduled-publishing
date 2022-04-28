@@ -46,7 +46,8 @@ const PreviewWrapper = (props: Props) => {
   const {hasError, validationTone} = useValidationState(markers)
   const {formatDateTz} = useTimeZone()
 
-  const scheduleDate = new Date(getLastExecuteDate(schedule))
+  const executeDate = getLastExecuteDate(schedule)
+  const scheduleDate = executeDate ? new Date(executeDate) : null
 
   return (
     <Card padding={1} radius={2} shadow={1} tone={validationTone}>
@@ -76,8 +77,18 @@ const PreviewWrapper = (props: Props) => {
                 }}
               >
                 <Stack space={2}>
-                  <Text size={1}>{formatDateTz({date: scheduleDate, format: 'dd/MM/yyyy'})}</Text>
-                  <Text size={1}>{formatDateTz({date: scheduleDate, format: 'p'})}</Text>
+                  {scheduleDate ? (
+                    <>
+                      <Text size={1}>
+                        {formatDateTz({date: scheduleDate, format: 'dd/MM/yyyy'})}
+                      </Text>
+                      <Text size={1}>{formatDateTz({date: scheduleDate, format: 'p'})}</Text>
+                    </>
+                  ) : (
+                    <Text muted size={1}>
+                      <em>No date specified</em>
+                    </Text>
+                  )}
                 </Stack>
               </Box>
               <Box
@@ -89,7 +100,13 @@ const PreviewWrapper = (props: Props) => {
                   width: children ? '35%' : 'auto',
                 }}
               >
-                <DateWithTooltip date={scheduleDate} useElementQueries={useElementQueries} />
+                {scheduleDate ? (
+                  <DateWithTooltip date={scheduleDate} useElementQueries={useElementQueries} />
+                ) : (
+                  <Text muted size={1}>
+                    <em>No date specified</em>
+                  </Text>
+                )}
               </Box>
             </>
 
