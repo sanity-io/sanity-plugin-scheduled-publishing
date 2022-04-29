@@ -3,17 +3,18 @@ import {Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import React, {ElementType, ReactNode, useState} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
+import useTimeZone from '../../hooks/useTimeZone'
 import {Schedule} from '../../types'
 import {PaneItemPreviewState} from '../../utils/paneItemHelpers'
-import {EMPTY_VALIDATION_STATUS, useValidationState} from '../../utils/validationUtils'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
+import {EMPTY_VALIDATION_STATUS, useValidationState} from '../../utils/validationUtils'
+import {ValidateScheduleDoc} from '../validation/SchedulesValidation'
 import {ValidationInfo} from '../validation/ValidationInfo'
 import DateWithTooltip from './dateWithTooltip/DateWithTooltip'
 import {DraftStatus} from './documentStatus/DraftStatus'
 import {PublishedStatus} from './documentStatus/PublishedStatus'
+import StateReasonFailedInfo from './StateReasonFailedInfo'
 import User from './User'
-import {ValidateScheduleDoc} from '../validation/SchedulesValidation'
-import useTimeZone from '../../hooks/useTimeZone'
 
 interface Props {
   children?: ReactNode
@@ -134,22 +135,29 @@ const PreviewWrapper = (props: Props) => {
           </Flex>
         </Card>
 
-        {/* Validation status */}
-        <Box>
-          <ValidateScheduleDoc schedule={schedule} updateValidation={setValidationStatus} />
-          <ValidationInfo
-            markers={markers}
-            type={schemaType}
-            documentId={publishedDocumentId}
-            menuHeader={
-              <Box padding={2}>
-                <Text size={1}>
-                  {hasError ? DOCUMENT_HAS_ERRORS_TEXT : DOCUMENT_HAS_WARNINGS_TEXT}
-                </Text>
-              </Box>
-            }
-          />
-        </Box>
+        {/* Validation status (only displayed on upcoming schedules) */}
+        {schedule.state === 'scheduled' && (
+          <Box>
+            <ValidateScheduleDoc schedule={schedule} updateValidation={setValidationStatus} />
+            <ValidationInfo
+              markers={markers}
+              type={schemaType}
+              documentId={publishedDocumentId}
+              menuHeader={
+                <Box padding={2}>
+                  <Text size={1}>
+                    {hasError ? DOCUMENT_HAS_ERRORS_TEXT : DOCUMENT_HAS_WARNINGS_TEXT}
+                  </Text>
+                </Box>
+              }
+            />
+          </Box>
+        )}
+
+        {/* Failed state reason (only displayed on cancelled schedules) */}
+        {schedule.state === 'cancelled' && (
+          <StateReasonFailedInfo stateReason={schedule.stateReason} />
+        )}
 
         {/* Context menu */}
         {contextMenu && <Box style={{flexShrink: 0}}>{contextMenu}</Box>}

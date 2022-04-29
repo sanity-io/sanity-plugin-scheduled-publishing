@@ -25,6 +25,7 @@ export interface Schedule {
   name: string
   projectId: string
   state: ScheduleState
+  stateReason: string
 }
 
 export interface ScheduleFilter {

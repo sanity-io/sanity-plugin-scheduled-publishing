@@ -37,6 +37,8 @@ export const DOCUMENT_HAS_WARNINGS_TEXT = 'This document has validation warnings
 export const DOCUMENT_HAS_ERRORS_TEXT =
   'This document has validation errors that should be resolved before its publish date.'
 
+export const SCHEDULE_FAILED_TEXT = 'This schedule failed to run.'
+
 // Text displayed in toasts on any 403 Forbidden request
 // (usually if a project doesn't have access to the Scheduled Publishing feature)
 export const FORBIDDEN_RESPONSE_TEXT =
