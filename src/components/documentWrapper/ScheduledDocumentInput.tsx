@@ -1,5 +1,5 @@
 import {SanityProps} from './helperTypes'
-import React, {forwardRef, Ref} from 'react'
+import React, {forwardRef, Ref, useMemo} from 'react'
 import {NestedFormBuilder} from './NestedFormBuilder'
 import {ObjectSchemaType} from '@sanity/types'
 import {ScheduleBanner} from './ScheduleBanner'
@@ -27,14 +27,19 @@ export const ScheduledDocumentInput = forwardRef(function ScheduledDocumentInput
 })
 
 function useTypeWithMarkerField(type: ObjectSchemaType): ObjectSchemaType {
+  return useMemo(() => typeWithMarkerField(type), [type])
+}
+
+function typeWithMarkerField(type: ObjectSchemaType): ObjectSchemaType {
   const t = {
     ...type,
     [scheduledMarkerFieldName]: true,
   }
   const typeOfType =
-    'type' in type && type.type ? useTypeWithMarkerField(type.type as ObjectSchemaType) : undefined
+    'type' in type && type.type ? typeWithMarkerField(type.type as ObjectSchemaType) : undefined
   return {
     ...t,
     type: typeOfType,
   }
 }
+
