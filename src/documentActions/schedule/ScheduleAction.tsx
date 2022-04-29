@@ -1,17 +1,23 @@
-import type {DocumentActionDescription, DocumentActionProps} from '@sanity/base'
+import type {
+  DocumentActionDescription,
+  DocumentActionModalDialogProps,
+  DocumentActionProps,
+} from '@sanity/base'
 import {InsufficientPermissionsMessage} from '@sanity/base/components'
 import {
   unstable_useDocumentPairPermissions as useDocumentPairPermissions,
   useCurrentUser,
 } from '@sanity/base/hooks'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
-import {Box} from '@sanity/ui'
+import {Box, Text} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
 import DialogFooter from '../../components/dialogs/DialogFooter'
 import DialogHeader from '../../components/dialogs/DialogHeader'
 import {EditScheduleForm} from '../../components/editScheduleForm'
 import ErrorCallout from '../../components/errorCallout/ErrorCallout'
+import {FEATURE_NOT_SUPPORTED_TEXT} from '../../constants'
 import {DocumentActionPropsProvider} from '../../contexts/documentActionProps'
+import useCheckFeature from '../../hooks/useCheckFeature'
 import usePollSchedules from '../../hooks/usePollSchedules'
 import useScheduleForm from '../../hooks/useScheduleForm'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
@@ -48,10 +54,18 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
   })
   const {createSchedule} = useScheduleOperation()
 
+  // Check if the current project supports Scheduled Publishing
+  const hasFeature = useCheckFeature()
+
   const [dialogOpen, setDialogOpen] = useState(false)
   const {formData, onFormChange} = useScheduleForm()
+
   // Poll for document schedules
-  const {error, isInitialLoading, schedules} = usePollSchedules({
+  const {
+    error: fetchError,
+    isInitialLoading,
+    schedules,
+  } = usePollSchedules({
     documentId: id,
     state: 'scheduled',
   })
@@ -106,24 +120,30 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
       'Live Edit is enabled for this content type and publishing happens automatically as you make changes'
   }
 
-  return {
-    dialog: dialogOpen && {
-      content: error ? (
+  let dialog: DocumentActionModalDialogProps
+  if (hasFeature === false) {
+    dialog = {
+      content: <Text size={1}>{FEATURE_NOT_SUPPORTED_TEXT}</Text>,
+      header: 'Feature not available',
+      onClose: onComplete,
+      type: 'modal',
+    }
+  } else {
+    dialog = {
+      content: fetchError ? (
         <ErrorCallout
           description="More information in the developer console."
           title="Something went wrong, unable to retrieve schedules."
         />
       ) : (
         <DocumentActionPropsProvider value={props}>
-          <>
-            {hasExistingSchedules ? (
-              <Schedules schedules={schedules} />
-            ) : (
-              <EditScheduleForm onChange={onFormChange} value={formData}>
-                <NewScheduleInfo id={id} schemaType={type} />
-              </EditScheduleForm>
-            )}
-          </>
+          {hasExistingSchedules ? (
+            <Schedules schedules={schedules} />
+          ) : (
+            <EditScheduleForm onChange={onFormChange} value={formData}>
+              <NewScheduleInfo id={id} schemaType={type} />
+            </EditScheduleForm>
+          )}
         </DocumentActionPropsProvider>
       ),
       footer: !hasExistingSchedules && (
@@ -139,7 +159,11 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
       header: <DialogHeader title={title} />,
       onClose: onComplete,
       type: 'modal',
-    },
+    }
+  }
+
+  return {
+    dialog: dialogOpen && dialog,
     disabled: isInitialLoading || !documentExists || liveEdit,
     label: title,
     icon: CalendarIcon,

@@ -12,6 +12,7 @@ import usePollSchedules from '../hooks/usePollSchedules'
 import useTimeZone from '../hooks/useTimeZone'
 import {Schedule, ScheduleState} from '../types'
 import {SchedulesProvider} from './contexts/schedules'
+import FeatureBanner from './featureBanner/FeatureBanner'
 import {ScheduleFilters} from './scheduleFilters'
 import {Schedules} from './schedules'
 import SchedulesContextMenu from './schedulesContextMenu/SchedulesContextMenu'
@@ -79,9 +80,6 @@ function Tool(props: Props) {
   return (
     <SchedulesProvider value={schedulesContext}>
       <Card
-        display="flex"
-        flex={1}
-        height="fill"
         overflow="hidden"
         style={{
           bottom: 0,
@@ -91,72 +89,76 @@ function Tool(props: Props) {
           top: 0,
         }}
       >
-        {/* LHS Column */}
-        <Column
-          display={['none', null, null, 'flex'] as any}
-          style={{
-            position: 'sticky',
-            top: 0,
-            width: '350px',
-          }}
-        >
-          <ToolCalendar onSelect={handleSelectDate} selectedDate={selectedDate} />
-        </Column>
-        {/* RHS Column */}
-        <Column display="flex" flex={1} overflow="hidden">
-          <ButtonTimeZoneElementQuery
+        <FeatureBanner />
+
+        <Flex flex={1} height="fill">
+          {/* LHS Column */}
+          <Column
+            display={['none', null, null, 'flex'] as any}
             style={{
-              background: white.hex,
               position: 'sticky',
               top: 0,
-              zIndex: 1,
+              width: '350px',
             }}
           >
-            {/* Header */}
-            <Flex
-              align="center"
-              paddingLeft={4}
-              paddingRight={3}
+            <ToolCalendar onSelect={handleSelectDate} selectedDate={selectedDate} />
+          </Column>
+          {/* RHS Column */}
+          <Column display="flex" flex={1} overflow="hidden">
+            <ButtonTimeZoneElementQuery
               style={{
-                borderBottom: '1px solid var(--card-border-color)',
-                minHeight: `${TOOL_HEADER_HEIGHT}px`,
+                background: white.hex,
+                position: 'sticky',
+                top: 0,
+                zIndex: 1,
               }}
             >
-              <Flex align="center" flex={1} justify="space-between">
-                {/* Filters */}
-                <ScheduleFilters onClearDate={handleClearDate} selectedDate={selectedDate} />
+              {/* Header */}
+              <Flex
+                align="center"
+                paddingLeft={4}
+                paddingRight={3}
+                style={{
+                  borderBottom: '1px solid var(--card-border-color)',
+                  minHeight: `${TOOL_HEADER_HEIGHT}px`,
+                }}
+              >
+                <Flex align="center" flex={1} justify="space-between">
+                  {/* Filters */}
+                  <ScheduleFilters onClearDate={handleClearDate} selectedDate={selectedDate} />
 
-                {/* Time zone select + context menu */}
-                <Flex align="center" gap={1}>
-                  <ButtonTimeZone useElementQueries />
-                  <SchedulesContextMenu />
+                  {/* Time zone select + context menu */}
+                  <Flex align="center" gap={1}>
+                    <ButtonTimeZone useElementQueries />
+                    <SchedulesContextMenu />
+                  </Flex>
                 </Flex>
               </Flex>
-            </Flex>
-          </ButtonTimeZoneElementQuery>
-          <Flex direction="column" flex={1}>
-            {/* Error */}
-            {error && (
-              <Box paddingTop={4} paddingX={4}>
-                <ErrorCallout
-                  description="More information in the developer console."
-                  title="Something went wrong, unable to retrieve schedules."
-                />
-              </Box>
-            )}
-
-            <Box flex={1}>
-              {isInitialLoading ? (
-                <Box padding={4}>
-                  <Text muted>Loading...</Text>
+            </ButtonTimeZoneElementQuery>
+            <Flex direction="column" flex={1}>
+              {/* Error */}
+              {error && (
+                <Box paddingTop={4} paddingX={4}>
+                  <ErrorCallout
+                    description="More information in the developer console."
+                    title="Something went wrong, unable to retrieve schedules."
+                  />
                 </Box>
-              ) : (
-                // Loaded schedules
-                <Schedules />
               )}
-            </Box>
-          </Flex>
-        </Column>
+
+              <Box flex={1}>
+                {isInitialLoading ? (
+                  <Box padding={4}>
+                    <Text muted>Loading...</Text>
+                  </Box>
+                ) : (
+                  // Loaded schedules
+                  <Schedules />
+                )}
+              </Box>
+            </Flex>
+          </Column>
+        </Flex>
       </Card>
     </SchedulesProvider>
   )

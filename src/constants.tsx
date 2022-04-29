@@ -1,4 +1,5 @@
 import {BadgeTone} from '@sanity/ui'
+import React from 'react'
 import {ScheduleState} from './types'
 
 export const LOCAL_STORAGE_TZ_KEY = 'scheduled-publishing::time-zone'
@@ -36,6 +37,13 @@ export const TOOL_HEADER_HEIGHT = 55 // px
 export const DOCUMENT_HAS_WARNINGS_TEXT = 'This document has validation warnings.'
 export const DOCUMENT_HAS_ERRORS_TEXT =
   'This document has validation errors that should be resolved before its publish date.'
+
+export const FEATURE_NOT_SUPPORTED_TEXT = (
+  <>
+    Scheduled Publishing is only available on the{' '}
+    <a href="https://sanity.io/pricing">Team tier and above</a>. Please upgrade to enable access.
+  </>
+)
 
 export const SCHEDULE_FAILED_TEXT = 'This schedule failed to run.'
 
