@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.4...v0.1.5) (2022-04-29)
+
+
+### Bug Fixes
+
+* check for scheduled publishing feature flag in both tool + document actions [sc-19032] ([1cbc209](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/1cbc209c6366f909fff3b5e0caacbc9718ae755f))
+
 ### [0.1.4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.3...v0.1.4) (2022-04-29)
 
 
