@@ -2,6 +2,7 @@ import {useCallback, useEffect} from 'react'
 import useSWR from 'swr'
 import client from '../lib/client'
 import {Schedule, ScheduleState} from '../types'
+import getScheduleBaseUrl from '../utils/getScheduleBaseUrl'
 import {
   ScheduleDeleteEvent,
   ScheduleDeleteMultipleEvent,
@@ -9,9 +10,6 @@ import {
   SchedulePublishEvent,
   ScheduleUpdateEvent,
 } from './useScheduleOperation'
-
-const {dataset, projectId} = client.config()
-const scheduleBaseUrl = `/schedules/${projectId}/${dataset}`
 
 type QueryKey = {
   params?: {
@@ -52,7 +50,7 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
       documentIds: documentId,
       state,
     },
-    url: scheduleBaseUrl,
+    url: getScheduleBaseUrl(),
   }
 
   const {data, error, mutate} = useSWR(queryKey, fetcher, SWR_OPTIONS)

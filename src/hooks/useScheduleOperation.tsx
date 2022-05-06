@@ -6,11 +6,10 @@ import client from '../lib/client'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
 import getErrorMessage from '../utils/getErrorMessage'
+import getScheduleBaseUrl from '../utils/getScheduleBaseUrl'
 import useTimeZone from './useTimeZone'
 
 const debug = debugWithName('useScheduleOperation')
-
-const {dataset, projectId} = client.config()
 
 // Custom events
 export enum ScheduleEvents {
@@ -84,7 +83,7 @@ function _create({date, documentId}: {date: string; documentId: string}) {
       name: roundedDate,
     },
     method: 'POST',
-    uri: `/schedules/${projectId}/${dataset}`,
+    uri: getScheduleBaseUrl(),
   })
 }
 
@@ -92,7 +91,7 @@ function _delete({scheduleId}: {scheduleId: string}) {
   debug('_delete:', scheduleId)
   return client.request<void>({
     method: 'DELETE',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
+    uri: `${getScheduleBaseUrl()}/${scheduleId}`,
   })
 }
 
@@ -104,10 +103,9 @@ function _deleteMultiple({scheduleIds}: {scheduleIds: string[]}) {
 
 function _publish({scheduleId}: {scheduleId: string}) {
   debug('_publish:', scheduleId)
-
   return client.request<{transactionId: string}>({
     method: 'POST',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}/publish`,
+    uri: `${getScheduleBaseUrl()}/${scheduleId}/publish`,
   })
 }
 
@@ -122,7 +120,7 @@ function _update({
   return client.request<{transactionId: string}>({
     body: documentSchedule,
     method: 'PATCH',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
+    uri: `${getScheduleBaseUrl()}/${scheduleId}`,
   })
 }
 
