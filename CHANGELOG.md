@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.5...v0.1.6) (2022-05-06)
+
+
+### Bug Fixes
+
+* ensure current dataset and project IDs are retrieved on every request ([36bd830](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/36bd83086d891fcd401e677dcdee7c16c62f5261))
+* memoized document type ([56afc1e](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/56afc1e5feb1ebc119ce3811023972a87f295713))
+
 ### [0.1.5](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.4...v0.1.5) (2022-04-29)
 
 
