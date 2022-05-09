@@ -39,7 +39,7 @@ const ToolPreview = (props: Props) => {
         ref={ref}
       />
     ))
-  }, [IntentLink, visibleDocument])
+  }, [schemaType.name, visibleDocument])
 
   return (
     <>

@@ -28,7 +28,7 @@ const DialogScheduleEdit = (props: Props) => {
       date: formData.date,
       scheduleId: schedule.id,
     }).then(onClose)
-  }, [formData?.date])
+  }, [formData?.date, onClose, schedule.id, updateSchedule])
 
   return (
     <Dialog

@@ -21,7 +21,7 @@ export default function usePreviewState(
     return () => {
       subscription?.unsubscribe()
     }
-  }, [schemaType])
+  }, [documentId, schemaType])
 
   return paneItemPreview
 }

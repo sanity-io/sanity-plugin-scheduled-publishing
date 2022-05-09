@@ -42,4 +42,3 @@ function typeWithMarkerField(type: ObjectSchemaType): ObjectSchemaType {
     type: typeOfType,
   }
 }
-

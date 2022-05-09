@@ -36,7 +36,7 @@ const DialogTimeZone = (props: Props) => {
   const isDirty = selectedTz?.name !== timeZone.name
   const isLocalTzSelected = useMemo(() => {
     return selectedTz?.name === getLocalTimeZone().name
-  }, [getLocalTimeZone, selectedTz])
+  }, [selectedTz])
 
   return (
     <Dialog

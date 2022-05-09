@@ -169,7 +169,7 @@ function useFallbackNavigation(router: HOCRouter, filter?: ScheduleState, select
     if (!filter && !selectedDate) {
       router.navigate({state: SCHEDULE_FILTERS[0]}, {replace: true})
     }
-  }, [router, filter])
+  }, [filter, router, selectedDate])
 }
 
 export default withRouterHOC(Tool)

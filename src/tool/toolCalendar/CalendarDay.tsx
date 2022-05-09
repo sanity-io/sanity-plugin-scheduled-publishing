@@ -32,7 +32,7 @@ export function CalendarDay(props: CalendarDayProps) {
     } else {
       onSelect(date)
     }
-  }, [date, onSelect])
+  }, [date, onSelect, selected])
 
   let tone: CardTone
   if (isToday || selected) {

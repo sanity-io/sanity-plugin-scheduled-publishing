@@ -142,7 +142,7 @@ export const Calendar = forwardRef(function Calendar(
       // set focus temporarily on this element to make sure focus is still inside the calendar-grid after re-render
       ref.current?.querySelector<HTMLElement>('[data-preserve-focus]')?.focus()
     },
-    [ref, focusCurrentWeekDay, onFocusedDateChange, focusedDate]
+    [focusCurrentWeekDay, focusedDate, onFocusedDateChange, ref, zoneDateToUtc]
   )
 
   useEffect(() => {

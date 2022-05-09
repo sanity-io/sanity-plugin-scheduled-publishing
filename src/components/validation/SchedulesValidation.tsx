@@ -67,7 +67,7 @@ function ValidationRunner({id, schemaName, updateValidation}: ValidationRunnerPr
     if (!validationStatus.isValidating) {
       updateValidation(validationStatus)
     }
-  }, [validationStatus])
+  }, [updateValidation, validationStatus])
 
   return null
 }

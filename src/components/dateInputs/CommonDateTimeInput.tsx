@@ -74,7 +74,7 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
         setLocalValue(nextInputValue)
       }
     },
-    [localValue, serialize, onChange, parseInputValue]
+    [localValue, onChange, parseInputValue, serialize, value, zoneDateToUtc]
   )
 
   // Calendar changes (UTC)

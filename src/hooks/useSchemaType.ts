@@ -6,9 +6,9 @@ import {getScheduledDocument} from '../utils/paneItemHelpers'
 
 export function useScheduleSchemaType(schedule: Schedule): SchemaType | undefined {
   const firstDocument = getScheduledDocument(schedule)
-  return firstDocument.documentType ? useSchemaType(firstDocument.documentType) : undefined
+  return useSchemaType(firstDocument.documentType)
 }
 
-export function useSchemaType(schemaName: string): SchemaType {
+export function useSchemaType(schemaName?: string): SchemaType | undefined {
   return useMemo(() => schema.get(schemaName), [schemaName])
 }
