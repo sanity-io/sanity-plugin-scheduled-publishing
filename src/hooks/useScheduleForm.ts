@@ -5,7 +5,7 @@ import useTimeZone from './useTimeZone'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function useScheduleForm(schedule?: Schedule) {
-  const {getCurrentZoneDate} = useTimeZone()
+  const {getCurrentZoneDate, utcToCurrentZoneDate} = useTimeZone()
 
   const [isDirty, setIsDirty] = useState(false)
   const [markers, setMarkers] = useState<ValidationMarker[]>([])
@@ -24,10 +24,8 @@ export default function useScheduleForm(schedule?: Schedule) {
 
   // Only allow dates in the future (`selectedDate` is UTC)
   const customValidation = useCallback(
-    (selectedDate: Date): boolean => {
-      return selectedDate > getCurrentZoneDate()
-    },
-    [getCurrentZoneDate]
+    (selectedDate: Date) => utcToCurrentZoneDate(selectedDate) > getCurrentZoneDate(),
+    [getCurrentZoneDate, utcToCurrentZoneDate]
   )
 
   const handleFormChange = useCallback(
