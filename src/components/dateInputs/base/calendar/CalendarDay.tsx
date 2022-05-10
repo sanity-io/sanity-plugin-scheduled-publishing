@@ -1,6 +1,7 @@
 import {Card, Text} from '@sanity/ui'
 import {endOfDay} from 'date-fns'
 import React, {useCallback, useMemo} from 'react'
+import useTimeZone from '../../../../hooks/useTimeZone'
 
 interface CalendarDayProps {
   date: Date
@@ -15,14 +16,17 @@ interface CalendarDayProps {
 export function CalendarDay(props: CalendarDayProps) {
   const {date, focused, isCurrentMonth, isToday, customValidation, onSelect, selected} = props
 
+  const {zoneDateToUtc} = useTimeZone()
+
   // Round date to the end of day when passing to custom validate function.
-  // Remember that all calendar days are in UTC, but comparison is done with 'wall clock' time.
+  // Remember that all calendar days have dates in local / 'wall time', but validation requires a conversion to UTC.
   const isValid = useMemo(() => {
     if (!customValidation) {
       return true
     }
-    return customValidation(endOfDay(date))
-  }, [customValidation, date])
+    const dayEnd = endOfDay(date)
+    return customValidation(zoneDateToUtc(dayEnd))
+  }, [customValidation, date, zoneDateToUtc])
 
   const handleClick = useCallback(() => {
     if (isValid) {

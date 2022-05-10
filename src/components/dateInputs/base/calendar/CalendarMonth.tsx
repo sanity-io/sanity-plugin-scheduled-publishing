@@ -29,7 +29,7 @@ export function CalendarMonth(props: CalendarMonthProps) {
           </Box>
         ))}
 
-        {/* Note: UTC dates are passed to each Calendar day but we use 'wall time' for comparison */}
+        {/* Note: Dates in local / 'wall time' are passed to each Calendar day */}
         {getWeeksOfMonth(props.date).map((week, weekIdx) =>
           week.days.map((date, dayIdx) => {
             const focused = props.focused && isSameDay(date, props.focused)
