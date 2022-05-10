@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.6...v0.1.7) (2022-05-10)
+
+
+### Bug Fixes
+
+* ensure custom validation correctly triggers on both field input and date picker changes ([e6991b4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/e6991b4945a31bf5e9801dee1f87ecabe6a5bec1))
+
 ### [0.1.6](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.5...v0.1.6) (2022-05-06)
 
 
