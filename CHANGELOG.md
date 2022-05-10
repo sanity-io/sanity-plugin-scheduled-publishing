@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.7...v0.1.8) (2022-05-10)
+
+
+### Bug Fixes
+
+* correctly convert UTC to current zone / wall time in custom validation ([46e2402](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/46e2402dd5952d161e78a5a97c2e56dd529551ad))
+
 ### [0.1.7](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.6...v0.1.7) (2022-05-10)
 
 
