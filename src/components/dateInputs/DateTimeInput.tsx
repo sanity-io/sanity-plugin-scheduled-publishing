@@ -9,7 +9,6 @@ import {isValidDate} from './utils'
 type ParsedOptions = {
   calendarTodayLabel: string
   customValidation: (selectedDate: Date) => boolean
-  customValidationMessage?: string
   dateFormat: string
   timeFormat: string
   timeStep: number
@@ -17,7 +16,6 @@ type ParsedOptions = {
 type SchemaOptions = {
   calendarTodayLabel?: string
   customValidation?: (selectedDate: Date) => boolean
-  customValidationMessage?: string
   dateFormat?: string
   timeFormat?: string
   timeStep?: number
@@ -43,7 +41,6 @@ function parseOptions(options: SchemaOptions = {}): ParsedOptions {
       function () {
         return true
       },
-    customValidationMessage: options.customValidationMessage || 'Invalid date.',
     calendarTodayLabel: options.calendarTodayLabel || 'Today',
     dateFormat: options.dateFormat || DEFAULT_DATE_FORMAT,
     timeFormat: options.timeFormat || DEFAULT_TIME_FORMAT,
@@ -88,8 +85,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
 
   const {getCurrentZoneDate, timeZone} = useTimeZone()
 
-  const {customValidation, customValidationMessage, dateFormat, timeFormat, timeStep} =
-    parseOptions(type.options)
+  const {customValidation, dateFormat, timeFormat, timeStep} = parseOptions(type.options)
 
   // Returns date in UTC string
   const handleChange = useCallback(
@@ -121,20 +117,12 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
         } as ParseResult
       }
 
-      // Check if value adheres to custom validation rules
-      if (!customValidation(parsed)) {
-        return {
-          isValid: false,
-          error: customValidationMessage,
-        } as ParseResult
-      }
-
       return {
         isValid: true,
         date: parsed,
       } as ParseResult
     },
-    [customValidation, customValidationMessage, dateFormat, getCurrentZoneDate, timeFormat]
+    [dateFormat, getCurrentZoneDate, timeFormat]
   )
 
   return (

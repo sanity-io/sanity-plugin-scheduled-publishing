@@ -7,7 +7,6 @@ Some changes have been made to make both `<DateTimeInput>` and its calendar comp
 - This continues to handle all dates in UTC, though it formats + parses values using the _current time zone_
 - Date and time handling uses `date-fns` formatting (rather than moment - which the studio is moving away from anyway)
 - Added the `customValidation` option, a callback function used to validate whether certain date ranges are selectable in the calendar
-- Added the `customValidationMessage` option, a custom error message displayed when `customValidation` fails
 
   ```js
   // E.g. No scheduling on weekends!
@@ -23,7 +22,6 @@ Some changes have been made to make both `<DateTimeInput>` and its calendar comp
         name: 'date',
         options: {
           customValidation: handleCustomValidation,
-          customValidationmessage: 'No schedules on weekends please',
           // date-fns format
           dateFormat: `d/MM/yyyy`,
           timeFormat: 'HH:mm',

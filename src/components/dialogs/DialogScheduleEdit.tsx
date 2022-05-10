@@ -16,7 +16,8 @@ const DialogScheduleEdit = (props: Props) => {
   const {onClose, schedule} = props
 
   const {updateSchedule} = useScheduleOperation()
-  const {formData, isDirty, onFormChange} = useScheduleForm(schedule)
+  const {customValidation, errors, formData, isDirty, markers, onFormChange} =
+    useScheduleForm(schedule)
 
   // Callbacks
   const handleScheduleUpdate = useCallback(() => {
@@ -36,7 +37,7 @@ const DialogScheduleEdit = (props: Props) => {
         <Box paddingX={4} paddingY={3}>
           <DialogFooter
             buttonText="Update"
-            disabled={!isDirty}
+            disabled={!isDirty || errors.length > 0}
             onAction={handleScheduleUpdate}
             onComplete={onClose}
             tone="primary"
@@ -49,7 +50,12 @@ const DialogScheduleEdit = (props: Props) => {
       width={1}
     >
       <Box padding={4}>
-        <EditScheduleForm onChange={onFormChange} value={formData} />
+        <EditScheduleForm
+          customValidation={customValidation}
+          markers={markers}
+          onChange={onFormChange}
+          value={formData}
+        />
       </Box>
     </Dialog>
   )

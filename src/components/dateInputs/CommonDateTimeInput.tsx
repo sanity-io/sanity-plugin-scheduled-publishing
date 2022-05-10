@@ -3,7 +3,7 @@ import {useId} from '@reach/auto-id'
 import {FormField} from '@sanity/base/components'
 import {Marker} from '@sanity/types'
 import {TextInput, useForwardedRef} from '@sanity/ui'
-import React, {useEffect} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import useTimeZone from '../../hooks/useTimeZone'
 import {DateTimeInput} from './base/DateTimeInput'
 import {CommonProps, ParseResult} from './types'
@@ -50,6 +50,11 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
   useEffect(() => {
     setLocalValue(null)
   }, [value])
+
+  const errors = useMemo(
+    () => markers.filter((marker) => marker.type === 'validation' && marker.level === 'error'),
+    [markers]
+  )
 
   const {zoneDateToUtc} = useTimeZone()
 
@@ -131,7 +136,7 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
           readOnly={Boolean(readOnly)}
           onInputChange={handleDatePickerInputChange}
           onChange={handleDatePickerChange}
-          customValidity={parseResult?.error}
+          customValidity={parseResult?.error || (errors.length > 0 ? errors[0].item.message : '')}
           customValidation={customValidation}
         />
       )}

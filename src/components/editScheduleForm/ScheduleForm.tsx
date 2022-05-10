@@ -1,18 +1,18 @@
+import type {ValidationMarker} from '@sanity/types'
 import {Card, Stack} from '@sanity/ui'
 import React, {useState} from 'react'
-import useTimeZone from '../../hooks/useTimeZone'
 import {ScheduleFormData} from '../../types'
 import {DateTimeInput} from '../dateInputs'
 
 interface Props {
+  customValidation: (selectedDate: Date) => boolean
+  markers?: ValidationMarker[]
   onChange?: (formData: ScheduleFormData) => void
   value?: ScheduleFormData | null
 }
 
 const ScheduleForm = (props: Props) => {
-  const {onChange, value} = props
-
-  const {getCurrentZoneDate} = useTimeZone()
+  const {customValidation, markers, onChange, value} = props
 
   // Date input is stored locally to handle behaviour of the studio's `<LazyTextInput />` component.
   // If we don't keep this local state (and only rely on the canonical value of `ScheduleFormData`),
@@ -27,23 +27,17 @@ const ScheduleForm = (props: Props) => {
     }
   }
 
-  // Only allow dates in the future (`selectedDate` is UTC)
-  const handleCustomValidation = (selectedDate: Date): boolean => {
-    return selectedDate > getCurrentZoneDate()
-  }
-
   return (
     <Stack space={4}>
       <Card>
         <DateTimeInput
           level={0}
-          markers={[]}
+          markers={markers || []}
           onChange={handleChange}
           type={{
             name: 'date',
             options: {
-              customValidation: handleCustomValidation,
-              customValidationMessage: 'Date cannot be in the past.',
+              customValidation,
               // date-fns format
               dateFormat: `dd/MM/yyyy`,
               timeFormat: 'HH:mm',

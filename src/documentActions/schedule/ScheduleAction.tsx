@@ -58,7 +58,7 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
   const hasFeature = useCheckFeature()
 
   const [dialogOpen, setDialogOpen] = useState(false)
-  const {formData, onFormChange} = useScheduleForm()
+  const {customValidation, errors, formData, markers, onFormChange} = useScheduleForm()
 
   // Poll for document schedules
   const {
@@ -140,7 +140,12 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
           {hasExistingSchedules ? (
             <Schedules schedules={schedules} />
           ) : (
-            <EditScheduleForm onChange={onFormChange} value={formData}>
+            <EditScheduleForm
+              customValidation={customValidation}
+              markers={markers}
+              onChange={onFormChange}
+              value={formData}
+            >
               <NewScheduleInfo id={id} schemaType={type} />
             </EditScheduleForm>
           )}
@@ -149,7 +154,7 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
       footer: !hasExistingSchedules && (
         <DialogFooter
           buttonText="Schedule"
-          disabled={!formData?.date}
+          disabled={!formData?.date || errors.length > 0}
           icon={ClockIcon}
           onAction={handleScheduleCreate}
           onComplete={onComplete}
