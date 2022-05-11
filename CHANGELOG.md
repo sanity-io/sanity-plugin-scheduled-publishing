@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.8...v0.1.9) (2022-05-11)
+
+
+### Bug Fixes
+
+* convert calendar day dates to UTC prior to validation, update misleading comments ([ad5300a](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/ad5300a013b3c8ac1e9a5843e599efeb1acd1869))
+
 ### [0.1.8](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.7...v0.1.8) (2022-05-10)
 
 
