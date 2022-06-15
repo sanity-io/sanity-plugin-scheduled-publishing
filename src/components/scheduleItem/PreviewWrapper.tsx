@@ -1,14 +1,14 @@
-import {SchemaType} from '@sanity/types'
+import {SchemaType} from 'sanity'
 import {Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
-import {SanityDefaultPreview} from 'part:@sanity/base/preview'
+import {SanityDefaultPreview} from 'sanity/_unstable'
 import React, {ElementType, ReactNode, useState} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
 import useTimeZone from '../../hooks/useTimeZone'
 import {Schedule} from '../../types'
 import {PaneItemPreviewState} from '../../utils/paneItemHelpers'
-import {getLastExecuteDate} from '../../utils/scheduleUtils'
 import {EMPTY_VALIDATION_STATUS, useValidationState} from '../../utils/validationUtils'
 import {ValidateScheduleDoc} from '../validation/SchedulesValidation'
+import {getLastExecuteDate} from '../../utils/scheduleUtils'
 import {ValidationInfo} from '../validation/ValidationInfo'
 import DateWithTooltip from './dateWithTooltip/DateWithTooltip'
 import {DraftStatus} from './documentStatus/DraftStatus'
@@ -29,6 +29,8 @@ interface Props {
   useElementQueries?: boolean
 }
 
+const DUMMY = {}
+
 const PreviewWrapper = (props: Props) => {
   const {
     children,
@@ -43,8 +45,8 @@ const PreviewWrapper = (props: Props) => {
   } = props
 
   const [validationStatus, setValidationStatus] = useState(EMPTY_VALIDATION_STATUS)
-  const {markers} = validationStatus
-  const {hasError, validationTone} = useValidationState(markers)
+  const {validation} = validationStatus
+  const {hasError, validationTone} = useValidationState(validation)
   const {formatDateTz} = useTimeZone()
 
   const executeDate = getLastExecuteDate(schedule)
@@ -114,7 +116,7 @@ const PreviewWrapper = (props: Props) => {
             {/* HACK: render invisible preview wrapper when no children are provided to ensure consistent height */}
             {!children && (
               <Box style={{visibility: 'hidden'}}>
-                <SanityDefaultPreview />
+                <SanityDefaultPreview isPlaceholder value={DUMMY} />
               </Box>
             )}
 
@@ -140,7 +142,7 @@ const PreviewWrapper = (props: Props) => {
           <Box>
             <ValidateScheduleDoc schedule={schedule} updateValidation={setValidationStatus} />
             <ValidationInfo
-              markers={markers}
+              markers={validation}
               type={schemaType}
               documentId={publishedDocumentId}
               menuHeader={

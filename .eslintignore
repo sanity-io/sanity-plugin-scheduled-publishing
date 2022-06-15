@@ -2,4 +2,6 @@
 commitlint.config.js
 lib
 lint-staged.config.js
-rollup.config.js
+*.md
+.parcel-cache
+*.js

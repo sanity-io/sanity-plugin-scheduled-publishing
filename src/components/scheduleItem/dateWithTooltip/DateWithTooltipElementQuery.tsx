@@ -1,7 +1,7 @@
 import {ElementQuery} from '@sanity/ui'
 import styled from 'styled-components'
 
-const DateWithTooltipElementQuery = styled(ElementQuery)`
+const DateWithTooltipElementQuery: typeof ElementQuery = styled(ElementQuery)`
   .date-small {
     display: inline;
   }

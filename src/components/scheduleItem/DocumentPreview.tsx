@@ -1,4 +1,4 @@
-import {SchemaType} from '@sanity/types'
+import {SchemaType} from 'sanity'
 import React, {useMemo} from 'react'
 import {useDocumentActionProps} from '../../contexts/documentActionProps'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'

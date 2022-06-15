@@ -1,7 +1,7 @@
-import {IntentLink} from '@sanity/base/components'
-import {SchemaType} from '@sanity/types'
-import {SanityDefaultPreview} from 'part:@sanity/base/preview'
-import {getPublishedId} from 'part:@sanity/base/util/draft-utils'
+import {IntentLink} from 'sanity/_unstable'
+import {SanityDocument, SchemaType} from 'sanity'
+import {SanityDefaultPreview} from 'sanity/_unstable'
+import {getPublishedId} from 'sanity'
 import React, {forwardRef, useMemo} from 'react'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
 import {usePublishedId} from '../../hooks/usePublishedId'
@@ -39,7 +39,7 @@ const ToolPreview = (props: Props) => {
         ref={ref}
       />
     ))
-  }, [IntentLink, visibleDocument])
+  }, [schemaType, visibleDocument])
 
   return (
     <>
@@ -67,10 +67,10 @@ const ToolPreview = (props: Props) => {
         useElementQueries
       >
         <SanityDefaultPreview
-          icon={schemaType?.icon}
+          icon={schemaType?.icon as React.ComponentType}
           isPlaceholder={previewState.isLoading}
           layout="default"
-          value={visibleDocument}
+          value={visibleDocument as SanityDocument}
         />
       </PreviewWrapper>
     </>

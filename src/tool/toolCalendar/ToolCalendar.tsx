@@ -2,12 +2,12 @@ import React, {useCallback, useState} from 'react'
 import useTimeZone from '../../hooks/useTimeZone'
 import {Calendar} from './Calendar'
 
-interface Props {
+export interface ToolCalendarProps {
   onSelect: (date?: Date) => void
   selectedDate?: Date
 }
 
-export const ToolCalendar = (props: Props) => {
+export const ToolCalendar = (props: ToolCalendarProps) => {
   const {onSelect, selectedDate} = props
 
   const {getCurrentZoneDate, utcToCurrentZoneDate} = useTimeZone()
@@ -15,9 +15,12 @@ export const ToolCalendar = (props: Props) => {
   // Focus selected date (if routed) or user's current date (in stored time zone)
   const [focusedDate, setFocusedDate] = useState<Date>(selectedDate || getCurrentZoneDate())
 
-  const handleFocusDateChange = useCallback((date: Date) => {
-    setFocusedDate(utcToCurrentZoneDate(date))
-  }, [])
+  const handleFocusDateChange = useCallback(
+    (date: Date) => {
+      setFocusedDate(utcToCurrentZoneDate(date))
+    },
+    [utcToCurrentZoneDate]
+  )
 
   return (
     <Calendar

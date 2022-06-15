@@ -55,3 +55,10 @@ test/fixtures/build/lib
 # IntelliJ
 .idea
 *.iml
+
+#yalc
+.yalc
+yalc.lock
+
+# parcel
+.parcel-cache

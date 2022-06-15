@@ -1,9 +1,6 @@
-import {
-  unstable_useDocumentPairPermissions as useDocumentPairPermissions,
-  useCurrentUser,
-} from '@sanity/base/hooks'
+import {useDocumentPairPermissions, useCurrentUser} from 'sanity/_unstable'
 import {CalendarIcon, CheckmarkCircleIcon, PublishIcon, TrashIcon} from '@sanity/icons'
-import {SchemaType} from '@sanity/types'
+import {SchemaType} from 'sanity'
 import React from 'react'
 import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
@@ -28,7 +25,7 @@ const ContextMenuItems = (props: Props) => {
 
   const firstDocument = getScheduledDocument(schedule)
 
-  const {value: currentUser} = useCurrentUser()
+  const currentUser = useCurrentUser()
   const [permissions, isPermissionsLoading] = useDocumentPairPermissions({
     id: firstDocument.documentId,
     type: schemaType?.name,
@@ -49,6 +46,10 @@ const ContextMenuItems = (props: Props) => {
 
   const handleExecute = () => {
     publishSchedule({schedule})
+  }
+
+  if (!currentUser) {
+    return null
   }
 
   return (

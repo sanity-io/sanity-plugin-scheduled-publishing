@@ -17,6 +17,6 @@ const ButtonTimeZoneElementQuery = styled(ElementQuery)`
       display: block;
     }
   }
-`
+` as any
 
 export default ButtonTimeZoneElementQuery

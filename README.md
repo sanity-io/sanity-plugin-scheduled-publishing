@@ -1,5 +1,13 @@
 # Scheduled Publishing plugin for Sanity.io
 
+> **NOTE**
+>
+> This is the **Sanity Studio v3 version** of @sanity/scheduled-publishing.
+>
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/sanity-plugin-scheduled-publishing).
+
+## What is it?
+
 Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
 > This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on Team or higher plans. Please visit our [Scheduled Publishing][scheduled-publishing] blog post for more information.
@@ -7,6 +15,17 @@ Schedule your content for future publication and organise upcoming releases – 
 ![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
 ![Scheduled Publishing document view](https://user-images.githubusercontent.com/209129/159463180-703d557a-cfe6-4ff0-970f-b33eea048e87.png)
+
+## Table of contents
+
+- [Features](#features)
+- [Getting started](#getting-started)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [Manually configuring the Schedule document action](#manually-configuring-the-schedule-document-action)
+    - [Manually configuring the Schedule document badge](#Manually configuring the Scheduled document badge)
+- [FAQ](#fag)
+- [Changes from Sanity Studio v2 version](#changes-from-sanity-studio-v2-version)
 
 ## Features
 
@@ -32,10 +51,33 @@ Schedule your content for future publication and organise upcoming releases – 
 
 ## Getting started
 
+### Install
+
 In your Sanity studio folder:
 
 ```sh
-sanity install @sanity/scheduled-publishing
+npm install --save @sanity/scheduled-publishing
+```
+
+or
+
+```sh
+yarn add @sanity/scheduled-publishing
+```
+
+### Usage
+
+Add it as a plugin in sanity.config.ts (or .js):
+
+```js
+import { scheduledPublishing } from "@sanity/scheduled-publishing";
+
+export default createConfig({
+  // ...
+  plugins: [
+    scheduledPublishing(),
+  ] 
+})
 ```
 
 This will automatically:
@@ -50,61 +92,63 @@ Please see [Custom setup](#custom-setup) for more fine grained control on limiti
 
 This plugin also exports both the **Schedule document action** and **Scheduled badge** which you can import and compose as you see fit.
 
-#### Manually adding the Schedule document action
+#### Manually configuring the Schedule document action
 
 This example assumes [you've customised your own document actions][document-actions] and would like to only show the Schedule button on `movie` documents only.
 
-The Schedule document action allows users to both create and edit existing schedules directly from the form editor.
+The Schedule document action allows users to both create and edit existing schedules directly from the form editor. It is added to all document types by the plugin,
+so you should remove it from types that should NOT have it.
 
 ```js
-import {ScheduleAction} from '@sanity/scheduled-publishing'
-import defaultResolve from 'part:@sanity/base/document-actions'
+import {scheduledPublishing, ScheduleAction} from '@sanity/scheduled-publishing'
 
-/*
- * Please note that this will only alter the visibility of the button in the studio.
- * Users with document publish permissions will be able to create schedules directly
- * via the Scheduled Publishing API.
- */
-
-export default function resolveDocumentActions(props) {
-  // Default document actions
-  const defaultActions = defaultResolve(props)
-
-  // Show the schedule button on `movie` documents only
-  if (props.type === 'movie') {
-    // Add our schedule action AFTER the first action (publish, by default)
-    // to ensure it sits at the top of our document context menu.
-    return [...defaultActions.slice(0, 1), ScheduleAction, ...defaultActions.slice(1)]
-  }
-
-  // Finally, return default actions for all other document types
-  return defaultActions
-}
+export default createConfig({
+  // ...
+  plugins: [
+    scheduledPublishing(),
+  ],
+  document: {
+    actions: (previousActions, {schemaType}) => {
+      /*
+      * Please note that this will only alter the visibility of the button in the studio.
+      * Users with document publish permissions will be able to create schedules directly
+      * via the Scheduled Publishing API.
+      */
+      if (schemaType.name !== 'movie') {
+        // Remove the schedule action from any documents that is not 'movie'.
+        return previousActions.filter(action => action !== ScheduleAction)
+      }
+      return previousActions
+    },
+  },
+})
 ```
 
-#### Manually adding the Scheduled document badge
+#### Manually configuring the Scheduled document badge
 
 This example assumes [you've customised your own document badges][document-badges] and would like to only show the Scheduled badge on `movie` documents only.
 
-The Scheduled document badge displays whether the current document is scheduled and when it will be published if so.
+The Scheduled document badge displays whether the current document is scheduled and when it will be published if so. It is added to all document types by the plugin,
+so you should remove it from types that should NOT have it.
 
 ```js
-import {ScheduledBadge} from '@sanity/scheduled-publishing'
-import defaultResolve from 'part:@sanity/base/document-badges'
+import {scheduledPublishing, ScheduledBadge} from '@sanity/scheduled-publishing'
 
-export default function resolveDocumentBadges(props) {
-  // Default document badges
-  const defaultBadges = defaultResolve(props)
-
-  // Show the scheduled badge on `movie` documents only
-  if (props.type === 'movie') {
-    // Add our scheduled badge after any defaults
-    return [...defaultBadges, ScheduledBadge]
-  }
-
-  // Return default badges for all other document types
-  return defaultBadges
-}
+export default createConfig({
+  // ...
+  plugins: [
+    scheduledPublishing(),
+  ],
+  document: {
+    actions: (previousBadges, {schemaType}) => {
+      if (schemaType.name !== 'movie') {
+        // Remove the schedule badge from any documents that is not 'movie'.
+        return previousBadges.filter(badge => badge !== ScheduledBadge)
+      }
+      return previousBadges
+    },
+  },
+})
 ```
 
 ## FAQ
@@ -151,6 +195,14 @@ More information can be found on the [Scheduling API][scheduling-api] page.
 
 </details>
 
+### Changes from Sanity Studio v2 version
+
+The Studio V3 version differs from the v2 versions in a few ways:
+
+- Actions and badges now auto-compose with other document actions by default. This is the _opposite_ of how the v2 version behaves:
+  It is no longer necessary to compose actions and badges manually when there are other plugins that add those to studio.
+- This means that you now have to _remove_ the Schedule Action from types that *should not* have it, as opposed to _add_ it for those that should like in v2.
+
 ## License
 
 This repository is published under the [MIT](LICENSE) license.
@@ -160,3 +212,25 @@ This repository is published under the [MIT](LICENSE) license.
 [scheduled-publishing]: https://www.sanity.io/blog/publishing-scheduled
 [scheduling-api]: https://www.sanity.io/docs/scheduling-api
 [@vvo/dztb]: https://github.com/vvo/tzdb
+
+## Develop & test
+
+Make sure to run `npm run build` once, then run
+
+```bash
+npm run link-watch
+```
+
+In another shell, `cd` to your test studio and run:
+
+```bash
+npx yalc add @sanity/scheduled-publishing--link && yarn install
+```
+
+Now, changes in this repo will be automatically built and pushed to the studio,
+triggering hotreload. Yalc avoids issues with react-hooks that are typical when using yarn/npm link.
+
+### About build & watch
+
+This plugin uses [@sanity/plugin-sdk](https://github.com/sanity-io/plugin-sdk)
+with default configuration for build & watch scripts.

@@ -1,13 +1,13 @@
 import type {
   DocumentActionDescription,
-  DocumentActionModalDialogProps,
+  DocumentActionDialogModalProps,
   DocumentActionProps,
-} from '@sanity/base'
-import {InsufficientPermissionsMessage} from '@sanity/base/components'
+} from 'sanity/desk'
 import {
-  unstable_useDocumentPairPermissions as useDocumentPairPermissions,
+  useDocumentPairPermissions,
   useCurrentUser,
-} from '@sanity/base/hooks'
+  InsufficientPermissionsMessage,
+} from 'sanity/_unstable'
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
 import {Box, Text} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'
@@ -27,7 +27,7 @@ import Schedules from './Schedules'
 
 const debug = debugWithName('ScheduleAction')
 
-/**
+/*
  * NOTE: Document actions are re-run whenever `onComplete` is called.
  *
  * The `onComplete` callback prop is used to typically denote that an action is 'finished',
@@ -45,8 +45,7 @@ const debug = debugWithName('ScheduleAction')
 export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescription => {
   const {draft, id, liveEdit, onComplete, published, type} = props
 
-  // Studio hooks
-  const {value: currentUser} = useCurrentUser()
+  const currentUser = useCurrentUser()
   const [permissions, isPermissionsLoading] = useDocumentPairPermissions({
     id,
     type,
@@ -93,7 +92,7 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
 
     // Create schedule then close dialog
     createSchedule({date: formData.date, documentId: id}).then(onComplete)
-  }, [formData?.date])
+  }, [onComplete, createSchedule, id, formData?.date])
 
   const title = hasExistingSchedules ? 'Edit Schedule' : 'Schedule'
 
@@ -120,13 +119,13 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
       'Live Edit is enabled for this content type and publishing happens automatically as you make changes'
   }
 
-  let dialog: DocumentActionModalDialogProps
+  let dialog: DocumentActionDialogModalProps
   if (hasFeature === false) {
     dialog = {
       content: <Text size={1}>{FEATURE_NOT_SUPPORTED_TEXT}</Text>,
       header: 'Feature not available',
       onClose: onComplete,
-      type: 'modal',
+      type: 'dialog',
     }
   } else {
     dialog = {
@@ -158,12 +157,12 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
       ),
       header: <DialogHeader title={title} />,
       onClose: onComplete,
-      type: 'modal',
+      type: 'dialog',
     }
   }
 
   return {
-    dialog: dialogOpen && dialog,
+    modal: dialogOpen && dialog,
     disabled: isInitialLoading || !documentExists || liveEdit,
     label: title,
     icon: CalendarIcon,

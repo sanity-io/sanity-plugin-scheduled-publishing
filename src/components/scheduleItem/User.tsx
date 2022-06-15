@@ -1,4 +1,4 @@
-import {UserAvatar} from '@sanity/base/components'
+import {UserAvatar} from 'sanity/_unstable'
 import React from 'react'
 
 interface Props {
@@ -7,8 +7,7 @@ interface Props {
 
 const User = (props: Props) => {
   const {id} = props
-
-  return <UserAvatar userId={id} withTooltip />
+  return <UserAvatar user={id} withTooltip />
 }
 
 export default User

@@ -134,7 +134,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
         date: parsed,
       } as ParseResult
     },
-    [dateFormat, getCurrentZoneDate, timeFormat]
+    [customValidationMessage, customValidation, dateFormat, getCurrentZoneDate, timeFormat]
   )
 
   return (

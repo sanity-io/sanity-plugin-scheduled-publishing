@@ -31,25 +31,28 @@ function SchedulesProvider({
   }
 }) {
   const [sortBy, setSortBy] = useState<ScheduleSort>(value.sortBy || 'executeAt')
-  const {timeZone, utcToCurrentZoneDate} = useTimeZone()
+  const {utcToCurrentZoneDate} = useTimeZone()
 
-  function filterByDate(wallDate: Date) {
-    return function (schedule: Schedule) {
-      const executeDate = getLastExecuteDate(schedule)
-      if (!executeDate) {
-        return false
+  const filterByDate = useCallback(
+    (wallDate: Date) => {
+      return function (schedule: Schedule) {
+        const executeDate = getLastExecuteDate(schedule)
+        if (!executeDate) {
+          return false
+        }
+        const scheduleDate = new Date(executeDate) // UTC
+        const zonedScheduleDate = utcToCurrentZoneDate(scheduleDate)
+        return isSameDay(zonedScheduleDate, wallDate)
       }
-      const scheduleDate = new Date(executeDate) // UTC
-      const zonedScheduleDate = utcToCurrentZoneDate(scheduleDate)
-      return isSameDay(zonedScheduleDate, wallDate)
-    }
-  }
+    },
+    [utcToCurrentZoneDate]
+  )
 
-  function filterByState(scheduleState: ScheduleState) {
+  const filterByState = useCallback((scheduleState: ScheduleState) => {
     return function (schedule: Schedule) {
       return schedule.state === scheduleState
     }
-  }
+  }, [])
 
   /**
    * Return all schedules if no date is currently selected, otherwise return all schedules for the
@@ -97,7 +100,14 @@ function SchedulesProvider({
           return 1
         }) || []
     )
-  }, [value.schedules, value.scheduleState, value.selectedDate, sortBy])
+  }, [
+    filterByState,
+    value.schedules,
+    value.scheduleState,
+    value.selectedDate,
+    sortBy,
+    filterByDate,
+  ])
 
   /**
    * Return all matching schedules with specified date (in clock time).
@@ -125,7 +135,7 @@ function SchedulesProvider({
         return aExecuteDate > bExecuteDate ? 1 : -1
       })
     },
-    [timeZone, value.schedules]
+    [value.schedules, filterByDate]
   )
 
   return (

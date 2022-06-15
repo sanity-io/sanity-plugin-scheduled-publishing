@@ -38,7 +38,7 @@ export const ScheduleItem = (props: Props) => {
     }
 
     return null
-  }, [previewState, schedule, schemaType])
+  }, [invalidDocument, type, previewState, schedule, schemaType])
 
   return <DateWithTooltipElementQuery>{preview}</DateWithTooltipElementQuery>
 }

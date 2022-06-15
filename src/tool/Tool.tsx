@@ -1,6 +1,4 @@
-import {HOCRouter, withRouterHOC} from '@sanity/base/router'
-import {white} from '@sanity/color'
-import {Box, Card, Flex, Text} from '@sanity/ui'
+import {Box, Card, Flex, Text, useTheme} from '@sanity/ui'
 import {parse} from 'date-fns'
 import React, {useEffect, useMemo, useRef} from 'react'
 import styled from 'styled-components'
@@ -17,6 +15,7 @@ import {ScheduleFilters} from './scheduleFilters'
 import {Schedules} from './schedules'
 import SchedulesContextMenu from './schedulesContextMenu/SchedulesContextMenu'
 import {ToolCalendar} from './toolCalendar'
+import {useRouter, RouterContextValue} from 'sanity/_unstable'
 
 const Column = styled(Box)`
   flex-direction: column;
@@ -24,29 +23,27 @@ const Column = styled(Box)`
     border-right: 1px solid var(--card-border-color);
   }
 `
-interface Props {
-  router: HOCRouter
-}
 
 const NO_SCHEDULE: Schedule[] = []
 const DATE_SLUG_FORMAT = 'yyyy-MM-dd' // date-fns format
 
-function Tool(props: Props) {
-  const {router} = props
+export default function Tool() {
+  const router = useRouter()
 
+  const {sanity: theme} = useTheme()
   const {error, isInitialLoading, schedules = NO_SCHEDULE} = usePollSchedules()
 
-  const lastScheduleState = useRef()
+  const lastScheduleState = useRef<ScheduleState | undefined>()
 
-  const scheduleState: ScheduleState = router.state.state
+  const scheduleState: ScheduleState = router.state.state as ScheduleState
   const selectedDate = router.state.date
-    ? parse(router.state.date, DATE_SLUG_FORMAT, new Date())
+    ? parse(router.state.date as string, DATE_SLUG_FORMAT, new Date())
     : undefined
 
-  // Store last active schedule state
+  //Store last active schedule state
   useEffect(() => {
     if (router.state.state) {
-      lastScheduleState.current = router.state.state
+      lastScheduleState.current = router.state.state as ScheduleState
     }
   }, [router.state.state])
 
@@ -107,7 +104,7 @@ function Tool(props: Props) {
           <Column display="flex" flex={1} overflow="hidden">
             <ButtonTimeZoneElementQuery
               style={{
-                background: white.hex,
+                background: theme.color.card.enabled.bg,
                 position: 'sticky',
                 top: 0,
                 zIndex: 1,
@@ -164,12 +161,14 @@ function Tool(props: Props) {
   )
 }
 
-function useFallbackNavigation(router: HOCRouter, filter?: ScheduleState, selectedDate?: Date) {
+function useFallbackNavigation(
+  router: RouterContextValue,
+  filter?: ScheduleState,
+  selectedDate?: Date
+) {
   useEffect(() => {
     if (!filter && !selectedDate) {
       router.navigate({state: SCHEDULE_FILTERS[0]}, {replace: true})
     }
-  }, [router, filter])
+  }, [selectedDate, router, filter])
 }
-
-export default withRouterHOC(Tool)

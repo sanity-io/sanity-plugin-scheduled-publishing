@@ -1,4 +1,4 @@
-import {Marker} from '@sanity/types'
+import {ValidationMarker} from 'sanity'
 
 export interface NormalizedTimeZone {
   abbreviation: string
@@ -43,7 +43,7 @@ export type ScheduleState = 'cancelled' | 'scheduled' | 'succeeded'
 
 export interface ValidationStatus {
   isValidating: boolean
-  markers: Marker[]
+  validation: ValidationMarker[]
 }
 
 /**

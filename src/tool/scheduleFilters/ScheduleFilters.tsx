@@ -1,4 +1,4 @@
-import {useRouter} from '@sanity/base/router'
+import {useRouter} from 'sanity/_unstable'
 import {CheckmarkIcon, CloseIcon, SelectIcon} from '@sanity/icons'
 import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
 import {format} from 'date-fns'
@@ -8,14 +8,13 @@ import {useFilteredSchedules} from '../../hooks/useFilteredSchedules'
 import {useSchedules} from '../contexts/schedules'
 import ScheduleFilter from './ScheduleFilter'
 
-interface Props {
+export interface ScheduleFiltersProps {
   onClearDate: () => void
   selectedDate?: Date
 }
 
-export const ScheduleFilters = (props: Props) => {
+export const ScheduleFilters = (props: ScheduleFiltersProps) => {
   const {onClearDate, selectedDate} = props
-
   const {navigate} = useRouter()
   const {schedules, scheduleState} = useSchedules()
 

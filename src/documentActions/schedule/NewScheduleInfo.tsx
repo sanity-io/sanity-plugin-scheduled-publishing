@@ -2,7 +2,7 @@ import {Card, Flex, Stack, Text} from '@sanity/ui'
 import React from 'react'
 import {usePublishedId} from '../../hooks/usePublishedId'
 import {useSchemaType} from '../../hooks/useSchemaType'
-import {useValidationStatus} from '@sanity/react-hooks'
+import {useValidationStatus} from 'sanity'
 import {useValidationState} from '../../utils/validationUtils'
 import {ValidationInfo} from '../../components/validation/ValidationInfo'
 import {DOCUMENT_HAS_ERRORS_TEXT} from '../../constants'
@@ -30,7 +30,7 @@ function ValidationWarning({id, type}: {id: string; type: string}) {
   const publishedId = usePublishedId(id)
   const schema = useSchemaType(type)
   const validationStatus = useValidationStatus(publishedId, type)
-  const {hasError} = useValidationState(validationStatus.markers)
+  const {hasError} = useValidationState(validationStatus.validation)
 
   if (!hasError) {
     return null
@@ -39,7 +39,11 @@ function ValidationWarning({id, type}: {id: string; type: string}) {
   return (
     <Card padding={2} radius={1} shadow={1} tone="critical">
       <Flex gap={1} align="center">
-        <ValidationInfo markers={validationStatus.markers} type={schema} documentId={publishedId} />
+        <ValidationInfo
+          markers={validationStatus.validation}
+          type={schema}
+          documentId={publishedId}
+        />
         <Text size={1}>{DOCUMENT_HAS_ERRORS_TEXT}</Text>
       </Flex>
     </Card>

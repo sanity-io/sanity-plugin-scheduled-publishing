@@ -1,9 +1,8 @@
-import React from 'react'
+import React, {KeyboardEvent} from 'react'
 import {TextInput} from '@sanity/ui'
 
 type TextInputProps = React.ComponentProps<typeof TextInput>
 
-// todo: delete this when v0.34 of @sanity/ui is out
 type Workaround = any
 
 type Props = Workaround &
@@ -24,12 +23,12 @@ export const LazyTextInput = React.forwardRef(function LazyTextInput(
 ) {
   const [inputValue, setInputValue] = React.useState<string>()
 
-  const handleChange = React.useCallback((event) => {
+  const handleChange = React.useCallback((event: KeyboardEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value)
   }, [])
 
   const checkEvent = React.useCallback(
-    (event) => {
+    (event: KeyboardEvent<HTMLInputElement>) => {
       const currentValue = event.currentTarget.value
       if (currentValue !== `${value}`) {
         if (onChange) {
@@ -42,7 +41,7 @@ export const LazyTextInput = React.forwardRef(function LazyTextInput(
   )
 
   const handleBlur = React.useCallback(
-    (e) => {
+    (e: KeyboardEvent<HTMLInputElement>) => {
       checkEvent(e)
       if (onBlur) {
         onBlur(e)

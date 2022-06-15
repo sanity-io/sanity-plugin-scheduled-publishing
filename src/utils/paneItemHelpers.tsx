@@ -1,11 +1,8 @@
 // Based off: https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/paneItem/helpers.tsx
-
-// TODO: fix TS errors, consider manually declaring individual sanity parts
-
 import {WarningOutlineIcon} from '@sanity/icons'
-import {SanityDocument, SchemaType} from '@sanity/types'
-import {observeForPreview} from 'part:@sanity/base/preview'
-import {getDraftId, getPublishedId} from 'part:@sanity/base/util/draft-utils'
+import {SanityDocument, SchemaType} from 'sanity'
+import {getDraftId, getPublishedId} from 'sanity'
+import {DocumentPreviewStore} from 'sanity/_unstable'
 import React from 'react'
 import {combineLatest, Observable, of} from 'rxjs'
 import {map, startWith} from 'rxjs/operators'
@@ -45,25 +42,29 @@ export const getMissingDocumentFallback = (item: SanityDocument): PreviewValue =
 })
 
 export function getPreviewStateObservable(
+  documentPreviewStore: DocumentPreviewStore,
   schemaType: SchemaType,
   documentId: string,
-  title: unknown
+  title: React.ReactNode
 ): Observable<PaneItemPreviewState> {
   const draft$ = isLiveEditEnabled(schemaType)
     ? of({snapshot: null})
-    : observeForPreview({_id: getDraftId(documentId)}, schemaType)
+    : documentPreviewStore.observeForPreview(
+        {_type: 'reference', _ref: getDraftId(documentId)},
+        schemaType
+      )
 
-  const published$ = observeForPreview({_id: getPublishedId(documentId)}, schemaType)
+  const published$ = documentPreviewStore.observeForPreview(
+    {_type: 'reference', _ref: getPublishedId(documentId)},
+    schemaType
+  )
 
   return combineLatest([draft$, published$]).pipe(
-    // @ts-expect-error poor typings
-    map(([draft, published]: [{snapshot: any}, snapshot: any]) => {
-      return {
-        draft: draft.snapshot ? {title, ...draft.snapshot} : null,
-        isLoading: false,
-        published: published.snapshot ? {title, ...published.snapshot} : null,
-      }
-    }),
+    map(([draft, published]: any) => ({
+      draft: draft.snapshot ? {title, ...(draft.snapshot || {})} : null,
+      isLoading: false,
+      published: published.snapshot ? {title, ...(published.snapshot || {})} : null,
+    })),
     startWith({draft: null, isLoading: true, published: null})
   )
 }

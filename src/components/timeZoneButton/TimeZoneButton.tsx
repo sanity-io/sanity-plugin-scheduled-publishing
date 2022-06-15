@@ -4,11 +4,11 @@ import React from 'react'
 import useDialogTimeZone from '../../hooks/useDialogTimeZone'
 import useTimeZone from '../../hooks/useTimeZone'
 
-interface Props {
+export interface ButtonTimeZoneProps {
   useElementQueries?: boolean
 }
 
-const ButtonTimeZone = (props: Props) => {
+const ButtonTimeZone = (props: ButtonTimeZoneProps) => {
   const {useElementQueries} = props
 
   const {timeZone} = useTimeZone()

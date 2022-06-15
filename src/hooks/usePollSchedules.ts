@@ -1,6 +1,5 @@
-import {useCallback, useEffect} from 'react'
+import {useCallback, useEffect, useMemo} from 'react'
 import useSWR from 'swr'
-import client from '../lib/client'
 import {Schedule, ScheduleState} from '../types'
 import {
   ScheduleDeleteEvent,
@@ -9,9 +8,7 @@ import {
   SchedulePublishEvent,
   ScheduleUpdateEvent,
 } from './useScheduleOperation'
-
-const {dataset, projectId} = client.config()
-const scheduleBaseUrl = `/schedules/${projectId}/${dataset}`
+import {useClient} from 'sanity'
 
 type QueryKey = {
   params?: {
@@ -21,12 +18,24 @@ type QueryKey = {
   url: string
 }
 
-const fetcher = (queryKey: QueryKey) =>
-  client.request<{schedules: Schedule[] | undefined}>({
-    query: queryKey.params,
-    method: 'GET',
-    uri: queryKey.url,
-  })
+function useScheduleBaseUrl() {
+  const client = useClient()
+  const {dataset, projectId} = client.config()
+  return `/schedules/${projectId}/${dataset}`
+}
+
+function useFetcher(queryKey: QueryKey) {
+  const client = useClient()
+  return useCallback(
+    () =>
+      client.request<{schedules: Schedule[] | undefined}>({
+        query: queryKey.params,
+        method: 'GET',
+        uri: queryKey.url,
+      }),
+    [client, queryKey]
+  )
+}
 
 const SWR_OPTIONS = {
   refreshInterval: 10000, // 10s
@@ -47,86 +56,98 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
   isInitialLoading: boolean
   schedules: Schedule[]
 } {
-  const queryKey: QueryKey = {
-    params: {
-      documentIds: documentId,
-      state,
-    },
-    url: scheduleBaseUrl,
-  }
+  const url = useScheduleBaseUrl()
+  const queryKey: QueryKey = useMemo(
+    () => ({params: {documentIds: documentId, state}, url}),
+    [url, documentId, state]
+  )
+
+  const fetcher = useFetcher(queryKey)
 
   const {data, error, mutate} = useSWR(queryKey, fetcher, SWR_OPTIONS)
 
   // Immediately remove schedule from SWR cache and revalidate
-  const handleDelete = useCallback((event: CustomEvent<ScheduleDeleteEvent>) => {
-    mutate(
-      (currentData) => ({
-        schedules: currentData?.schedules?.filter(
-          (schedule) => schedule.id !== event.detail.scheduleId
-        ),
-      }),
-      true // revalidate SWR
-    )
-  }, [])
+  const handleDelete = useCallback(
+    (event: CustomEvent<ScheduleDeleteEvent>) => {
+      mutate(
+        (currentData) => ({
+          schedules: currentData?.schedules?.filter(
+            (schedule) => schedule.id !== event.detail.scheduleId
+          ),
+        }),
+        true // revalidate SWR
+      )
+    },
+    [mutate]
+  )
 
   // Immediately remove schedules from SWR cache and revalidate
-  const handleDeleteMultiple = useCallback((event: CustomEvent<ScheduleDeleteMultipleEvent>) => {
-    mutate(
-      (currentData) => ({
-        schedules: currentData?.schedules?.filter(
-          (schedule) => !event.detail.scheduleIds.includes(schedule.id)
-        ),
-      }),
-      true // revalidate SWR
-    )
-  }, [])
+  const handleDeleteMultiple = useCallback(
+    (event: CustomEvent<ScheduleDeleteMultipleEvent>) => {
+      mutate(
+        (currentData) => ({
+          schedules: currentData?.schedules?.filter(
+            (schedule) => !event.detail.scheduleIds.includes(schedule.id)
+          ),
+        }),
+        true // revalidate SWR
+      )
+    },
+    [mutate]
+  )
 
   // Immediately publish schedule in SWR cache and revalidate
-  const handlePublish = useCallback((event: CustomEvent<SchedulePublishEvent>) => {
-    mutate(
-      (currentData) => {
-        const currentSchedules = currentData?.schedules || []
-        const index = currentSchedules.findIndex(
-          (schedule) => schedule.id === event.detail.scheduleId
-        )
-        return {
-          schedules: [
-            ...currentSchedules?.slice(0, index),
-            {
-              ...currentSchedules[index],
-              executeAt: new Date().toISOString(),
-              state: 'succeeded',
-            },
-            ...currentSchedules?.slice(index + 1),
-          ],
-        }
-      },
-      true // revalidate SWR
-    )
-  }, [])
+  const handlePublish = useCallback(
+    (event: CustomEvent<SchedulePublishEvent>) => {
+      mutate(
+        (currentData) => {
+          const currentSchedules = currentData?.schedules || []
+          const index = currentSchedules.findIndex(
+            (schedule) => schedule.id === event.detail.scheduleId
+          )
+          return {
+            schedules: [
+              ...currentSchedules?.slice(0, index),
+              {
+                ...currentSchedules[index],
+                executeAt: new Date().toISOString(),
+                state: 'succeeded',
+              },
+              ...currentSchedules?.slice(index + 1),
+            ],
+          }
+        },
+        true // revalidate SWR
+      )
+    },
+    [mutate]
+  )
 
   // Immediately update schedule in SWR cache and revalidate
-  const handleUpdate = useCallback((event: CustomEvent<ScheduleUpdateEvent>) => {
-    mutate(
-      (currentData) => {
-        const currentSchedules = currentData?.schedules || []
-        const index = currentSchedules.findIndex(
-          (schedule) => schedule.id === event.detail.scheduleId
-        )
-        return {
-          schedules: [
-            ...currentSchedules?.slice(0, index),
-            {
-              ...currentSchedules[index],
-              executeAt: event.detail.date,
-            },
-            ...currentSchedules?.slice(index + 1),
-          ],
-        }
-      },
-      true // revalidate SWR
-    )
-  }, [])
+  const handleUpdate = useCallback(
+    (event: CustomEvent<ScheduleUpdateEvent>) => {
+      mutate(
+        (currentData) => {
+          const currentSchedules = currentData?.schedules || []
+          const index = currentSchedules.findIndex(
+            (schedule) => schedule.id === event.detail.scheduleId
+          )
+          return {
+            schedules: [
+              ...currentSchedules?.slice(0, index),
+              {
+                ...currentSchedules[index],
+                executeAt: event.detail.date,
+              },
+              ...currentSchedules?.slice(index + 1),
+            ],
+          }
+        },
+        true // revalidate SWR
+      )
+    },
+    [mutate]
+  )
 
   // Listen to schedule events
   useEffect(() => {
@@ -140,7 +161,7 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
       window.removeEventListener(ScheduleEvents.publish, handlePublish)
       window.removeEventListener(ScheduleEvents.update, handleUpdate)
     }
-  }, [])
+  }, [handleDelete, handleDeleteMultiple, handlePublish, handleUpdate])
 
   return {
     error,

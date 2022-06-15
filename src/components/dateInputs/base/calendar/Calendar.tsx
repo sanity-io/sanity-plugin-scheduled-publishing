@@ -1,8 +1,8 @@
 import {ChevronLeftIcon, ChevronRightIcon} from '@sanity/icons'
 import {Box, Button, Flex, Select, Text, useForwardedRef} from '@sanity/ui'
 import {addDays, addMonths, setDate, setHours, setMinutes, setMonth, setYear} from 'date-fns'
-import {range} from 'lodash'
-import React, {forwardRef, useCallback, useEffect} from 'react'
+import range from 'lodash/range'
+import React, {forwardRef, KeyboardEvent, useCallback, useEffect} from 'react'
 import useTimeZone from '../../../../hooks/useTimeZone'
 import {CalendarMonth} from './CalendarMonth'
 import {ARROW_KEYS, DEFAULT_TIME_PRESETS, HOURS_24, MONTH_NAMES} from './constants'
@@ -118,12 +118,12 @@ export const Calendar = forwardRef(function Calendar(
   }, [ref])
 
   const handleKeyDown = useCallback(
-    (event) => {
+    (event: KeyboardEvent<HTMLDivElement>) => {
       if (!ARROW_KEYS.includes(event.key)) {
         return
       }
       event.preventDefault()
-      if (event.target.hasAttribute('data-calendar-grid')) {
+      if (event.currentTarget.hasAttribute('data-calendar-grid')) {
         focusCurrentWeekDay()
         return
       }
@@ -142,7 +142,7 @@ export const Calendar = forwardRef(function Calendar(
       // set focus temporarily on this element to make sure focus is still inside the calendar-grid after re-render
       ref.current?.querySelector<HTMLElement>('[data-preserve-focus]')?.focus()
     },
-    [ref, focusCurrentWeekDay, onFocusedDateChange, focusedDate]
+    [zoneDateToUtc, ref, focusCurrentWeekDay, onFocusedDateChange, focusedDate]
   )
 
   useEffect(() => {

@@ -59,7 +59,7 @@ export const Calendar = forwardRef(function Calendar(
         onSelect(undefined)
       }
     },
-    [onSelect, zoneDateToUtc]
+    [onSelect, zoneDateToUtc, onFocusedDateChange]
   )
 
   const ref = useForwardedRef(forwardedRef)
@@ -69,12 +69,12 @@ export const Calendar = forwardRef(function Calendar(
   }, [ref])
 
   const handleKeyDown = useCallback(
-    (event) => {
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (!ARROW_KEYS.includes(event.key)) {
         return
       }
       event.preventDefault()
-      if (event.target.hasAttribute('data-calendar-grid')) {
+      if (event.currentTarget.hasAttribute('data-calendar-grid')) {
         focusCurrentWeekDay()
         return
       }
@@ -93,7 +93,7 @@ export const Calendar = forwardRef(function Calendar(
       // set focus temporarily on this element to make sure focus is still inside the calendar-grid after re-render
       ref.current?.querySelector<HTMLElement>('[data-preserve-focus]')?.focus()
     },
-    [ref, focusCurrentWeekDay, onFocusedDateChange, focusedDate]
+    [ref, focusCurrentWeekDay, onFocusedDateChange, focusedDate, zoneDateToUtc]
   )
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export const Calendar = forwardRef(function Calendar(
     const now = new Date()
     onSelect(now)
     onFocusedDateChange(now)
-  }, [onSelect])
+  }, [onSelect, onFocusedDateChange])
 
   const handlePrevMonthClick = useCallback(() => moveFocusedDate(-1), [moveFocusedDate])
 

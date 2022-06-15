@@ -7,12 +7,12 @@ import DialogFooter from './DialogFooter'
 import DialogHeader from './DialogHeader'
 import {EditScheduleForm} from '../editScheduleForm/EditScheduleForm'
 
-interface Props {
+export interface DialogScheduleEditProps {
   onClose: () => void
   schedule: Schedule
 }
 
-const DialogScheduleEdit = (props: Props) => {
+const DialogScheduleEdit = (props: DialogScheduleEditProps) => {
   const {onClose, schedule} = props
 
   const {updateSchedule} = useScheduleOperation()
@@ -28,7 +28,7 @@ const DialogScheduleEdit = (props: Props) => {
       date: formData.date,
       scheduleId: schedule.id,
     }).then(onClose)
-  }, [formData?.date])
+  }, [schedule.id, updateSchedule, onClose, formData?.date])
 
   return (
     <Dialog

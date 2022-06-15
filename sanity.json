@@ -1,24 +1,8 @@
 {
   "parts": [
     {
-      "implements": "part:@sanity/base/tool",
-      "path": "tool.js"
-    },
-    {
-      "implements": "part:@sanity/base/document-actions/resolver",
-      "path": "documentActions.js"
-    },
-    {
-      "implements": "part:@sanity/base/document-badges/resolver",
-      "path": "documentBadges.js"
-    },
-    {
-      "implements": "part:@sanity/form-builder/input-resolver",
-      "path": "inputResolver.js"
+      "implements": "part:@sanity/base/sanity-root",
+      "path": "./v2-incompatible.js"
     }
-  ],
-  "paths": {
-    "source": "./src",
-    "compiled": "./lib"
-  }
+  ]
 }

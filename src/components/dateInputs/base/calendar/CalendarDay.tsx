@@ -22,7 +22,7 @@ export function CalendarDay(props: CalendarDayProps) {
       return true
     }
     return customValidation(endOfDay(date))
-  }, [date])
+  }, [date, customValidation])
 
   const handleClick = useCallback(() => {
     if (isValid) {

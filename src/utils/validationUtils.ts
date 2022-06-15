@@ -1,24 +1,24 @@
 import {useMemo} from 'react'
-import {isValidationErrorMarker, isValidationWarningMarker} from '@sanity/types'
+import {isValidationErrorMarker, isValidationWarningMarker} from 'sanity'
 import {ButtonTone} from '@sanity/ui'
-import {Marker} from '@sanity/types'
+import {ValidationMarker} from 'sanity'
 import {ValidationStatus} from '../types'
 
 export const EMPTY_VALIDATION_STATUS: ValidationStatus = {
-  markers: [],
+  validation: [],
   isValidating: false,
 }
 
 interface ValidationState {
-  markers: Marker[]
+  markers: ValidationMarker[]
   validationTone: ButtonTone
   hasError: boolean
   hasWarning: boolean
 }
 
-export function getValidationState(markers: Marker[]): ValidationState {
-  const validationMarkers = markers.filter((marker) => marker.type === 'validation')
-
+export function getValidationState(
+  validationMarkers: ValidationMarker[] = EMPTY_VALIDATION_STATUS.validation
+): ValidationState {
   const hasError = validationMarkers.filter(isValidationErrorMarker).length > 0
   const hasWarning = validationMarkers.filter(isValidationWarningMarker).length > 0
 
@@ -31,13 +31,13 @@ export function getValidationState(markers: Marker[]): ValidationState {
   }
 
   return {
-    markers,
+    markers: validationMarkers,
     validationTone,
     hasError,
     hasWarning,
   }
 }
 
-export function useValidationState(markers: Marker[]): ValidationState {
+export function useValidationState(markers: ValidationMarker[]): ValidationState {
   return useMemo(() => getValidationState(markers), [markers])
 }

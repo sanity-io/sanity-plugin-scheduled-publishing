@@ -1,5 +1,5 @@
 import {EllipsisVerticalIcon} from '@sanity/icons'
-import {SchemaType} from '@sanity/types'
+import {SchemaType} from 'sanity'
 import {Button, Menu, MenuButton} from '@sanity/ui'
 import React from 'react'
 import {Schedule} from '../../types'

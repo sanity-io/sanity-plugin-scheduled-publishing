@@ -3,7 +3,7 @@ import React, {CSSProperties, useEffect, useMemo, useState} from 'react'
 import {Card, Flex, Label} from '@sanity/ui'
 import {ScheduleItem} from '../../components/scheduleItem'
 import {VirtualItem} from 'react-virtual'
-import {SanityDefaultPreview} from 'part:@sanity/base/preview'
+import {SanityDefaultPreview} from 'sanity/_unstable'
 
 export interface ListItem {
   content: Schedule | string
@@ -102,11 +102,13 @@ function MonthHeading({content}: {content: string}) {
   )
 }
 
+const DUMMY = {}
+
 function PlaceholderScheduleItem() {
   return (
     <Card padding={1} radius={2} shadow={1}>
       <Card padding={1}>
-        <SanityDefaultPreview isPlaceholder />
+        <SanityDefaultPreview isPlaceholder value={DUMMY} />
       </Card>
     </Card>
   )

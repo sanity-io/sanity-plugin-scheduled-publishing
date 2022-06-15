@@ -1,5 +1,5 @@
 import {CalendarIcon} from '@sanity/icons'
-import {Marker, SchemaType} from '@sanity/types'
+import {ValidationMarker, SchemaType} from 'sanity'
 import {Badge, Box, Card, Flex, Stack, Text} from '@sanity/ui'
 import {format} from 'date-fns'
 import React, {useMemo} from 'react'
@@ -11,7 +11,7 @@ import {ValidationInfo} from '../validation/ValidationInfo'
 
 interface Props {
   id: string
-  markers: Marker[]
+  markers: ValidationMarker[]
   type: SchemaType
 }
 

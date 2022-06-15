@@ -1,9 +1,8 @@
-import defaultResolve from 'part:@sanity/base/document-badges'
-import {DocumentBadgeComponent, DocumentActionProps} from '@sanity/base'
+import {DocumentBadgeComponent} from 'sanity/desk'
 import {ScheduledBadge} from './documentBadges/scheduled/ScheduledBadge'
 
 export default function resolveDocumentBadges(
-  props: DocumentActionProps
+  existingBadges: DocumentBadgeComponent[]
 ): DocumentBadgeComponent[] {
-  return [...defaultResolve(props), ScheduledBadge]
+  return [...existingBadges, ScheduledBadge]
 }

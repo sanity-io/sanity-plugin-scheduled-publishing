@@ -6,11 +6,11 @@ import useTimeZone, {allTimeZones, getLocalTimeZone} from '../../hooks/useTimeZo
 import {NormalizedTimeZone} from '../../types'
 import DialogFooter from './DialogFooter'
 
-interface Props {
+export interface DialogTimeZoneProps {
   onClose?: () => void
 }
 
-const DialogTimeZone = (props: Props) => {
+const DialogTimeZone = (props: DialogTimeZoneProps) => {
   const {onClose} = props
 
   const {setTimeZone, timeZone} = useTimeZone()
@@ -36,7 +36,7 @@ const DialogTimeZone = (props: Props) => {
   const isDirty = selectedTz?.name !== timeZone.name
   const isLocalTzSelected = useMemo(() => {
     return selectedTz?.name === getLocalTimeZone().name
-  }, [getLocalTimeZone, selectedTz])
+  }, [selectedTz])
 
   return (
     <Dialog

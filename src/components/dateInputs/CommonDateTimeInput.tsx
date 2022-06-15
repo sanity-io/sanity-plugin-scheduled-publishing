@@ -1,9 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import {useId} from '@reach/auto-id'
-import {FormField} from '@sanity/base/components'
-import {Marker} from '@sanity/types'
+import {FormField} from 'sanity/form'
 import {TextInput, useForwardedRef} from '@sanity/ui'
-import React, {useEffect} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import useTimeZone from '../../hooks/useTimeZone'
 import {DateTimeInput} from './base/DateTimeInput'
 import {CommonProps, ParseResult} from './types'
@@ -52,19 +51,19 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
   }, [value])
 
   const {zoneDateToUtc} = useTimeZone()
-
+  const undefinedValue = typeof value === 'undefined'
   // Text input changes ('wall time')
   const handleDatePickerInputChange = React.useCallback(
-    (event) => {
+    (event: React.FocusEvent<HTMLInputElement>) => {
       const nextInputValue = event.currentTarget.value
       const result = nextInputValue === '' ? null : parseInputValue(nextInputValue)
 
       if (result === null) {
         onChange(null)
 
-        // If the field value is undefined and we are clearing the invalid value
+        // If the field value is undefined, and we are clearing the invalid value
         // the above useEffect won't trigger, so we do some extra clean up here
-        if (typeof value === 'undefined' && localValue) {
+        if (undefinedValue && localValue) {
           setLocalValue(null)
         }
       } else if (result.isValid) {
@@ -74,7 +73,7 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
         setLocalValue(nextInputValue)
       }
     },
-    [localValue, serialize, onChange, parseInputValue]
+    [undefinedValue, zoneDateToUtc, localValue, serialize, onChange, parseInputValue]
   )
 
   // Calendar changes (UTC)
@@ -97,19 +96,28 @@ export const CommonDateTimeInput = React.forwardRef(function CommonDateTimeInput
     ? formatInputValue(parseResult.date)
     : value
 
+  const nodeValidations = useMemo(
+    () =>
+      markers.map((m) => ({
+        level: m.level,
+        path: m.path,
+        message: m.item.message,
+      })),
+    [markers]
+  )
   return (
     <FormField
-      __unstable_markers={
+      validation={
         parseResult?.error
           ? [
-              ...markers,
+              ...nodeValidations,
               {
-                type: 'validation',
                 level: 'error',
-                item: {message: parseResult.error, paths: []},
-              } as unknown as Marker, // casting to marker to avoid having to implement cloneWithMessage on item
+                message: parseResult.error,
+                path: [],
+              }, // casting to marker to avoid having to implement cloneWithMessage on item
             ]
-          : markers
+          : nodeValidations
       }
       title={title}
       level={level}

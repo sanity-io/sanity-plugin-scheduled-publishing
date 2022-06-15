@@ -2,15 +2,10 @@ import {useToast} from '@sanity/ui'
 import pluralize from 'pluralize'
 import React from 'react'
 import ToastDescription from '../components/toastDescription/ToastDescription'
-import client from '../lib/client'
 import {Schedule} from '../types'
-import {debugWithName} from '../utils/debug'
 import getErrorMessage from '../utils/getErrorMessage'
 import useTimeZone from './useTimeZone'
-
-const debug = debugWithName('useScheduleOperation')
-
-const {dataset, projectId} = client.config()
+import {useScheduleApi} from './useScheduleApi'
 
 // Custom events
 export enum ScheduleEvents {
@@ -69,66 +64,10 @@ export const scheduleCustomEvent = <
   }
 ): CustomEvent<D> => new CustomEvent(name, payload)
 
-function _create({date, documentId}: {date: string; documentId: string}) {
-  debug('_create:', documentId)
-
-  // Round date to nearest second (mutate)
-  const roundedDate = new Date(date)
-  roundedDate.setSeconds(0)
-  roundedDate.setMilliseconds(0)
-
-  return client.request<Schedule>({
-    body: {
-      documents: [{documentId}],
-      executeAt: roundedDate,
-      name: roundedDate,
-    },
-    method: 'POST',
-    uri: `/schedules/${projectId}/${dataset}`,
-  })
-}
-
-function _delete({scheduleId}: {scheduleId: string}) {
-  debug('_delete:', scheduleId)
-  return client.request<void>({
-    method: 'DELETE',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
-  })
-}
-
-function _deleteMultiple({scheduleIds}: {scheduleIds: string[]}) {
-  debug('_deleteMultiple:', scheduleIds)
-  const requests = scheduleIds.map((scheduleId) => _delete({scheduleId}))
-  return Promise.allSettled(requests)
-}
-
-function _publish({scheduleId}: {scheduleId: string}) {
-  debug('_publish:', scheduleId)
-
-  return client.request<{transactionId: string}>({
-    method: 'POST',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}/publish`,
-  })
-}
-
-function _update({
-  documentSchedule,
-  scheduleId,
-}: {
-  documentSchedule: Partial<Schedule>
-  scheduleId: string
-}) {
-  debug('_update:', scheduleId, documentSchedule)
-  return client.request<{transactionId: string}>({
-    body: documentSchedule,
-    method: 'PATCH',
-    uri: `/schedules/${projectId}/${dataset}/${scheduleId}`,
-  })
-}
-
 export default function useScheduleOperation() {
   const toast = useToast()
   const {formatDateTz} = useTimeZone()
+  const api = useScheduleApi()
 
   async function createSchedule({
     date,
@@ -140,7 +79,7 @@ export default function useScheduleOperation() {
     documentId: string
   }) {
     try {
-      const data = await _create({date, documentId})
+      const data = await api.create({date, documentId})
 
       window.dispatchEvent(
         scheduleCustomEvent(ScheduleEvents.create, {
@@ -190,7 +129,7 @@ export default function useScheduleOperation() {
     schedule: Schedule
   }) {
     try {
-      await _delete({scheduleId: schedule?.id})
+      await api.delete({scheduleId: schedule?.id})
 
       window.dispatchEvent(
         scheduleCustomEvent(ScheduleEvents.delete, {
@@ -230,7 +169,7 @@ export default function useScheduleOperation() {
   }) {
     try {
       const scheduleIds = schedules.map((schedule) => schedule.id)
-      const response = await _deleteMultiple({scheduleIds})
+      const response = await api.deleteMultiple({scheduleIds})
 
       const {fulfilledIds, rejectedReasons} = response.reduce<{
         fulfilledIds: string[]
@@ -307,7 +246,7 @@ export default function useScheduleOperation() {
   }) {
     try {
       const scheduleId = schedule.id
-      await _publish({scheduleId})
+      await api.publish({scheduleId})
 
       window.dispatchEvent(scheduleCustomEvent(ScheduleEvents.publish, {detail: {scheduleId}}))
 
@@ -342,7 +281,7 @@ export default function useScheduleOperation() {
     scheduleId: string
   }) {
     try {
-      await _update({documentSchedule: {executeAt: date}, scheduleId})
+      await api.update({documentSchedule: {executeAt: date}, scheduleId})
 
       window.dispatchEvent(scheduleCustomEvent(ScheduleEvents.update, {detail: {date, scheduleId}}))
 

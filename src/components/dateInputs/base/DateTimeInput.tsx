@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {KeyboardEvent, useCallback} from 'react'
 import FocusLock from 'react-focus-lock'
 import {Box, Button, LayerProvider, Popover, useClickOutside, useForwardedRef} from '@sanity/ui'
 import {CalendarIcon} from '@sanity/icons'
@@ -48,7 +48,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
     inputRef.current?.select()
   }, [inputRef])
 
-  const handleKeyUp = useCallback((e) => {
+  const handleKeyUp = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       setPickerOpen(false)
     }

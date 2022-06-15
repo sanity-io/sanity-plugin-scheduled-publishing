@@ -1,14 +1,22 @@
 import {Schedule} from '../types'
 import {useMemo} from 'react'
-import schema from 'part:@sanity/base/schema'
-import {SchemaType} from '@sanity/types'
+import {SchemaType, useSchema} from 'sanity'
 import {getScheduledDocument} from '../utils/paneItemHelpers'
 
 export function useScheduleSchemaType(schedule: Schedule): SchemaType | undefined {
   const firstDocument = getScheduledDocument(schedule)
-  return firstDocument.documentType ? useSchemaType(firstDocument.documentType) : undefined
+  const schema = useSchema()
+  const schemaName = firstDocument.documentType
+
+  return useMemo(() => {
+    if (!schemaName) {
+      return undefined
+    }
+    return schema.get(schemaName) as SchemaType
+  }, [schemaName, schema])
 }
 
 export function useSchemaType(schemaName: string): SchemaType {
-  return useMemo(() => schema.get(schemaName), [schemaName])
+  const schema = useSchema()
+  return useMemo(() => schema.get(schemaName) as SchemaType, [schemaName, schema])
 }

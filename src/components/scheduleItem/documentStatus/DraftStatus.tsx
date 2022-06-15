@@ -1,10 +1,10 @@
-// Based on https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/DraftStatus.tsx
+// https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/DraftStatus.tsx
 
 import React from 'react'
 import {Box, Text, Tooltip} from '@sanity/ui'
-import {TextWithTone} from '@sanity/base/components'
+import {TextWithTone} from 'sanity/_unstable'
 import {EditIcon} from '@sanity/icons'
-import {SanityDocument} from '@sanity/types'
+import {SanityDocument} from 'sanity'
 import {TimeAgo} from './TimeAgo'
 
 export const DraftStatus = ({document}: {document?: SanityDocument | null}) => (

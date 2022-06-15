@@ -1,4 +1,4 @@
-import {Marker} from '@sanity/types'
+import {ValidationMarker} from 'sanity'
 
 export type ParseResult = {isValid: boolean; date?: Date; error?: string} & (
   | {isValid: true; date: Date}
@@ -7,7 +7,7 @@ export type ParseResult = {isValid: boolean; date?: Date; error?: string} & (
 
 export type CommonProps = {
   value?: string
-  markers: Marker[]
+  markers: ValidationMarker[]
   readOnly?: boolean
   level: number
   onFocus?: () => void

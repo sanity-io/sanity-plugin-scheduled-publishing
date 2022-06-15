@@ -27,7 +27,7 @@ const VirtualList = () => {
   // Reset virtual list scroll position on state changes
   useEffect(() => {
     containerRef?.current?.scrollTo(0, 0)
-  }, [scheduleState, sortBy])
+  }, [scheduleState, sortBy, containerRef])
 
   return (
     <Box

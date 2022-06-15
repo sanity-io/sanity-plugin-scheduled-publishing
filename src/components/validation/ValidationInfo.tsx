@@ -1,17 +1,17 @@
 import React, {ReactNode, useCallback} from 'react'
 import {Button, CardTone, Container, Menu, MenuButton, Stack} from '@sanity/ui'
-import {Marker, ObjectSchemaType, Path, SchemaType} from '@sanity/types'
+import {ValidationMarker, ObjectSchemaType, Path, SchemaType} from 'sanity'
 import {useValidationState} from '../../utils/validationUtils'
 import {ErrorOutlineIcon, WarningOutlineIcon} from '@sanity/icons'
 import {useId} from '@reach/auto-id'
-import {ValidationList} from '@sanity/base/components'
-import {HOCRouter, withRouterHOC} from '@sanity/base/router'
+import {useRouter, ValidationList} from 'sanity/_unstable'
+// eslint-disable-next-line no-restricted-imports
 import * as PathUtils from '@sanity/util/paths'
 import {usePublishedId} from '../../hooks/usePublishedId'
 
 interface ValidationProps {
   documentId?: string
-  markers: Marker[]
+  markers: ValidationMarker[]
   type?: SchemaType
   menuHeader?: ReactNode
 }
@@ -24,10 +24,9 @@ const POPOVER_PROPS = {
   width: 0,
 }
 
-export const ValidationInfo = withRouterHOC(ValidationInfoWithRouter)
-
-function ValidationInfoWithRouter(props: ValidationProps & {router: HOCRouter}) {
-  const {type, markers, menuHeader, router, documentId} = props
+export function ValidationInfo(props: ValidationProps) {
+  const {type, markers, menuHeader, documentId} = props
+  const router = useRouter()
   const {hasError, hasWarning} = useValidationState(markers)
   // use visibility so we can occupy the space equally for all states
   const visibility = hasError || hasWarning ? 'visible' : 'hidden'
@@ -67,7 +66,7 @@ function ValidationInfoWithRouter(props: ValidationProps & {router: HOCRouter}) 
               {menuHeader ?? null}
               <ValidationList
                 documentType={type as ObjectSchemaType}
-                markers={markers}
+                validation={markers}
                 onFocus={onFocus}
               />
             </Stack>
