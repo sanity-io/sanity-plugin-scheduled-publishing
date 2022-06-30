@@ -30,7 +30,7 @@ export const SCHEDULE_FILTERS: ScheduleState[] = Object.keys(SCHEDULE_STATE_DICT
   (f): f is ScheduleState => !!f
 )
 
-export const TOOL_HEADER_HEIGHT = 51 // px
+export const TOOL_HEADER_HEIGHT = 55 // px
 
 export const DOCUMENT_HAS_WARNINGS_TEXT = 'This document has validation warnings.'
 export const DOCUMENT_HAS_ERRORS_TEXT =

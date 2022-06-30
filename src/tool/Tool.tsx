@@ -1,4 +1,4 @@
-import {Box, Card, Flex, Text, useTheme} from '@sanity/ui'
+import {Box, Flex, Text, useTheme} from '@sanity/ui'
 import {parse} from 'date-fns'
 import React, {useEffect, useMemo, useRef} from 'react'
 import styled from 'styled-components'
@@ -76,16 +76,7 @@ export default function Tool() {
 
   return (
     <SchedulesProvider value={schedulesContext}>
-      <Card
-        overflow="hidden"
-        style={{
-          bottom: 0,
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      >
+      <Flex direction="column" height="fill" flex={1} overflow="hidden">
         <FeatureBanner />
 
         <Flex flex={1} height="fill">
@@ -156,7 +147,7 @@ export default function Tool() {
             </Flex>
           </Column>
         </Flex>
-      </Card>
+      </Flex>
     </SchedulesProvider>
   )
 }
