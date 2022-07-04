@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.10](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.9...v0.1.10) (2022-07-04)
+
+
+### Bug Fixes
+
+* add local client which was erroneously included in gitignore ([ba1e2b0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/ba1e2b044a7a2478ad927a009e993b0b1bfd37e6))
+* cache local time zone and don't un-necessarily reevaluate ([f236cb6](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/f236cb64dced2a10bc888857a779c9e05060c732))
+
 ### [0.1.9](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.8...v0.1.9) (2022-05-11)
 
 
