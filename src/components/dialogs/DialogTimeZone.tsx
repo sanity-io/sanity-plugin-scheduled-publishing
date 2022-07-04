@@ -2,7 +2,7 @@ import {black, hues} from '@sanity/color'
 import {SearchIcon} from '@sanity/icons'
 import {Autocomplete, Box, Card, Dialog, Flex, Inline, Stack, Text} from '@sanity/ui'
 import React, {useMemo, useState} from 'react'
-import useTimeZone, {allTimeZones, getLocalTimeZone} from '../../hooks/useTimeZone'
+import useTimeZone, {allTimeZones, localTimeZone} from '../../hooks/useTimeZone'
 import {NormalizedTimeZone} from '../../types'
 import DialogFooter from './DialogFooter'
 
@@ -23,7 +23,7 @@ const DialogTimeZone = (props: Props) => {
   }
 
   const handleTimeZoneSelectLocal = () => {
-    setSelectedTz(getLocalTimeZone())
+    setSelectedTz(localTimeZone)
   }
 
   const handleTimeZoneUpdate = () => {
@@ -35,7 +35,7 @@ const DialogTimeZone = (props: Props) => {
 
   const isDirty = selectedTz?.name !== timeZone.name
   const isLocalTzSelected = useMemo(() => {
-    return selectedTz?.name === getLocalTimeZone().name
+    return selectedTz?.name === localTimeZone.name
   }, [selectedTz])
 
   return (

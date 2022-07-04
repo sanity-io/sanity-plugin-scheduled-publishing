@@ -30,15 +30,12 @@ export const allTimeZones = getTimeZones().map((tz) => {
   } as NormalizedTimeZone
 })
 
-export function getLocalTimeZone(): NormalizedTimeZone {
-  return (
-    allTimeZones.find((tz) => tz.name === Intl.DateTimeFormat().resolvedOptions().timeZone) ||
-    // Default to GMT-0 if no user timeZone is found
-    allTimeZones.find((timeZone) => timeZone.abbreviation === 'GMT') ||
-    // Return the first time zone as a fallback
-    allTimeZones[0]
-  )
-}
+export const localTimeZone: NormalizedTimeZone =
+  allTimeZones.find((tz) => tz.name === Intl.DateTimeFormat().resolvedOptions().timeZone) ||
+  // Default to GMT-0 if no user timeZone is found
+  allTimeZones.find((tz) => tz.abbreviation === 'GMT') ||
+  // Return the first time zone as a fallback
+  allTimeZones[0]
 
 function getStoredTimeZone(): NormalizedTimeZone {
   const storedTimeZone = localStorage.getItem(LOCAL_STORAGE_TZ_KEY)
@@ -50,7 +47,7 @@ function getStoredTimeZone(): NormalizedTimeZone {
     // invalid value (non-JSON) - fallback to local timeZone
   }
 
-  return getLocalTimeZone()
+  return localTimeZone
 }
 
 const useTimeZone = () => {
