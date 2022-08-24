@@ -29,7 +29,6 @@
     "lint": "eslint .",
     "format": "prettier src -w",
     "prepare": "npm run build && husky install",
-    "release": "standard-version",
     "watch": "rollup -c rollup.config.js --watch",
     "verify": "tsc --noEmit && npm run lint"
   },
@@ -59,6 +58,7 @@
     "@sanity/form-builder": "^2.29.1",
     "@sanity/icons": "^1.2.5",
     "@sanity/react-hooks": "^2.28.2",
+    "@sanity/semantic-release-preset": "^2.0.0",
     "@sanity/structure": "^2.28.0",
     "@sanity/types": "^2.28.0",
     "@sanity/ui": "^0.37.5",
@@ -81,14 +81,13 @@
     "husky": "^7.0.0",
     "lint-staged": "^12.3.3",
     "lodash": "^4.17.21",
-    "prettier": "2.5.1",
+    "prettier": "^2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.66.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rxjs": "^7.5.2",
-    "standard-version": "^9.3.2",
     "typescript": "4.5.5"
   },
   "peerDependencies": {
