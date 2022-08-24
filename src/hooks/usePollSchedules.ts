@@ -1,6 +1,6 @@
 import {useCallback, useEffect} from 'react'
 import useSWR from 'swr'
-import client from '../lib/client'
+import sanityClient from '../lib/client'
 import {Schedule, ScheduleState} from '../types'
 import getScheduleBaseUrl from '../utils/getScheduleBaseUrl'
 import {
@@ -10,6 +10,8 @@ import {
   SchedulePublishEvent,
   ScheduleUpdateEvent,
 } from './useScheduleOperation'
+
+const client = sanityClient()
 
 type QueryKey = {
   params?: {

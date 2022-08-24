@@ -1,6 +1,7 @@
 import useSWR from 'swr'
-import client from '../lib/client'
+import sanityClient from '../lib/client'
 
+const client = sanityClient()
 const {projectId} = client.config()
 
 const uri = `/projects/${projectId}/features/scheduledPublishing`

@@ -2,7 +2,7 @@ import {useToast} from '@sanity/ui'
 import pluralize from 'pluralize'
 import React from 'react'
 import ToastDescription from '../components/toastDescription/ToastDescription'
-import client from '../lib/client'
+import sanityClient from '../lib/client'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
 import getErrorMessage from '../utils/getErrorMessage'
@@ -10,6 +10,7 @@ import getScheduleBaseUrl from '../utils/getScheduleBaseUrl'
 import useTimeZone from './useTimeZone'
 
 const debug = debugWithName('useScheduleOperation')
+const client = sanityClient()
 
 // Custom events
 export enum ScheduleEvents {
