@@ -160,3 +160,11 @@ This repository is published under the [MIT](LICENSE) license.
 [scheduled-publishing]: https://www.sanity.io/blog/publishing-scheduled
 [scheduling-api]: https://www.sanity.io/docs/scheduling-api
 [@vvo/dztb]: https://github.com/vvo/tzdb
+
+## Developing this plugin
+
+### Release new version
+Run ["CI & Release" workflow](https://github.com/sanity-io/plugin-kitactions).
+Make sure to select main or v3 branch and check "Release new version".
+
+Semantic release will only release on configured branches, so it is safe to run release on any branch.
