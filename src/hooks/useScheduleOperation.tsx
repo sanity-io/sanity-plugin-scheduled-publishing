@@ -2,7 +2,7 @@ import {useToast} from '@sanity/ui'
 import pluralize from 'pluralize'
 import React from 'react'
 import ToastDescription from '../components/toastDescription/ToastDescription'
-import sanityClient from '../lib/client'
+import {getSanityClient} from '../lib/client'
 import {Schedule} from '../types'
 import {debugWithName} from '../utils/debug'
 import getErrorMessage from '../utils/getErrorMessage'
@@ -10,7 +10,6 @@ import getScheduleBaseUrl from '../utils/getScheduleBaseUrl'
 import useTimeZone from './useTimeZone'
 
 const debug = debugWithName('useScheduleOperation')
-const client = sanityClient()
 
 // Custom events
 export enum ScheduleEvents {
@@ -77,7 +76,7 @@ function _create({date, documentId}: {date: string; documentId: string}) {
   roundedDate.setSeconds(0)
   roundedDate.setMilliseconds(0)
 
-  return client.request<Schedule>({
+  return getSanityClient().request<Schedule>({
     body: {
       documents: [{documentId}],
       executeAt: roundedDate,
@@ -90,7 +89,7 @@ function _create({date, documentId}: {date: string; documentId: string}) {
 
 function _delete({scheduleId}: {scheduleId: string}) {
   debug('_delete:', scheduleId)
-  return client.request<void>({
+  return getSanityClient().request<void>({
     method: 'DELETE',
     uri: `${getScheduleBaseUrl()}/${scheduleId}`,
   })
@@ -104,7 +103,7 @@ function _deleteMultiple({scheduleIds}: {scheduleIds: string[]}) {
 
 function _publish({scheduleId}: {scheduleId: string}) {
   debug('_publish:', scheduleId)
-  return client.request<{transactionId: string}>({
+  return getSanityClient().request<{transactionId: string}>({
     method: 'POST',
     uri: `${getScheduleBaseUrl()}/${scheduleId}/publish`,
   })
@@ -118,7 +117,7 @@ function _update({
   scheduleId: string
 }) {
   debug('_update:', scheduleId, documentSchedule)
-  return client.request<{transactionId: string}>({
+  return getSanityClient().request<{transactionId: string}>({
     body: documentSchedule,
     method: 'PATCH',
     uri: `${getScheduleBaseUrl()}/${scheduleId}`,

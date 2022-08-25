@@ -1,15 +1,18 @@
 import useSWR from 'swr'
-import sanityClient from '../lib/client'
+import {getSanityClient} from '../lib/client'
 
-const client = sanityClient()
-const {projectId} = client.config()
+function getUri() {
+  const client = getSanityClient()
+  const {projectId} = client.config()
+  return `/projects/${projectId}/features/scheduledPublishing`
+}
 
-const uri = `/projects/${projectId}/features/scheduledPublishing`
-const fetcher = () =>
-  client.request<boolean>({
+const fetcher = () => {
+  return getSanityClient().request<boolean>({
     method: 'GET',
-    uri,
+    uri: getUri(),
   })
+}
 
 const SWR_OPTIONS = {
   refreshWhenHidden: false,
@@ -25,7 +28,7 @@ const SWR_OPTIONS = {
  * SWR will cache this value and prevent unnecessary re-fetching.
  */
 function useHasScheduledPublishing(): boolean | undefined {
-  const {data} = useSWR(uri, fetcher, SWR_OPTIONS)
+  const {data} = useSWR(getUri(), fetcher, SWR_OPTIONS)
   return data
 }
 

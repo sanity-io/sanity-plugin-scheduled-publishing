@@ -1,6 +1,6 @@
 import {useCallback, useEffect} from 'react'
 import useSWR from 'swr'
-import sanityClient from '../lib/client'
+import {getSanityClient} from '../lib/client'
 import {Schedule, ScheduleState} from '../types'
 import getScheduleBaseUrl from '../utils/getScheduleBaseUrl'
 import {
@@ -11,8 +11,6 @@ import {
   ScheduleUpdateEvent,
 } from './useScheduleOperation'
 
-const client = sanityClient()
-
 type QueryKey = {
   params?: {
     documentIds?: string
@@ -22,7 +20,7 @@ type QueryKey = {
 }
 
 const fetcher = (queryKey: QueryKey) =>
-  client.request<{schedules: Schedule[] | undefined}>({
+  getSanityClient().request<{schedules: Schedule[] | undefined}>({
     query: queryKey.params,
     method: 'GET',
     uri: queryKey.url,
