@@ -164,7 +164,7 @@ This repository is published under the [MIT](LICENSE) license.
 ## Developing this plugin
 
 ### Release new version
-Run ["CI & Release" workflow](https://github.com/sanity-io/plugin-kitactions).
+Run ["CI & Release" workflow](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/actions).
 Make sure to select main or v3 branch and check "Release new version".
 
 Semantic release will only release on configured branches, so it is safe to run release on any branch.
