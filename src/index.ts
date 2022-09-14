@@ -1,6 +1,5 @@
 import {CalendarIcon} from '@sanity/icons'
-import {createPlugin} from 'sanity'
-import {route} from 'sanity/_unstable'
+import {createPlugin, route} from 'sanity'
 import resolveDocumentActions from './documentActions'
 import resolveDocumentBadges from './documentBadges'
 import {resolveInput} from './inputResolver'

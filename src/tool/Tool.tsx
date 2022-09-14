@@ -15,7 +15,7 @@ import {ScheduleFilters} from './scheduleFilters'
 import {Schedules} from './schedules'
 import SchedulesContextMenu from './schedulesContextMenu/SchedulesContextMenu'
 import {ToolCalendar} from './toolCalendar'
-import {useRouter, RouterContextValue} from 'sanity/_unstable'
+import {useRouter, RouterContextValue} from 'sanity'
 
 const Column = styled(Box)`
   flex-direction: column;

@@ -1,5 +1,4 @@
-import {IntentLink} from 'sanity/_unstable'
-import {SanityDocument, SchemaType} from 'sanity'
+import {SanityDocument, SchemaType, IntentLink} from 'sanity'
 import {SanityDefaultPreview} from 'sanity/_unstable'
 import {getPublishedId} from 'sanity'
 import React, {forwardRef, useMemo} from 'react'

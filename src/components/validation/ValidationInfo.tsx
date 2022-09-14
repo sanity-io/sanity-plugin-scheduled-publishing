@@ -1,10 +1,10 @@
 import React, {ReactNode, useCallback} from 'react'
 import {Button, CardTone, Container, Menu, MenuButton, Stack} from '@sanity/ui'
-import {ValidationMarker, ObjectSchemaType, Path, SchemaType} from 'sanity'
+import {ValidationMarker, ObjectSchemaType, Path, SchemaType, useRouter} from 'sanity'
 import {useValidationState} from '../../utils/validationUtils'
 import {ErrorOutlineIcon, WarningOutlineIcon} from '@sanity/icons'
 import {useId} from '@reach/auto-id'
-import {useRouter, ValidationList} from 'sanity/_unstable'
+import {ValidationList} from 'sanity/_unstable'
 // eslint-disable-next-line no-restricted-imports
 import * as PathUtils from '@sanity/util/paths'
 import {usePublishedId} from '../../hooks/usePublishedId'
