@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0-v3-studio.3](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.2...v0.3.0-v3-studio.3) (2022-09-14)
+
+### Bug Fixes
+
+- dev-preview.17 compatability ([ea820e4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/ea820e4ea5aad918721369b9602e9bd33b91ba19))
+
 ## [0.3.0-v3-studio.2](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.1...v0.3.0-v3-studio.2) (2022-09-14)
 
 ### Bug Fixes
