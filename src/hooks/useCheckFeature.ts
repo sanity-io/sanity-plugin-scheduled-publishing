@@ -16,7 +16,7 @@ const SWR_OPTIONS = {
  * SWR will cache this value and prevent unnecessary re-fetching.
  */
 function useHasScheduledPublishing(): boolean | undefined {
-  const client = useClient()
+  const client = useClient({apiVersion: '2022-09-01'})
   const uri = `/projects/${client.config().projectId}/features/scheduledPublishing`
   const fetcher = useCallback(
     () =>

@@ -7,7 +7,7 @@ import {useClient} from 'sanity'
 const debug = debugWithName('useScheduleOperation')
 
 export function useScheduleApi(): ReturnType<typeof createScheduleApi> {
-  const client = useClient()
+  const client = useClient({apiVersion: '2022-09-01'})
   return useMemo(() => createScheduleApi(client), [client])
 }
 

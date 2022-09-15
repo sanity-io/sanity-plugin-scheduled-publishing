@@ -19,13 +19,13 @@ type QueryKey = {
 }
 
 function useScheduleBaseUrl() {
-  const client = useClient()
+  const client = useClient({apiVersion: '2022-09-01'})
   const {dataset, projectId} = client.config()
   return `/schedules/${projectId}/${dataset}`
 }
 
 function useFetcher(queryKey: QueryKey) {
-  const client = useClient()
+  const client = useClient({apiVersion: '2022-09-01'})
   return useCallback(
     () =>
       client.request<{schedules: Schedule[] | undefined}>({

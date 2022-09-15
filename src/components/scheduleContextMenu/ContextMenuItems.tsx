@@ -1,6 +1,6 @@
-import {useDocumentPairPermissions, useCurrentUser} from 'sanity/_unstable'
+import {useDocumentPairPermissions} from 'sanity/_unstable'
 import {CalendarIcon, CheckmarkCircleIcon, PublishIcon, TrashIcon} from '@sanity/icons'
-import {SchemaType} from 'sanity'
+import {SchemaType, useCurrentUser} from 'sanity'
 import React from 'react'
 import MenuItemWithPermissionsTooltip from './MenuItemWithPermissionsTooltip'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
