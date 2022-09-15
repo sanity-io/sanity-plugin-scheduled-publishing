@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0-v3-studio.5](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.4...v0.3.0-v3-studio.5) (2022-09-15)
+
+### Bug Fixes
+
+- use new useClient api ([87c7322](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/87c73227774a14340949708dcf71506a4579921e))
+
 ## [0.3.0-v3-studio.4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.3...v0.3.0-v3-studio.4) (2022-09-14)
 
 ### Bug Fixes
