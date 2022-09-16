@@ -19,7 +19,7 @@ export function ScheduleBanner(props: Props) {
   const {id, markers, type} = props
   const publishedId = usePublishedId(id)
   const {hasError} = useValidationState(markers)
-  const formattedDateTime = useNextSchedule(publishedId)
+  const {formattedDateTime, action} = useNextSchedule(publishedId)
 
   if (!formattedDateTime) {
     return null
@@ -33,12 +33,14 @@ export function ScheduleBanner(props: Props) {
         paddingX={3}
         radius={1}
         shadow={1}
-        tone={hasError ? 'critical' : 'primary'}
+        tone={hasError ? 'critical' : `${action === 'publish' ? 'primary' : 'caution'}`}
       >
         <Stack space={2}>
           <Flex>
             <Badge fontSize={1} mode="outline" padding={2} style={{flexShrink: 0}}>
-              {hasError ? 'Scheduled (with errors)' : 'Scheduled'}
+              {hasError
+                ? 'Scheduled (with errors)'
+                : `${action === 'publish' ? 'Scheduled' : `Scheduled Unpublish`}`}
             </Badge>
           </Flex>
 
@@ -53,7 +55,9 @@ export function ScheduleBanner(props: Props) {
               </Box>
             )}
             <Text muted size={1}>
-              {hasError ? 'Publishing with errors on' : 'Scheduled to publish on'}{' '}
+              {hasError
+                ? 'Publishing with errors on'
+                : `Scheduled to ${action === 'publish' ? `Publish` : `Unpublish`} on`}{' '}
               <span style={{fontWeight: 500}}>{formattedDateTime}</span> (local time)
             </Text>
           </Flex>
@@ -63,15 +67,21 @@ export function ScheduleBanner(props: Props) {
   )
 }
 
-function useNextSchedule(id: string) {
+function useNextSchedule(id: string): {
+  formattedDateTime?: string
+  action?: string
+} {
   const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
 
   return useMemo(() => {
     const upcomingSchedule = schedules?.[0]
 
     if (!upcomingSchedule || !upcomingSchedule.executeAt) {
-      return undefined
+      return {}
     }
-    return format(new Date(upcomingSchedule.executeAt), DATE_FORMAT.LARGE)
+    return {
+      formattedDateTime: format(new Date(upcomingSchedule.executeAt), DATE_FORMAT.LARGE),
+      action: upcomingSchedule.action,
+    }
   }, [schedules])
 }
