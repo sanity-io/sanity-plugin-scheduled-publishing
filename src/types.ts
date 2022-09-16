@@ -12,6 +12,7 @@ export interface NormalizedTimeZone {
 
 export interface Schedule {
   author: string
+  action: string
   createdAt: string
   dataset: string
   description: string

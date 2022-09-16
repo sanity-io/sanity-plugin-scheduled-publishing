@@ -1,5 +1,5 @@
 import {SchemaType} from '@sanity/types'
-import {Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
+import {Badge, Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import React, {ElementType, ReactNode, useState} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
@@ -66,7 +66,11 @@ const PreviewWrapper = (props: Props) => {
         >
           <Flex align="center" justify="space-between">
             {children && <Box style={{flexBasis: 'auto', flexGrow: 1}}>{children}</Box>}
-
+            {schedule.action === 'unpublish' ? (
+              <Badge mode="outline" tone="caution" fontSize={0}>
+                Unpublish
+              </Badge>
+            ) : null}
             {/* Schedule date */}
             <>
               <Box
