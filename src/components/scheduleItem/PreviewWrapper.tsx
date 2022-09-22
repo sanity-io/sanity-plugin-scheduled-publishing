@@ -2,10 +2,14 @@ import {SchemaType} from '@sanity/types'
 import {Badge, Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
 import {SanityDefaultPreview} from 'part:@sanity/base/preview'
 import React, {ElementType, ReactNode, useState} from 'react'
-import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
+import {
+  DOCUMENT_HAS_ERRORS_TEXT,
+  DOCUMENT_HAS_WARNINGS_TEXT,
+  SCHEDULE_ACTION_DICTIONARY,
+} from '../../constants'
 import useTimeZone from '../../hooks/useTimeZone'
-import {Schedule} from '../../types'
-import {PaneItemPreviewState} from '../../utils/paneItemHelpers'
+import type {Schedule} from '../../types'
+import type {PaneItemPreviewState} from '../../utils/paneItemHelpers'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
 import {EMPTY_VALIDATION_STATUS, useValidationState} from '../../utils/validationUtils'
 import {ValidateScheduleDoc} from '../validation/SchedulesValidation'
@@ -64,56 +68,49 @@ const PreviewWrapper = (props: Props) => {
           tabIndex={0}
           tone={validationTone}
         >
-          <Flex align="center" justify="space-between">
+          <Flex align="center" gap={3} justify="flex-start" paddingLeft={children ? 0 : [1, 2]}>
             {children && <Box style={{flexBasis: 'auto', flexGrow: 1}}>{children}</Box>}
-            {schedule.action === 'unpublish' ? (
-              <Badge mode="outline" tone="caution" fontSize={0}>
-                Unpublish
-              </Badge>
-            ) : null}
+
+            {/* Badge */}
+            {schedule.action === 'unpublish' && (
+              <Flex style={{flexShrink: 0}}>
+                <Badge
+                  fontSize={0}
+                  mode="outline"
+                  tone={SCHEDULE_ACTION_DICTIONARY[schedule.action].badgeTone}
+                >
+                  {schedule.action}
+                </Badge>
+              </Flex>
+            )}
+
             {/* Schedule date */}
-            <>
-              <Box
-                display={['block', 'none']}
-                marginLeft={children ? [3, 3, 4] : 2}
-                style={{
-                  flexShrink: 0,
-                  width: '90px',
-                }}
-              >
-                <Stack space={2}>
-                  {scheduleDate ? (
-                    <>
-                      <Text size={1}>
-                        {formatDateTz({date: scheduleDate, format: 'dd/MM/yyyy'})}
-                      </Text>
-                      <Text size={1}>{formatDateTz({date: scheduleDate, format: 'p'})}</Text>
-                    </>
-                  ) : (
-                    <Text muted size={1}>
-                      <em>No date specified</em>
-                    </Text>
-                  )}
-                </Stack>
-              </Box>
-              <Box
-                display={['none', 'block']}
-                marginLeft={children ? [3, 3, 4] : 2}
-                style={{
-                  flexShrink: 0,
-                  maxWidth: '250px',
-                  width: children ? '35%' : 'auto',
-                }}
-              >
+            <Box display={['block', 'none']} style={{flexShrink: 0, width: '90px'}}>
+              <Stack space={2}>
                 {scheduleDate ? (
-                  <DateWithTooltip date={scheduleDate} useElementQueries={useElementQueries} />
+                  <>
+                    <Text size={1}>{formatDateTz({date: scheduleDate, format: 'dd/MM/yyyy'})}</Text>
+                    <Text size={1}>{formatDateTz({date: scheduleDate, format: 'p'})}</Text>
+                  </>
                 ) : (
                   <Text muted size={1}>
                     <em>No date specified</em>
                   </Text>
                 )}
-              </Box>
-            </>
+              </Stack>
+            </Box>
+            <Box
+              display={['none', 'block']}
+              style={{flexShrink: 0, maxWidth: '250px', width: children ? '35%' : 'auto'}}
+            >
+              {scheduleDate ? (
+                <DateWithTooltip date={scheduleDate} useElementQueries={useElementQueries} />
+              ) : (
+                <Text muted size={1}>
+                  <em>No date specified</em>
+                </Text>
+              )}
+            </Box>
 
             {/* HACK: render invisible preview wrapper when no children are provided to ensure consistent height */}
             {!children && (
@@ -122,14 +119,14 @@ const PreviewWrapper = (props: Props) => {
               </Box>
             )}
 
-            <Flex align="center" style={{flexShrink: 0}}>
+            <Flex align="center" style={{flexShrink: 0, marginLeft: 'auto'}}>
               {/* Avatar */}
               <Box display={['none', 'none', 'block']} marginX={3} style={{flexShrink: 0}}>
                 <User id={schedule?.author} />
               </Box>
 
               {/* Document status */}
-              <Box marginX={[2, 2, 3]} style={{flexShrink: 0}}>
+              <Box display={['none', 'block']} marginX={[2, 2, 3]} style={{flexShrink: 0}}>
                 <Inline space={4}>
                   <PublishedStatus document={previewState?.published} />
                   <DraftStatus document={previewState?.draft} />
