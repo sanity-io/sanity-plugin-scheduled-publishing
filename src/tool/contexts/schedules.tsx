@@ -1,8 +1,9 @@
 import {isSameDay} from 'date-fns'
 import React, {createContext, ReactNode, useCallback, useContext, useMemo, useState} from 'react'
 import useTimeZone from '../../hooks/useTimeZone'
-import {Schedule, ScheduleSort, ScheduleState} from '../../types'
+import type {Schedule, ScheduleSort, ScheduleState} from '../../types'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
+import {sortByExecuteDate} from '../../utils/sortByExecuteDate'
 
 type State = {
   activeSchedules: Schedule[]
@@ -82,20 +83,8 @@ function SchedulesProvider({
             return a[sortBy] < b[sortBy] ? 1 : -1
           }
           if (sortBy === 'executeAt') {
-            const invertOrder = value.scheduleState === 'scheduled' || value.selectedDate ? -1 : 1
-            const aExecuteDate = getLastExecuteDate(a)
-            const bExecuteDate = getLastExecuteDate(b)
-
-            if (aExecuteDate === bExecuteDate) {
-              return 0
-            }
-            if (aExecuteDate === null) {
-              return 1
-            }
-            if (bExecuteDate === null) {
-              return -1
-            }
-            return (aExecuteDate > bExecuteDate ? -1 : 1) * invertOrder
+            const reverseOrder = !(value.scheduleState === 'scheduled' || value.selectedDate)
+            return sortByExecuteDate({reverseOrder})(a, b)
           }
           return 1
         }) || []
@@ -119,21 +108,9 @@ function SchedulesProvider({
    */
   const schedulesByDate = useCallback(
     (wallDate: Date) => {
-      return value.schedules.filter(filterByDate(wallDate)).sort((a, b) => {
-        const aExecuteDate = getLastExecuteDate(a)
-        const bExecuteDate = getLastExecuteDate(b)
-
-        if (aExecuteDate === bExecuteDate) {
-          return 0
-        }
-        if (aExecuteDate === null) {
-          return 1
-        }
-        if (bExecuteDate === null) {
-          return -1
-        }
-        return aExecuteDate > bExecuteDate ? 1 : -1
-      })
+      return value.schedules
+        .filter(filterByDate(wallDate)) //
+        .sort(sortByExecuteDate())
     },
     [filterByDate, value.schedules]
   )

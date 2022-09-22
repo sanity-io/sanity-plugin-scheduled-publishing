@@ -1,8 +1,9 @@
-import {useCallback, useEffect} from 'react'
+import {useCallback, useEffect, useMemo} from 'react'
 import useSWR from 'swr'
 import {getSanityClient} from '../lib/client'
-import {Schedule, ScheduleState} from '../types'
+import type {Schedule, ScheduleState} from '../types'
 import getScheduleBaseUrl from '../utils/getScheduleBaseUrl'
+import {sortByExecuteDate} from '../utils/sortByExecuteDate'
 import {
   ScheduleDeleteEvent,
   ScheduleDeleteMultipleEvent,
@@ -152,10 +153,16 @@ function usePollSchedules({documentId, state}: {documentId?: string; state?: Sch
     }
   }, [handleDelete, handleDeleteMultiple, handlePublish, handleUpdate])
 
+  // By default: sort schedules by last execute date (executedAt || executeAt)
+  const sortedSchedules = useMemo(
+    () => data?.schedules?.sort(sortByExecuteDate()),
+    [data?.schedules]
+  )
+
   return {
     error,
     isInitialLoading: !error && !data,
-    schedules: data?.schedules || NO_SCHEDULES,
+    schedules: sortedSchedules || NO_SCHEDULES,
   }
 }
 
