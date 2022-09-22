@@ -1,6 +1,6 @@
 import type {DocumentBadgeComponent} from '@sanity/base'
 import {format} from 'date-fns'
-import {DATE_FORMAT} from '../../constants'
+import {DATE_FORMAT, SCHEDULE_ACTION_DICTIONARY} from '../../constants'
 import usePollSchedules from '../../hooks/usePollSchedules'
 import {debugWithName} from '../../utils/debug'
 
@@ -20,8 +20,10 @@ export const ScheduledBadge: DocumentBadgeComponent = (props) => {
   const formattedDateTime = format(new Date(upcomingSchedule.executeAt), DATE_FORMAT.LARGE)
 
   return {
-    color: 'primary',
+    color: SCHEDULE_ACTION_DICTIONARY[upcomingSchedule.action].badgeColor,
     label: `Scheduled`,
-    title: `Publishing on ${formattedDateTime} (local time)`,
+    title: `${
+      SCHEDULE_ACTION_DICTIONARY[upcomingSchedule.action].actionName
+    } on ${formattedDateTime} (local time)`,
   }
 }

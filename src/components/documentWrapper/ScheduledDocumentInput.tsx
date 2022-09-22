@@ -20,7 +20,7 @@ export const ScheduledDocumentInput = forwardRef(function ScheduledDocumentInput
 
   return (
     <>
-      {value?._id ? <ScheduleBanner id={value._id} markers={markers} type={type} /> : null}
+      {value?._id ? <ScheduleBanner id={value._id} markers={markers} /> : null}
       <NestedFormBuilder {...props} ref={ref} type={type} />
     </>
   )

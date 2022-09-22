@@ -1,77 +1,74 @@
 import {CalendarIcon} from '@sanity/icons'
-import {Marker, SchemaType} from '@sanity/types'
-import {Badge, Box, Card, Flex, Stack, Text} from '@sanity/ui'
+import type {Marker} from '@sanity/types'
+import {Badge, Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
 import {format} from 'date-fns'
-import React, {useMemo} from 'react'
-import {DATE_FORMAT} from '../../constants'
+import React from 'react'
+import {DATE_FORMAT, DOCUMENT_HAS_ERRORS_TEXT} from '../../constants'
 import usePollSchedules from '../../hooks/usePollSchedules'
 import {usePublishedId} from '../../hooks/usePublishedId'
 import {useValidationState} from '../../utils/validationUtils'
-import {ValidationInfo} from '../validation/ValidationInfo'
 
 interface Props {
   id: string
   markers: Marker[]
-  type: SchemaType
 }
 
 export function ScheduleBanner(props: Props) {
-  const {id, markers, type} = props
+  const {id, markers} = props
   const publishedId = usePublishedId(id)
   const {hasError} = useValidationState(markers)
-  const formattedDateTime = useNextSchedule(publishedId)
 
-  if (!formattedDateTime) {
+  const {schedules} = usePollSchedules({documentId: publishedId, state: 'scheduled'})
+
+  const hasSchedules = schedules.length > 0
+  if (!hasSchedules) {
     return null
   }
 
   return (
     <Box marginBottom={4}>
-      <Card
-        paddingBottom={2}
-        paddingTop={3}
-        paddingX={3}
-        radius={1}
-        shadow={1}
-        tone={hasError ? 'critical' : 'primary'}
-      >
+      <Card padding={3} radius={1} shadow={1} tone={hasError ? 'critical' : 'primary'}>
         <Stack space={2}>
-          <Flex>
-            <Badge fontSize={1} mode="outline" padding={2} style={{flexShrink: 0}}>
-              {hasError ? 'Scheduled (with errors)' : 'Scheduled'}
-            </Badge>
-          </Flex>
-
-          <Flex align="center" gap={1}>
-            {hasError ? (
-              <ValidationInfo markers={markers} type={type} documentId={publishedId} />
-            ) : (
-              <Box padding={3}>
-                <Text muted>
-                  <CalendarIcon />
-                </Text>
-              </Box>
-            )}
+          <Flex align="center" gap={3} marginBottom={1} padding={1}>
             <Text muted size={1}>
-              {hasError ? 'Publishing with errors on' : 'Scheduled to publish on'}{' '}
-              <span style={{fontWeight: 500}}>{formattedDateTime}</span> (local time)
+              <CalendarIcon />
+            </Text>
+            <Text muted size={1}>
+              <span style={{fontWeight: 600}}>Upcoming schedule</span> (local time)
             </Text>
           </Flex>
+
+          <Stack space={2}>
+            {schedules.map((schedule) => {
+              if (!schedule.executeAt) {
+                return null
+              }
+              const formattedDateTime = format(new Date(schedule.executeAt), DATE_FORMAT.LARGE)
+              return (
+                <Inline key={schedule.id} space={2}>
+                  <Text muted size={1}>
+                    {formattedDateTime}
+                  </Text>
+                  {/* HACK: Hide non unpublish schedules to maintain layout */}
+                  <Flex style={{opacity: schedule.action === 'unpublish' ? 1 : 0}}>
+                    <Badge fontSize={0} mode="outline">
+                      {schedule.action}
+                    </Badge>
+                  </Flex>
+                </Inline>
+              )
+            })}
+          </Stack>
+
+          {hasError && (
+            <Box marginTop={3}>
+              <Text muted size={1} weight="regular">
+                {DOCUMENT_HAS_ERRORS_TEXT}
+              </Text>
+            </Box>
+          )}
         </Stack>
       </Card>
     </Box>
   )
-}
-
-function useNextSchedule(id: string) {
-  const {schedules} = usePollSchedules({documentId: id, state: 'scheduled'})
-
-  return useMemo(() => {
-    const upcomingSchedule = schedules?.[0]
-
-    if (!upcomingSchedule || !upcomingSchedule.executeAt) {
-      return undefined
-    }
-    return format(new Date(upcomingSchedule.executeAt), DATE_FORMAT.LARGE)
-  }, [schedules])
 }
