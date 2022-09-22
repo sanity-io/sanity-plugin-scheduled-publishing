@@ -11,10 +11,6 @@ All notable changes to this project will be documented in this file. See
 
 - make sanity config a function so the current Space is respected ([#13](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/13)) ([e21034c](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/e21034cc85036215601dced21ffe158212b6f252))
 
-# Changelog
-
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
-
 ### [0.1.10](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.9...v0.1.10) (2022-07-04)
 
 ### Bug Fixes
