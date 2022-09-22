@@ -136,29 +136,31 @@ const PreviewWrapper = (props: Props) => {
           </Flex>
         </Card>
 
-        {/* Validation status (only displayed on upcoming schedules) */}
-        {schedule.state === 'scheduled' && (
-          <Box>
-            <ValidateScheduleDoc schedule={schedule} updateValidation={setValidationStatus} />
-            <ValidationInfo
-              markers={markers}
-              type={schemaType}
-              documentId={publishedDocumentId}
-              menuHeader={
-                <Box padding={2}>
-                  <Text size={1}>
-                    {hasError ? DOCUMENT_HAS_ERRORS_TEXT : DOCUMENT_HAS_WARNINGS_TEXT}
-                  </Text>
-                </Box>
-              }
-            />
-          </Box>
-        )}
+        <Flex justify="center" style={{width: '38px'}}>
+          {/* Validation status (only displayed on upcoming schedules) */}
+          {schedule.state === 'scheduled' && (
+            <Box>
+              <ValidateScheduleDoc schedule={schedule} updateValidation={setValidationStatus} />
+              <ValidationInfo
+                markers={markers}
+                type={schemaType}
+                documentId={publishedDocumentId}
+                menuHeader={
+                  <Box padding={2}>
+                    <Text size={1}>
+                      {hasError ? DOCUMENT_HAS_ERRORS_TEXT : DOCUMENT_HAS_WARNINGS_TEXT}
+                    </Text>
+                  </Box>
+                }
+              />
+            </Box>
+          )}
 
-        {/* Failed state reason (only displayed on cancelled schedules) */}
-        {schedule.state === 'cancelled' && (
-          <StateReasonFailedInfo stateReason={schedule.stateReason} />
-        )}
+          {/* Failed state reason (only displayed on cancelled schedules) */}
+          {schedule.state === 'cancelled' && (
+            <StateReasonFailedInfo stateReason={schedule.stateReason} />
+          )}
+        </Flex>
 
         {/* Context menu */}
         {contextMenu && <Box style={{flexShrink: 0}}>{contextMenu}</Box>}
