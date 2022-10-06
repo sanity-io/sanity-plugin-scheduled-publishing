@@ -2,9 +2,8 @@
 
 import React from 'react'
 import {Box, Text, Tooltip} from '@sanity/ui'
-import {TextWithTone} from 'sanity/_unstable'
 import {EditIcon} from '@sanity/icons'
-import {SanityDocument} from 'sanity'
+import {SanityDocument, TextWithTone} from 'sanity'
 import {TimeAgo} from './TimeAgo'
 
 export const DraftStatus = ({document}: {document?: SanityDocument | null}) => (

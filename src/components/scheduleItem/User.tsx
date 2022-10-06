@@ -1,4 +1,4 @@
-import {UserAvatar} from 'sanity/_unstable'
+import {UserAvatar} from 'sanity'
 import React from 'react'
 
 interface Props {

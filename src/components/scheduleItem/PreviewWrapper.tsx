@@ -1,6 +1,5 @@
-import {SchemaType} from 'sanity'
+import {SchemaType, SanityDefaultPreview} from 'sanity'
 import {Box, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
-import {SanityDefaultPreview} from 'sanity/_unstable'
 import React, {ElementType, ReactNode, useState} from 'react'
 import {DOCUMENT_HAS_ERRORS_TEXT, DOCUMENT_HAS_WARNINGS_TEXT} from '../../constants'
 import useTimeZone from '../../hooks/useTimeZone'

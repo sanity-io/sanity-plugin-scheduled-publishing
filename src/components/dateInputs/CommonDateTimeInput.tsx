@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import {useId} from '@reach/auto-id'
-import {FormField} from 'sanity/form'
+import {FormField} from 'sanity'
 import {TextInput, useForwardedRef} from '@sanity/ui'
 import React, {useEffect, useMemo} from 'react'
 import useTimeZone from '../../hooks/useTimeZone'

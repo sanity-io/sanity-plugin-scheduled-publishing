@@ -1,4 +1,4 @@
-import {useRouter} from 'sanity'
+import {useRouter} from 'sanity/router'
 import {CheckmarkIcon, CloseIcon, SelectIcon} from '@sanity/icons'
 import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
 import {format} from 'date-fns'

@@ -1,14 +1,14 @@
 import {ScheduledDocumentInput} from './components/documentWrapper/ScheduledDocumentInput'
-import {InputProps, RenderInputCallback} from 'sanity/lib/dts/src/form'
-import React, {ReactNode} from 'react'
+import {InputProps} from 'sanity'
+import React, {ComponentType} from 'react'
 
-export const resolveInput = (props: InputProps, next: RenderInputCallback): ReactNode => {
+export const DocumentBannerInput: ComponentType<InputProps> = (props) => {
   const {schemaType} = props
   const rootType = getRootType(schemaType)
   if (rootType.name === 'document') {
-    return <ScheduledDocumentInput {...props}>{next(props)}</ScheduledDocumentInput>
+    return <ScheduledDocumentInput {...props}>{props.renderDefault(props)}</ScheduledDocumentInput>
   }
-  return undefined
+  return props.renderDefault(props)
 }
 
 function getRootType(type: any): any {

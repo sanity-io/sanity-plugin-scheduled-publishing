@@ -1,9 +1,10 @@
 import {CalendarIcon} from '@sanity/icons'
-import {createPlugin, route} from 'sanity'
+import {createPlugin} from 'sanity'
+import {route} from 'sanity/router'
 import resolveDocumentActions from './documentActions'
 import resolveDocumentBadges from './documentBadges'
-import {resolveInput} from './inputResolver'
 import Tool from './tool/Tool'
+
 export {ScheduleAction} from './documentActions/schedule'
 export {ScheduledBadge} from './documentBadges/scheduled'
 export {resolveDocumentActions, resolveDocumentBadges}
@@ -16,9 +17,13 @@ export const scheduledPublishing = createPlugin({
     badges: (prev) => resolveDocumentBadges(prev),
   },
 
+  /*
   form: {
-    renderInput: resolveInput,
+    components: {
+      input: DocumentBannerInput,
+    },
   },
+*/
 
   tools: (prev) => {
     return [

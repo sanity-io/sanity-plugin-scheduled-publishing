@@ -3,7 +3,7 @@ import React, {CSSProperties, useEffect, useMemo, useState} from 'react'
 import {Card, Flex, Label} from '@sanity/ui'
 import {ScheduleItem} from '../../components/scheduleItem'
 import {VirtualItem} from 'react-virtual'
-import {SanityDefaultPreview} from 'sanity/_unstable'
+import {SanityDefaultPreview} from 'sanity'
 
 export interface ListItem {
   content: Schedule | string

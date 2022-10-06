@@ -1,4 +1,4 @@
-import {DocumentActionComponent} from 'sanity/desk'
+import {DocumentActionComponent} from 'sanity'
 import {ScheduleAction} from './documentActions/schedule'
 
 type Action = DocumentActionComponent

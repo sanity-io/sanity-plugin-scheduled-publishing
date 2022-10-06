@@ -2,9 +2,8 @@
 
 import React from 'react'
 import {Box, Text, Tooltip} from '@sanity/ui'
-import {TextWithTone} from 'sanity/_unstable'
 import {PublishIcon} from '@sanity/icons'
-import {SanityDocument} from 'sanity'
+import {SanityDocument, TextWithTone} from 'sanity'
 import {TimeAgo} from './TimeAgo'
 
 export const PublishedStatus = ({document}: {document?: SanityDocument | null}) => (

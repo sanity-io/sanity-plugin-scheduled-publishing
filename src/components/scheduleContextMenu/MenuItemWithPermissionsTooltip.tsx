@@ -1,5 +1,4 @@
-import {InsufficientPermissionsMessage} from 'sanity/_unstable'
-import {CurrentUser} from 'sanity'
+import {CurrentUser, InsufficientPermissionsMessage} from 'sanity'
 import {Box, MenuItem, SelectableTone, Tooltip} from '@sanity/ui'
 import React, {ComponentType, ReactNode} from 'react'
 

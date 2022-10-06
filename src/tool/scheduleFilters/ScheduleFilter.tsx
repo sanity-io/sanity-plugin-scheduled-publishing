@@ -1,4 +1,4 @@
-import {StateLink} from 'sanity'
+import {StateLink} from 'sanity/router'
 import {red, white} from '@sanity/color'
 import {Box, Flex, Tab, Text} from '@sanity/ui'
 import React from 'react'

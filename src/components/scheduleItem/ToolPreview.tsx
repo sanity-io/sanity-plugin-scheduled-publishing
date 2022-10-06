@@ -1,6 +1,5 @@
-import {SanityDocument, SchemaType, IntentLink} from 'sanity'
-import {SanityDefaultPreview} from 'sanity/_unstable'
-import {getPublishedId} from 'sanity'
+import {SanityDocument, SchemaType, getPublishedId, SanityDefaultPreview} from 'sanity'
+import {IntentLink} from 'sanity/router'
 import React, {forwardRef, useMemo} from 'react'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
 import {usePublishedId} from '../../hooks/usePublishedId'

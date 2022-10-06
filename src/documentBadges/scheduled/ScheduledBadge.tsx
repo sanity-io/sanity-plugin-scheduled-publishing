@@ -1,4 +1,4 @@
-import type {DocumentBadgeComponent} from 'sanity/desk'
+import type {DocumentBadgeComponent} from 'sanity'
 import {format} from 'date-fns'
 import {DATE_FORMAT} from '../../constants'
 import usePollSchedules from '../../hooks/usePollSchedules'

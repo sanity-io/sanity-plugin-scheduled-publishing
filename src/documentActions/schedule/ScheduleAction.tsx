@@ -1,13 +1,12 @@
-import type {
-  DocumentActionDescription,
-  DocumentActionDialogModalProps,
-  DocumentActionProps,
-} from 'sanity/desk'
 import {
+  type DocumentActionDescription,
+  type DocumentActionDialogModalProps,
+  type DocumentActionProps,
   useDocumentPairPermissions,
   useCurrentUser,
   InsufficientPermissionsMessage,
-} from 'sanity/_unstable'
+} from 'sanity'
+
 import {CalendarIcon, ClockIcon} from '@sanity/icons'
 import {Box, Text} from '@sanity/ui'
 import React, {useCallback, useState} from 'react'

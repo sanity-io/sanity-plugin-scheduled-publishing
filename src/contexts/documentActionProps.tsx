@@ -1,4 +1,4 @@
-import {DocumentActionProps} from 'sanity/desk'
+import {DocumentActionProps} from 'sanity'
 import React, {createContext, ReactNode, useContext} from 'react'
 
 type State = DocumentActionProps

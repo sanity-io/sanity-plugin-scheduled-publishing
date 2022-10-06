@@ -1,8 +1,6 @@
 // Based off: https://github.com/sanity-io/sanity/blob/next/packages/@sanity/desk-tool/src/components/paneItem/helpers.tsx
 import {WarningOutlineIcon} from '@sanity/icons'
-import {SanityDocument, SchemaType} from 'sanity'
-import {getDraftId, getPublishedId} from 'sanity'
-import {DocumentPreviewStore} from 'sanity/_unstable'
+import {getDraftId, getPublishedId, DocumentPreviewStore, SanityDocument, SchemaType} from 'sanity'
 import React from 'react'
 import {combineLatest, Observable, of} from 'rxjs'
 import {map, startWith} from 'rxjs/operators'

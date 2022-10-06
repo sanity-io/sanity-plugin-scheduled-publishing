@@ -1,6 +1,6 @@
 import {red} from '@sanity/color'
 import {UnknownIcon} from '@sanity/icons'
-import {SanityDefaultPreview} from 'sanity/_unstable'
+import {SanityDefaultPreview} from 'sanity'
 import React from 'react'
 import {Schedule} from '../../types'
 import {FallbackContextMenu} from '../scheduleContextMenu/FallbackContextMenu'
