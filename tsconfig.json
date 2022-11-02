@@ -3,9 +3,9 @@
     "jsx": "preserve",
     "moduleResolution": "node",
     "target": "esnext",
-    "esModuleInterop": true,
     "module": "esnext",
-    "lib": ["es2015", "es2016", "es2017", "es2021", "dom"],
+    "esModuleInterop": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "strict": true,
     "sourceMap": false,
     "inlineSourceMap": false,
@@ -15,11 +15,10 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "outDir": "lib",
-    "baseUrl": ".",
     "skipLibCheck": true,
     "isolatedModules": true,
     "checkJs": false,
-    "incremental": true
+    "rootDir": "src"
   },
   "include": ["src/**/*"]
 }

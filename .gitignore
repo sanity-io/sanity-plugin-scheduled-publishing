@@ -1,6 +1,3 @@
-# Built files
-lib
-
 # Logs
 logs
 *.log
@@ -45,20 +42,17 @@ jspm_packages
 # VS Code settings
 .vscode
 
-# Cache
-.cache
-
-# Fixtures for tests, but only for the `build` command -
-# we expect `verify` to have precompiled results to verify
-test/fixtures/build/lib
-
 # IntelliJ
 .idea
 *.iml
 
-#yalc
+# Cache
+.cache
+
+# Yalc
 .yalc
 yalc.lock
 
-# parcel
-.parcel-cache
+# Compiled plugin
+lib
+

@@ -1,6 +1,8 @@
 {
   "name": "@sanity/scheduled-publishing",
   "version": "0.3.0-v3-studio.7",
+  "description": "> **NOTE**",
+  "author": "Sanity.io <hello@sanity.io>",
   "license": "MIT",
   "keywords": [
     "sanity",
@@ -9,20 +11,22 @@
   "source": "./src/index.ts",
   "exports": {
     ".": {
-      "require": "./lib/cjs/index.js",
-      "default": "./lib/esm/index.js"
+      "types": "./lib/src/index.d.ts",
+      "source": "./src/index.ts",
+      "import": "./lib/index.esm.js",
+      "require": "./lib/index.js",
+      "default": "./lib/index.esm.js"
     }
   },
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "types": "./lib/types/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/index.esm.js",
+  "types": "./lib/src/index.d.ts",
   "files": [
     "src",
     "lib",
     "v2-incompatible.js",
     "sanity.json"
   ],
-  "author": "Sanity.io <hello@sanity.io>",
   "repository": {
     "type": "git",
     "url": "git@github.com:sanity-io/sanity-plugin-scheduled-publishing.git"
@@ -34,9 +38,9 @@
   "sanityExchangeUrl": "https://www.sanity.io/plugins/scheduled-publishing",
   "scripts": {
     "clean": "rimraf lib",
-    "prebuild": "npm run clean && plugin-kit verify-package --silent",
-    "build": "parcel build --no-cache",
-    "watch": "parcel watch",
+    "prebuild": "npm run clean && plugin-kit verify-package --silent && pkg-utils",
+    "build": "pkg-utils build",
+    "watch": "pkg-utils watch",
     "link-watch": "plugin-kit link-watch",
     "prepublishOnly": "npm run build",
     "dev": "npm run watch",
@@ -65,41 +69,39 @@
     "swr": "^1.2.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "@parcel/packager-ts": "^2.6.0",
-    "@parcel/transformer-typescript-types": "^2.6.0",
-    "@sanity/plugin-kit": "^1.1.0-ecosystem-preset.5",
-    "@sanity/semantic-release-preset": "^2.0.1",
+    "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0",
+    "@sanity/pkg-utils": "^1.16.2",
+    "@sanity/plugin-kit": "^2.0.7",
+    "@sanity/semantic-release-preset": "^2.0.2",
     "@types/debug": "^4.1.7",
     "@types/lodash": "^4.14.182",
     "@types/pluralize": "^0.0.29",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.21",
-    "@typescript-eslint/eslint-plugin": "^5.27.0",
-    "@typescript-eslint/parser": "^5.27.0",
-    "eslint": "^8.7.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-sanity": "^5.1.0",
-    "eslint-plugin-prettier": "4.0.0",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-sanity": "^6.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "lodash": "^4.17.21",
-    "parcel": "^2.6.0",
-    "prettier": "^2.5.1",
+    "prettier": "^2.7.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "rimraf": "^3.0.2",
-    "sanity": "3.0.0-dev-preview.22",
-    "typescript": "4.7.3"
+    "sanity": "dev-preview || 3.0.0-rc.0",
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "sanity": "dev-preview || 3.0.0-dev-preview.22",
+    "sanity": "dev-preview || 3.0.0-rc.0",
     "styled-components": "^5.3.3"
   },
   "engines": {

@@ -1,7 +1,9 @@
-src
-node_modules
+/test
+/coverage
 .editorconfig
-.eslintignore
-.eslintrc.js
-commitlint.config.js
-tsconfig.json
+.eslintrc
+.gitignore
+.github
+.prettierrc
+.travis.yml
+.nyc_output

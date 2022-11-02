@@ -49,30 +49,28 @@ Schedule your content for future publication and organise upcoming releases – 
 - Easily select time zones by city, time zone abbreviation or name search.
 - Selected time zones are automatically stored in your local storage for future use.
 
-## Getting started
+# Getting started
 
-### Install
+## Installation
 
-In your Sanity studio folder:
-
-```sh
-npm install --save @sanity/scheduled-publishing
+```
+npm install --save @sanity/scheduled-publishing@studio-v3
 ```
 
 or
 
-```sh
-yarn add @sanity/scheduled-publishing
+```
+yarn add @sanity/scheduled-publishing@studio-v3
 ```
 
-### Usage
+## Usage
 
 Add it as a plugin in sanity.config.ts (or .js):
 
 ```js
 import { scheduledPublishing } from "@sanity/scheduled-publishing";
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     scheduledPublishing(),
@@ -102,7 +100,7 @@ so you should remove it from types that should NOT have it.
 ```js
 import {scheduledPublishing, ScheduleAction} from '@sanity/scheduled-publishing'
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     scheduledPublishing(),
@@ -134,7 +132,7 @@ so you should remove it from types that should NOT have it.
 ```js
 import {scheduledPublishing, ScheduledBadge} from '@sanity/scheduled-publishing'
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     scheduledPublishing(),
@@ -220,3 +218,23 @@ with default configuration for build & watch scripts.
 
 See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
 on how to run this plugin with hotreload in the studio.
+
+
+## License
+
+MIT-licensed. See LICENSE.
+
+## Develop & test
+
+This plugin uses [@sanity/plugin-kit](https://github.com/sanity-io/plugin-kit)
+with default configuration for build & watch scripts.
+
+See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
+on how to run this plugin with hotreload in the studio.
+
+### Release new version
+
+Run ["CI & Release" workflow](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/actions/workflows/main.yml).
+Make sure to select the main branch and check "Release new version".
+
+Semantic release will only release on configured branches, so it is safe to run release on any branch.
