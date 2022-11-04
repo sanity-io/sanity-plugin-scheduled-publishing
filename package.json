@@ -1,14 +1,21 @@
 {
   "name": "@sanity/scheduled-publishing",
   "version": "0.3.0-v3-studio.10",
-  "description": "> **NOTE**",
-  "author": "Sanity.io <hello@sanity.io>",
-  "license": "MIT",
+  "description": "",
   "keywords": [
     "sanity",
     "plugin"
   ],
-  "source": "./src/index.ts",
+  "homepage": "https://github.com/sanity-io/sanity-plugin-scheduled-publishing#readme",
+  "bugs": {
+    "url": "https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sanity-io/sanity-plugin-scheduled-publishing.git"
+  },
+  "license": "MIT",
+  "author": "Sanity.io <hello@sanity.io>",
   "exports": {
     ".": {
       "types": "./lib/src/index.d.ts",
@@ -16,10 +23,12 @@
       "import": "./lib/index.esm.js",
       "require": "./lib/index.js",
       "default": "./lib/index.esm.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "main": "./lib/index.js",
   "module": "./lib/index.esm.js",
+  "source": "./src/index.ts",
   "types": "./lib/src/index.d.ts",
   "files": [
     "src",
@@ -27,29 +36,20 @@
     "v2-incompatible.js",
     "sanity.json"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:sanity-io/sanity-plugin-scheduled-publishing.git"
-  },
-  "bugs": {
-    "url": "https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues"
-  },
-  "homepage": "https://github.com/sanity-io/sanity-plugin-scheduled-publishing#readme",
-  "sanityExchangeUrl": "https://www.sanity.io/plugins/scheduled-publishing",
   "scripts": {
-    "clean": "rimraf lib",
     "prebuild": "npm run clean && plugin-kit verify-package --silent && pkg-utils",
-    "build": "pkg-utils build",
-    "watch": "pkg-utils watch",
-    "link-watch": "plugin-kit link-watch",
-    "prepublishOnly": "npm run build",
+    "build": "pkg-utils build --strict",
+    "clean": "rimraf lib",
+    "compile": "tsc --noEmit",
     "dev": "npm run watch",
-    "lint": "eslint .",
     "format": "prettier src -w",
+    "link-watch": "plugin-kit link-watch",
+    "lint": "eslint .",
     "prepare": "husky install",
+    "prepublishOnly": "npm run build",
     "release": "standard-version",
     "verify": "npm run compile && npm run lint",
-    "compile": "tsc --noEmit"
+    "watch": "pkg-utils watch"
   },
   "dependencies": {
     "@sanity/color": "2.1.19-beta.3",
@@ -71,14 +71,14 @@
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
-    "@sanity/pkg-utils": "^1.16.2",
-    "@sanity/plugin-kit": "^2.0.9",
+    "@sanity/pkg-utils": "^1.17.2",
+    "@sanity/plugin-kit": "^2.1.5",
     "@sanity/semantic-release-preset": "^2.0.2",
     "@types/debug": "^4.1.7",
     "@types/lodash": "^4.14.187",
     "@types/pluralize": "^0.0.29",
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
@@ -92,19 +92,21 @@
     "lint-staged": "^13.0.3",
     "lodash": "^4.17.21",
     "prettier": "^2.7.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "prettier-plugin-packagejson": "^2.3.0",
+    "react": "^18",
+    "react-dom": "^18",
     "rimraf": "^3.0.2",
-    "sanity": "dev-preview || 3.0.0-rc.0",
+    "sanity": "3.0.0-rc.0",
     "typescript": "^4.8.4"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18",
+    "react-dom": "^18",
     "sanity": "dev-preview || 3.0.0-rc.0",
     "styled-components": "^5.3.3"
   },
   "engines": {
-    "node": ">=14.0.0"
-  }
+    "node": ">=14"
+  },
+  "sanityExchangeUrl": "https://www.sanity.io/plugins/scheduled-publishing"
 }
