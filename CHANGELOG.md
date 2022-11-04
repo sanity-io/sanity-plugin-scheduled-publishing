@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0-v3-studio.9](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.8...v0.3.0-v3-studio.9) (2022-11-04)
+
+### Bug Fixes
+
+- **deps:** pin dependencies ([#31](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/31)) ([5ccd60e](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/5ccd60e1cf0d1caa32a3d5811f1df0d7b932037a))
+
 ## [0.3.0-v3-studio.8](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.7...v0.3.0-v3-studio.8) (2022-11-03)
 
 ### Bug Fixes
