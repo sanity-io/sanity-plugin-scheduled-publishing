@@ -57,16 +57,16 @@
     "@sanity/incompatible-plugin": "^1.0.4",
     "@sanity/ui": "1.0.0-beta.32",
     "@sanity/util": "3.0.0-rc.0",
-    "@vvo/tzdb": "^6.35.0",
-    "date-fns": "^2.27.0",
-    "date-fns-tz": "^1.2.2",
-    "debug": "^4.3.3",
+    "@vvo/tzdb": "^6.75.0",
+    "date-fns": "^2.29.3",
+    "date-fns-tz": "^1.3.7",
+    "debug": "^4.3.4",
     "lodash": "^4.17.21",
     "pluralize": "^8.0.0",
-    "react-focus-lock": "^2.7.1",
+    "react-focus-lock": "^2.9.1",
     "react-virtual": "^2.10.4",
-    "rxjs": "^7.5.2",
-    "swr": "^1.2.0"
+    "rxjs": "^7.5.7",
+    "swr": "^1.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
