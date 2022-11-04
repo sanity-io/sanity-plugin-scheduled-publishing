@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0-v3-studio.10](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.9...v0.3.0-v3-studio.10) (2022-11-04)
+
+### Bug Fixes
+
+- **deps:** update dependencies (non-major) ([#33](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/33)) ([33c3521](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/33c3521e51fb6e1614c3181649be6833fefe836e))
+- **deps:** update sanity-ui-pin ([#35](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/35)) ([eca498c](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/eca498c725114ab7add2211a20cd9972702a9ea3))
+
 ## [0.3.0-v3-studio.9](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.8...v0.3.0-v3-studio.9) (2022-11-04)
 
 ### Bug Fixes
