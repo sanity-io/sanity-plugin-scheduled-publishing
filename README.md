@@ -1,10 +1,7 @@
 # Scheduled Publishing plugin for Sanity.io
 
-> **NOTE**
->
-> This is the **Sanity Studio v3 version** of @sanity/scheduled-publishing.
->
-> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/sanity-plugin-scheduled-publishing).
+> This is a **Sanity Studio v3** plugin.
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/tree/studio-v2).
 
 ## What is it?
 
@@ -54,13 +51,13 @@ Schedule your content for future publication and organise upcoming releases – 
 ## Installation
 
 ```
-npm install --save @sanity/scheduled-publishing@studio-v3
+npm install --save @sanity/scheduled-publishing
 ```
 
 or
 
 ```
-yarn add @sanity/scheduled-publishing@studio-v3
+yarn add @sanity/scheduled-publishing
 ```
 
 ## Usage
