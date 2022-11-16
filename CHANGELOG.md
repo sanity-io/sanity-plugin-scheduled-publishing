@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.0.0...v1.0.1) (2022-11-16)
+
+### Bug Fixes
+
+- **deps:** compiled for sanity 3.0.0-rc.2 ([6a9619d](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/6a9619d4d35dd85c62f41895689bbf011173798c))
+
 ## [1.0.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.5...v1.0.0) (2022-11-16)
 
 ### ⚠ BREAKING CHANGES
