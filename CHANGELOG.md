@@ -5,6 +5,36 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.1.5...v1.0.0) (2022-11-16)
+
+### ⚠ BREAKING CHANGES
+
+- this version does not work in Sanity Studio V2.
+- This version no longer works in Studio V2
+
+### Features
+
+- initial studio V3 release ([db571a6](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/db571a6fa98f0ef8657a528d087023ae2b78ca00))
+- initial Studio V3 version ([212e34b](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/212e34bac8813aa8254ff7f5b8631f956db7be27))
+
+### Bug Fixes
+
+- compiled for sanity 3.0.0-rc.0 ([437e291](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/437e2912221943600c002271c22fffc48c4906c7))
+- **deps:** @sanity/util bump ([7641344](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/76413445126d5c58e35b78d6372a34ec16c0fe0e))
+- **deps:** added semver workflow ([00b3052](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/00b3052c7c94f4d1aa2aa352fb8087ecd7e5b9da))
+- **deps:** dev-preview.21 ([25b3198](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/25b319841b0bfb1bc43bea58c3e49f28370117e2))
+- **deps:** dev-preview.22 ([524cdf9](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/524cdf901f9dd7c63d0f08c0216b4c5d3aad0be1))
+- **deps:** pin dependencies ([#31](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/31)) ([5ccd60e](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/5ccd60e1cf0d1caa32a3d5811f1df0d7b932037a))
+- **deps:** pkg-utils & @sanity/plugin-kit ([373c025](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/373c0258c2bac37a0f906ea3f7f415509410f97b))
+- **deps:** update dependencies (non-major) ([#33](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/33)) ([33c3521](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/33c3521e51fb6e1614c3181649be6833fefe836e))
+- **deps:** update sanity-ui-pin ([#35](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/35)) ([eca498c](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/eca498c725114ab7add2211a20cd9972702a9ea3))
+- **deps:** version updates ([ccfd466](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/ccfd466a204da7701d4b24f6764b32d6e51ae3b4))
+- dev-preview.17 compatability ([ea820e4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/ea820e4ea5aad918721369b9602e9bd33b91ba19))
+- memoized document type ([56afc1e](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/56afc1e5feb1ebc119ce3811023972a87f295713))
+- re-enable missing calendar day routes, update tool header positioning ([83f0e27](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/83f0e279f02b5450ace646b760853459cfec18a6))
+- sanity/util dev-preview.17 compatability ([4e29800](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/4e29800a3b4e2936875a4bbf98b24b63702942bd))
+- use new useClient api ([87c7322](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/87c73227774a14340949708dcf71506a4579921e))
+
 ## [0.3.0-v3-studio.11](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v0.3.0-v3-studio.10...v0.3.0-v3-studio.11) (2022-11-04)
 
 ### Bug Fixes
