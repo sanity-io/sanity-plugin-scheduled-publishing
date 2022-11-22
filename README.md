@@ -38,7 +38,14 @@ Schedule your content for future publication and organise upcoming releases – 
 In your Sanity studio folder:
 
 ```sh
-sanity install @sanity/scheduled-publishing@studio-v2
+yarn add @sanity/scheduled-publishing@studio-v2
+```
+
+Next, add `"@sanity/scheduled-publishing"` to `sanity.json` plugins array:
+```json
+"plugins": [
+  "@sanity/scheduled-publishing"
+]
 ```
 
 This will automatically:
