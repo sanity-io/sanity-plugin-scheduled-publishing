@@ -28,8 +28,6 @@ interface Props {
   useElementQueries?: boolean
 }
 
-const DUMMY = {}
-
 const PreviewWrapper = (props: Props) => {
   const {
     children,
@@ -115,7 +113,7 @@ const PreviewWrapper = (props: Props) => {
             {/* HACK: render invisible preview wrapper when no children are provided to ensure consistent height */}
             {!children && (
               <Box style={{visibility: 'hidden'}}>
-                <SanityDefaultPreview isPlaceholder value={DUMMY} />
+                <SanityDefaultPreview isPlaceholder />
               </Box>
             )}
 

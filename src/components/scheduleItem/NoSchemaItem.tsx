@@ -16,10 +16,8 @@ const NoSchemaItem = ({schedule}: {schedule: Schedule}) => {
       <SanityDefaultPreview
         icon={UnknownIcon}
         layout="default"
-        value={{
-          subtitle: <em>It may have been deleted</em>,
-          title: <em style={{color: red[600].hex}}>Document not found</em>,
-        }}
+        subtitle={<em>It may have been deleted</em>}
+        title={<em style={{color: red[600].hex}}>Document not found</em>}
       />
     </PreviewWrapper>
   )

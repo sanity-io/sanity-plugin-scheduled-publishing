@@ -1,4 +1,4 @@
-import {SanityDocument, SchemaType, getPublishedId, SanityDefaultPreview} from 'sanity'
+import {getPublishedId, Preview, SanityDefaultPreview, SchemaType} from 'sanity'
 import {IntentLink} from 'sanity/router'
 import React, {forwardRef, useMemo} from 'react'
 import useDialogScheduleEdit from '../../hooks/useDialogScheduleEdit'
@@ -64,12 +64,15 @@ const ToolPreview = (props: Props) => {
         schemaType={schemaType}
         useElementQueries
       >
-        <SanityDefaultPreview
-          icon={schemaType?.icon as React.ComponentType}
-          isPlaceholder={previewState.isLoading}
-          layout="default"
-          value={visibleDocument as SanityDocument}
-        />
+        {previewState.isLoading ? (
+          <SanityDefaultPreview
+            icon={schemaType?.icon as React.ComponentType}
+            isPlaceholder={previewState.isLoading}
+            layout="default"
+          />
+        ) : (
+          <Preview layout="default" schemaType={schemaType} value={visibleDocument} />
+        )}
       </PreviewWrapper>
     </>
   )

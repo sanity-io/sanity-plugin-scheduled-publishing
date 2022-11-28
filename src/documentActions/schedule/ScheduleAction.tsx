@@ -1,6 +1,6 @@
 import {
   type DocumentActionDescription,
-  type DocumentActionDialogModalProps,
+  type DocumentActionDialogProps,
   type DocumentActionProps,
   useDocumentPairPermissions,
   useCurrentUser,
@@ -118,7 +118,7 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
       'Live Edit is enabled for this content type and publishing happens automatically as you make changes'
   }
 
-  let dialog: DocumentActionDialogModalProps
+  let dialog: DocumentActionDialogProps
   if (hasFeature === false) {
     dialog = {
       content: <Text size={1}>{FEATURE_NOT_SUPPORTED_TEXT}</Text>,
@@ -161,7 +161,7 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
   }
 
   return {
-    modal: dialogOpen && dialog,
+    dialog: dialogOpen && dialog,
     disabled: isInitialLoading || !documentExists || liveEdit,
     label: title,
     icon: CalendarIcon,

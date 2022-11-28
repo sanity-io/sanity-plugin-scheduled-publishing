@@ -102,13 +102,11 @@ function MonthHeading({content}: {content: string}) {
   )
 }
 
-const DUMMY = {}
-
 function PlaceholderScheduleItem() {
   return (
     <Card padding={1} radius={2} shadow={1}>
       <Card padding={1}>
-        <SanityDefaultPreview isPlaceholder value={DUMMY} />
+        <SanityDefaultPreview isPlaceholder />
       </Card>
     </Card>
   )
