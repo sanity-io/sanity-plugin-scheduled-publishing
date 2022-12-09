@@ -8,6 +8,7 @@ import {DocumentBannerInput} from './inputResolver'
 
 export {ScheduleAction} from './documentActions/schedule'
 export {ScheduledBadge} from './documentBadges/scheduled'
+export {EditScheduleForm} from './components/editScheduleForm/EditScheduleForm'
 export {resolveDocumentActions, resolveDocumentBadges}
 
 export const scheduledPublishing = definePlugin({

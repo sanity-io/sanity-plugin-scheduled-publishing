@@ -1,11 +1,11 @@
 import {CloseIcon} from '@sanity/icons'
-import type {CardTone} from '@sanity/ui'
+import {CardTone, Inline, Label} from '@sanity/ui'
 import {Badge, Box, Card, Flex, Stack, Text, Tooltip} from '@sanity/ui'
 import {format, isWeekend} from 'date-fns'
 import React, {useCallback, useMemo} from 'react'
-import {SCHEDULE_STATE_DICTIONARY} from '../../constants'
+import {SCHEDULE_ACTION_DICTIONARY, SCHEDULE_STATE_DICTIONARY} from '../../constants'
 import useTimeZone from '../../hooks/useTimeZone'
-import type {Schedule} from '../../types'
+import type {Schedule, ScheduleState} from '../../types'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
 import {useSchedules} from '../contexts/schedules'
 import Pip from './Pip'
@@ -115,43 +115,78 @@ interface TooltipContentProps {
   schedules?: Schedule[]
 }
 
+type SchedulesByState = Record<ScheduleState, Schedule[]>
+
 function TooltipContent(props: TooltipContentProps) {
   const {date, schedules = []} = props
   const {formatDateTz} = useTimeZone()
 
+  const schedulesByState = schedules.reduce<SchedulesByState>(
+    (acc, val) => {
+      acc[val.state].push(val)
+      return acc
+    },
+    {
+      cancelled: [],
+      succeeded: [],
+      scheduled: [],
+    }
+  )
+
   return (
     <Box padding={3}>
-      <Box marginBottom={3}>
-        <Text muted size={1} weight="regular">
+      <Box marginBottom={4}>
+        <Text size={1} weight="medium">
           {format(date, 'd MMMM yyyy')}
         </Text>
       </Box>
-      <Stack space={2}>
-        {schedules
-          .filter((schedule) => schedule.executeAt)
-          .map((schedule) => {
-            const executeDate = getLastExecuteDate(schedule)
-            if (!executeDate) {
-              return null
-            }
+      <Stack space={3}>
+        {(Object.keys(schedulesByState) as Array<keyof typeof schedulesByState>).map((key) => {
+          const stateSchedules = schedulesByState[key]
+          if (stateSchedules.length === 0) {
+            return null
+          }
+          return (
+            <Stack key={key} space={2}>
+              <Label muted size={0}>
+                {SCHEDULE_STATE_DICTIONARY[key].title}
+              </Label>
+              <Stack space={1}>
+                {stateSchedules
+                  .filter((schedule) => schedule.executeAt)
+                  .map((schedule) => {
+                    const executeDate = getLastExecuteDate(schedule)
+                    if (!executeDate) {
+                      return null
+                    }
 
-            return (
-              <Flex align="center" gap={3} justify="space-between" key={schedule.id}>
-                <Box>
-                  <Text size={1} weight="semibold">
-                    {formatDateTz({date: new Date(executeDate), format: 'p'})}
-                  </Text>
-                </Box>
-                <Badge
-                  fontSize={0}
-                  mode="outline"
-                  tone={SCHEDULE_STATE_DICTIONARY[schedule.state].badgeTone}
-                >
-                  {SCHEDULE_STATE_DICTIONARY[schedule.state].title}
-                </Badge>
-              </Flex>
-            )
-          })}
+                    return (
+                      <Inline key={schedule.id} space={2}>
+                        <Box style={{width: '60px'}}>
+                          <Text size={1} weight="regular">
+                            {formatDateTz({date: new Date(executeDate), format: 'p'})}
+                          </Text>
+                        </Box>
+                        {/* HACK: Hide non unpublish schedules to maintain layout */}
+                        <Flex
+                          align="center"
+                          style={{flexShrink: 0, opacity: schedule.action === 'unpublish' ? 1 : 0}}
+                        >
+                          <Badge
+                            fontSize={0}
+                            mode="outline"
+                            tone={SCHEDULE_ACTION_DICTIONARY[schedule.action].badgeTone}
+                          >
+                            {schedule.action}
+                          </Badge>
+                        </Flex>
+                      </Inline>
+                    )
+                  })}
+              </Stack>
+            </Stack>
+          )
+        })}
       </Stack>
     </Box>
   )
