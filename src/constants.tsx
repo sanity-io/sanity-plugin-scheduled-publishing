@@ -1,26 +1,42 @@
 import {BadgeTone} from '@sanity/ui'
 import React from 'react'
-import {ScheduleState} from './types'
+import {ScheduleAction, ScheduleState} from './types'
 
 export const LOCAL_STORAGE_TZ_KEY = 'scheduled-publishing::time-zone'
+
+export const SCHEDULE_ACTION_DICTIONARY: Record<
+  ScheduleAction,
+  {
+    actionName: string
+    badgeColor?: 'primary' | 'success' | 'warning' | 'danger' // Document badge specific
+    badgeTone: BadgeTone
+  }
+> = {
+  publish: {
+    actionName: 'Publishing',
+    badgeColor: 'primary',
+    badgeTone: 'positive',
+  },
+  unpublish: {
+    actionName: 'Unpublishing',
+    badgeColor: 'danger',
+    badgeTone: 'critical',
+  },
+}
 
 export const SCHEDULE_STATE_DICTIONARY: Record<
   ScheduleState,
   {
-    badgeTone: BadgeTone
     title: string
   }
 > = {
   scheduled: {
-    badgeTone: 'primary',
     title: 'Upcoming',
   },
   succeeded: {
-    badgeTone: 'default',
     title: 'Completed',
   },
   cancelled: {
-    badgeTone: 'critical',
     title: 'Failed',
   },
 }

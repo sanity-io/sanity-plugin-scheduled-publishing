@@ -3,7 +3,7 @@ import {ScheduleBanner} from './ScheduleBanner'
 import {InputProps, ValidationMarker} from 'sanity'
 
 export function ScheduledDocumentInput(props: PropsWithChildren<InputProps>) {
-  const {value, validation, schemaType, children} = props
+  const {value, validation, children} = props
   const doc: {_id?: string} = value as unknown as {_id: string}
 
   const markers: ValidationMarker[] = useMemo(
@@ -18,7 +18,7 @@ export function ScheduledDocumentInput(props: PropsWithChildren<InputProps>) {
 
   return (
     <>
-      {doc?._id ? <ScheduleBanner id={doc._id} markers={markers} type={schemaType} /> : null}
+      {doc?._id ? <ScheduleBanner id={doc._id} markers={markers} /> : null}
       {children}
     </>
   )

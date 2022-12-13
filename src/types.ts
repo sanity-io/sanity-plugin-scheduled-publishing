@@ -12,6 +12,7 @@ export interface NormalizedTimeZone {
 
 export interface Schedule {
   author: string
+  action: ScheduleAction
   createdAt: string
   dataset: string
   description: string
@@ -27,6 +28,8 @@ export interface Schedule {
   state: ScheduleState
   stateReason: string
 }
+
+export type ScheduleAction = 'publish' | 'unpublish'
 
 export interface ScheduleFilter {
   state: ScheduleState
