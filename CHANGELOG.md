@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.0.2...v1.1.0) (2022-12-13)
+
+### Features
+
+- re-add v2 support for unpublish action badges ([#47](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/47)) ([f1f72a9](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/f1f72a98ce48c33240e8759d80a53f5940cf3913))
+
 ## [1.0.2](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.0.1...v1.0.2) (2022-11-28)
 
 ### Bug Fixes
