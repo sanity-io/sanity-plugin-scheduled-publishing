@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.1.0...v1.1.1) (2023-02-01)
+
+### Bug Fixes
+
+- ensure time zone selection is legible in dark mode ([4e84945](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/4e84945f9bcdf44636ec70ef3e459f27ba71bc7d))
+- memoize initial stored value and handlers in useTimeZone ([da0e65b](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/da0e65bd2425bd82f6a062ce2b8cabbd80aaccda))
+
 ## [1.1.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.0.2...v1.1.0) (2022-12-13)
 
 ### Features
