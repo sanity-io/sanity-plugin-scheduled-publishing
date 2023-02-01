@@ -1,7 +1,7 @@
 import {useToast} from '@sanity/ui'
 import {getTimeZones} from '@vvo/tzdb'
 import {formatInTimeZone, utcToZonedTime, zonedTimeToUtc} from 'date-fns-tz'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import ToastDescription from '../components/toastDescription/ToastDescription'
 import {DATE_FORMAT, LOCAL_STORAGE_TZ_KEY} from '../constants'
 import {NormalizedTimeZone} from '../types'
@@ -54,7 +54,8 @@ function getStoredTimeZone(): NormalizedTimeZone {
 }
 
 const useTimeZone = () => {
-  const [timeZone, setTimeZone] = useState<NormalizedTimeZone>(getStoredTimeZone())
+  const initialTimeZone = useMemo(() => getStoredTimeZone(), [])
+  const [timeZone, setTimeZone] = useState<NormalizedTimeZone>(initialTimeZone)
   const toast = useToast()
 
   useEffect(() => {
@@ -72,76 +73,85 @@ const useTimeZone = () => {
   /**
    * Return time-zone adjusted date in a date-fns supported format
    */
-  const formatDateTz = ({
-    date,
-    format = DATE_FORMAT.LARGE,
-    includeTimeZone,
-    prefix,
-  }: {
-    date: Date
-    format?: string
-    includeTimeZone?: boolean
-    prefix?: string
-  }) => {
-    let dateFormat = format
-    if (prefix) {
-      dateFormat = `'${prefix}'${format}`
-    }
-    if (includeTimeZone) {
-      dateFormat = `${format} (zzzz)`
-    }
-    return formatInTimeZone(date, timeZone.name, dateFormat)
-  }
+  const formatDateTz = useCallback(
+    ({
+      date,
+      format = DATE_FORMAT.LARGE,
+      includeTimeZone,
+      prefix,
+    }: {
+      date: Date
+      format?: string
+      includeTimeZone?: boolean
+      prefix?: string
+    }) => {
+      let dateFormat = format
+      if (prefix) {
+        dateFormat = `'${prefix}'${format}`
+      }
+      if (includeTimeZone) {
+        dateFormat = `${format} (zzzz)`
+      }
+      return formatInTimeZone(date, timeZone.name, dateFormat)
+    },
+    [timeZone.name]
+  )
 
-  const getCurrentZoneDate = () => {
-    return utcToZonedTime(new Date(), timeZone.name)
-  }
+  const getCurrentZoneDate = useCallback(
+    () => utcToZonedTime(new Date(), timeZone.name),
+    [timeZone.name]
+  )
 
-  const handleNewValue = (tz: NormalizedTimeZone) => {
-    debug('handleNewValue:', tz)
+  const handleNewValue = useCallback(
+    (tz: NormalizedTimeZone) => {
+      debug('handleNewValue:', tz)
 
-    setTimeZone((prevTz) => {
-      try {
-        // If different from current state, update localStorage & notify other instances
-        if (prevTz.name !== tz.name) {
-          localStorage.setItem(LOCAL_STORAGE_TZ_KEY, JSON.stringify(tz))
-          window.dispatchEvent(new Event(TimeZoneEvents.update))
+      setTimeZone((prevTz) => {
+        try {
+          // If different from current state, update localStorage & notify other instances
+          if (prevTz.name !== tz.name) {
+            localStorage.setItem(LOCAL_STORAGE_TZ_KEY, JSON.stringify(tz))
+            window.dispatchEvent(new Event(TimeZoneEvents.update))
+          }
+
+          toast.push({
+            closable: true,
+            description: (
+              <ToastDescription
+                body={`${tz.alternativeName} (${tz.namePretty})`}
+                title="Time zone updated"
+              />
+            ),
+            duration: 15000, // 15s
+            status: 'info',
+          })
+        } catch (err) {
+          console.error(err)
+
+          toast.push({
+            closable: true,
+            description: (
+              <ToastDescription body={getErrorMessage(err)} title="Unable to update time zone" />
+            ),
+            status: 'error',
+          })
         }
 
-        toast.push({
-          closable: true,
-          description: (
-            <ToastDescription
-              body={`${tz.alternativeName} (${tz.namePretty})`}
-              title="Time zone updated"
-            />
-          ),
-          duration: 15000, // 15s
-          status: 'info',
-        })
-      } catch (err) {
-        console.error(err)
+        return tz
+      })
+    },
+    [toast]
+  )
 
-        toast.push({
-          closable: true,
-          description: (
-            <ToastDescription body={getErrorMessage(err)} title="Unable to update time zone" />
-          ),
-          status: 'error',
-        })
-      }
+  const utcToCurrentZoneDate = useCallback(
+    (date: Date) => utcToZonedTime(date, timeZone.name),
+    [timeZone.name]
+  )
 
-      return tz
-    })
-  }
-
-  const utcToCurrentZoneDate = (date: Date) => {
-    return utcToZonedTime(date, timeZone.name)
-  }
-
-  const zoneDateToUtc = (date: Date) => {
-    return zonedTimeToUtc(date, timeZone.name)
-  }
+  const zoneDateToUtc = useCallback(
+    (date: Date) => zonedTimeToUtc(date, timeZone.name),
+    [timeZone.name]
+  )
 
   return {
     formatDateTz,
