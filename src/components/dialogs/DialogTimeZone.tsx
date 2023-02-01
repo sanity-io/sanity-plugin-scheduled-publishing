@@ -1,7 +1,7 @@
-import {black, hues} from '@sanity/color'
 import {SearchIcon} from '@sanity/icons'
-import {Autocomplete, Box, Card, Dialog, Flex, Inline, Stack, Text} from '@sanity/ui'
+import {Autocomplete, Box, Card, Dialog, Flex, Inline, Stack, Text, Theme} from '@sanity/ui'
 import React, {useMemo, useState} from 'react'
+import styled, {css} from 'styled-components'
 import useTimeZone, {allTimeZones, getLocalTimeZone} from '../../hooks/useTimeZone'
 import {NormalizedTimeZone} from '../../types'
 import DialogFooter from './DialogFooter'
@@ -9,6 +9,21 @@ import DialogFooter from './DialogFooter'
 export interface DialogTimeZoneProps {
   onClose?: () => void
 }
+
+const TimeZoneAlternativeNameSpan = styled.span(({theme}: {theme: Theme}) => {
+  return css`
+    color: ${theme.sanity.color.base.fg};
+    font-weight: 500;
+    margin-left: 1em;
+  `
+})
+
+const TimeZoneMainCitiesSpan = styled.span(({theme}: {theme: Theme}) => {
+  return css`
+    color: ${theme.sanity.color.input.default.readOnly.fg};
+    margin-left: 1em;
+  `
+})
 
 const DialogTimeZone = (props: DialogTimeZoneProps) => {
   const {onClose} = props
@@ -101,23 +116,10 @@ const DialogTimeZone = (props: DialogTimeZoneProps) => {
                 <Card as="button" padding={3}>
                   <Text size={1} textOverflow="ellipsis">
                     <span>GMT{option.offset}</span>
-                    <span
-                      style={{
-                        color: black.hex,
-                        fontWeight: 500,
-                        marginLeft: '1em',
-                      }}
-                    >
+                    <TimeZoneAlternativeNameSpan>
                       {option.alternativeName}
-                    </span>
-                    <span
-                      style={{
-                        color: hues.gray[700].hex,
-                        marginLeft: '1em',
-                      }}
-                    >
-                      {option.mainCities}
-                    </span>
+                    </TimeZoneAlternativeNameSpan>
+                    <TimeZoneMainCitiesSpan>{option.mainCities}</TimeZoneMainCitiesSpan>
                   </Text>
                 </Card>
               )
