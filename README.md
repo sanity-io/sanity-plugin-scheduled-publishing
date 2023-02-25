@@ -20,7 +20,7 @@ Schedule your content for future publication and organise upcoming releases – 
   - [Install](#install)
   - [Usage](#usage)
     - [Manually configuring the Schedule document action](#manually-configuring-the-schedule-document-action)
-    - [Manually configuring the Schedule document badge](#Manually configuring the Scheduled document badge)
+    - [Manually configuring the Schedule document badge](#manually-configuring-the-scheduled-document-badge)
 - [FAQ](#faq)
 - [Changes from Sanity Studio v2 version](#changes-from-sanity-studio-v2-version)
 
