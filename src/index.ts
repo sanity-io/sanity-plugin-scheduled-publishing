@@ -10,6 +10,7 @@ export {ScheduleAction} from './documentActions/schedule'
 export {ScheduledBadge} from './documentBadges/scheduled'
 export {EditScheduleForm} from './components/editScheduleForm/EditScheduleForm'
 export {resolveDocumentActions, resolveDocumentBadges}
+export type {Schedule} from './types'
 
 export const scheduledPublishing = definePlugin({
   name: 'scheduled-publishing',
