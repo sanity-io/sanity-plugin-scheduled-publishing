@@ -73,7 +73,7 @@
     "@commitlint/config-conventional": "^17.2.0",
     "@sanity/pkg-utils": "^1.17.3",
     "@sanity/plugin-kit": "^2.1.17",
-    "@sanity/semantic-release-preset": "^4.0.0",
+    "@sanity/semantic-release-preset": "^4.1.2",
     "@types/debug": "^4.1.7",
     "@types/lodash": "^4.14.187",
     "@types/pluralize": "^0.0.29",
@@ -97,6 +97,7 @@
     "react-dom": "^18",
     "rimraf": "^5.0.0",
     "sanity": "^3.0.0",
+    "semantic-release": "^21.0.7",
     "typescript": "^4.8.4"
   },
   "peerDependencies": {
@@ -108,5 +109,9 @@
   "engines": {
     "node": ">=14"
   },
-  "sanityExchangeUrl": "https://www.sanity.io/plugins/scheduled-publishing"
+  "sanityExchangeUrl": "https://www.sanity.io/plugins/scheduled-publishing",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }
