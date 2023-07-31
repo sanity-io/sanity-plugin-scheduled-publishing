@@ -5,6 +5,21 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.1.1...v1.2.0) (2023-07-31)
+
+### Features
+
+- export `Schedule` ([#71](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/71)) ([1c12063](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/1c120635b440c2ee32ddeb9123ddf15135c5f02c))
+
+### Bug Fixes
+
+- broken link ([d6c43e4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/d6c43e4f4d4d975d24799a5e61ae7f462fdf8765))
+- **deps:** update dependencies (non-major) ([#73](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/73)) ([c23f611](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/c23f6115e7627bd82e14e2fd132d933280e8708f))
+- **deps:** update dependency date-fns-tz to v2 ([#57](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/57)) ([99e5479](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/99e5479ee1d7c255a1fa53c011a3f6d540f88e07))
+- **deps:** update sanity monorepo to v3.11.5 ([#74](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/74)) ([d7ad94f](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/d7ad94f9049d0cfdf8f8223c0ebe8d4352ea717c))
+- internalize `ValidationList` component ([#81](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/issues/81)) ([6e5abb5](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/6e5abb5a2d0c432ab7af87d7c4215eb142c2b090))
+- link typo ([28b8d75](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/28b8d75b141de1675c04fd315b012de44e3a3e01))
+
 ## [1.1.1](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.1.0...v1.1.1) (2023-02-01)
 
 ### Bug Fixes
