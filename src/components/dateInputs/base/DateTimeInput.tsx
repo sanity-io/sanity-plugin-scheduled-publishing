@@ -1,6 +1,14 @@
 import React, {KeyboardEvent, useCallback} from 'react'
 import FocusLock from 'react-focus-lock'
-import {Box, Button, LayerProvider, Popover, useClickOutside, useForwardedRef} from '@sanity/ui'
+import {
+  Box,
+  Button,
+  LayerProvider,
+  Popover,
+  useClickOutside,
+  useForwardedRef,
+  usePortal,
+} from '@sanity/ui'
 import {CalendarIcon} from '@sanity/icons'
 import {DatePicker} from './DatePicker'
 import {LazyTextInput} from './LazyTextInput'
@@ -40,6 +48,8 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
   const buttonRef = React.useRef(null)
 
   const [isPickerOpen, setPickerOpen] = React.useState(false)
+
+  const portal = usePortal()
 
   useClickOutside(() => setPickerOpen(false), [popoverRef])
 
@@ -86,6 +96,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
               constrainSize
               data-testid="date-input-dialog"
               portal
+              floatingBoundary={portal.element}
               content={
                 <Box overflow="auto">
                   <FocusLock onDeactivation={handleDeactivation}>
