@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.0...v1.2.1) (2023-08-11)
+
+### Bug Fixes
+
+- ensure datepicker popovers render and constrain correctly within portals ([06d3d0e](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/06d3d0efeb894d44bf0722b7b8f94f0716bb1e98))
+
 ## [1.2.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.1.1...v1.2.0) (2023-07-31)
 
 ### Features
