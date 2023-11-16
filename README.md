@@ -7,7 +7,7 @@
 
 Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
-> This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on [Growth or higher plans][pricing]. Please visit our [Scheduled Publishing][scheduled-publishing] blog post for more information.
+> This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on [Growth or higher plans][pricing].
 
 ![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
@@ -225,7 +225,6 @@ Semantic release will only release on configured branches, so it is safe to run 
 
 [document-actions]: https://www.sanity.io/docs/document-actions
 [document-badges]: https://www.sanity.io/docs/custom-document-badges
-[scheduled-publishing]: https://www.sanity.io/blog/publishing-scheduled
 [scheduling-api]: https://www.sanity.io/docs/scheduling-api
 [@vvo/dztb]: https://github.com/vvo/tzdb
 [pricing]: https://www.sanity.io/pricing
