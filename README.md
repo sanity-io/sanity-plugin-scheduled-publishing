@@ -7,7 +7,7 @@
 
 Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
-> This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on Team or higher plans. Please visit our [Scheduled Publishing][scheduled-publishing] blog post for more information.
+> This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on [Growth or higher plans][pricing]. Please visit our [Scheduled Publishing][scheduled-publishing] blog post for more information.
 
 ![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
@@ -65,13 +65,11 @@ yarn add @sanity/scheduled-publishing
 Add it as a plugin in sanity.config.ts (or .js):
 
 ```js
-import { scheduledPublishing } from "@sanity/scheduled-publishing";
+import {scheduledPublishing} from '@sanity/scheduled-publishing'
 
 export default defineConfig({
   // ...
-  plugins: [
-    scheduledPublishing(),
-  ] 
+  plugins: [scheduledPublishing()],
 })
 ```
 
@@ -99,19 +97,17 @@ import {scheduledPublishing, ScheduleAction} from '@sanity/scheduled-publishing'
 
 export default defineConfig({
   // ...
-  plugins: [
-    scheduledPublishing(),
-  ],
+  plugins: [scheduledPublishing()],
   document: {
     actions: (previousActions, {schemaType}) => {
       /*
-      * Please note that this will only alter the visibility of the button in the studio.
-      * Users with document publish permissions will be able to create schedules directly
-      * via the Scheduled Publishing API.
-      */
+       * Please note that this will only alter the visibility of the button in the studio.
+       * Users with document publish permissions will be able to create schedules directly
+       * via the Scheduled Publishing API.
+       */
       if (schemaType.name !== 'movie') {
         // Remove the schedule action from any documents that is not 'movie'.
-        return previousActions.filter(action => action !== ScheduleAction)
+        return previousActions.filter((action) => action !== ScheduleAction)
       }
       return previousActions
     },
@@ -131,14 +127,12 @@ import {scheduledPublishing, ScheduledBadge} from '@sanity/scheduled-publishing'
 
 export default defineConfig({
   // ...
-  plugins: [
-    scheduledPublishing(),
-  ],
+  plugins: [scheduledPublishing()],
   document: {
     actions: (previousBadges, {schemaType}) => {
       if (schemaType.name !== 'movie') {
         // Remove the schedule badge from any documents that is not 'movie'.
-        return previousBadges.filter(badge => badge !== ScheduledBadge)
+        return previousBadges.filter((badge) => badge !== ScheduledBadge)
       }
       return previousBadges
     },
@@ -196,17 +190,11 @@ The Studio V3 version differs from the v2 versions in a few ways:
 
 - Actions and badges now auto-compose with other document actions by default. This is the _opposite_ of how the v2 version behaves:
   It is no longer necessary to compose actions and badges manually when there are other plugins that add those to studio.
-- This means that you now have to _remove_ the Schedule Action from types that *should not* have it, as opposed to _add_ it for those that should like in v2.
+- This means that you now have to _remove_ the Schedule Action from types that _should not_ have it, as opposed to _add_ it for those that should like in v2.
 
 ## License
 
 This repository is published under the [MIT](LICENSE) license.
-
-[document-actions]: https://www.sanity.io/docs/document-actions
-[document-badges]: https://www.sanity.io/docs/custom-document-badges
-[scheduled-publishing]: https://www.sanity.io/blog/publishing-scheduled
-[scheduling-api]: https://www.sanity.io/docs/scheduling-api
-[@vvo/dztb]: https://github.com/vvo/tzdb
 
 ## Develop & test
 
@@ -215,7 +203,6 @@ with default configuration for build & watch scripts.
 
 See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
 on how to run this plugin with hotreload in the studio.
-
 
 ## License
 
@@ -235,3 +222,10 @@ Run ["CI & Release" workflow](https://github.com/sanity-io/sanity-plugin-schedul
 Make sure to select the main branch and check "Release new version".
 
 Semantic release will only release on configured branches, so it is safe to run release on any branch.
+
+[document-actions]: https://www.sanity.io/docs/document-actions
+[document-badges]: https://www.sanity.io/docs/custom-document-badges
+[scheduled-publishing]: https://www.sanity.io/blog/publishing-scheduled
+[scheduling-api]: https://www.sanity.io/docs/scheduling-api
+[@vvo/dztb]: https://github.com/vvo/tzdb
+[pricing]: https://www.sanity.io/pricing
