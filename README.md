@@ -2,10 +2,10 @@
 
 > This is a **Sanity Studio v2** plugin.
 > For the v3 version, please refer to the [v3-branch](https://github.com/sanity-io/sanity-plugin-scheduled-publishing).
- 
+
 Schedule your content for future publication and organise upcoming releases – no custom tasks or serverless functions required!
 
-> This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on Team or higher plans. Please visit our [Scheduled Publishing][scheduled-publishing] blog post for more information.
+> This plugin uses Sanity's [Scheduling API][scheduling-api] which is available to customers on [Growth or higher plans][pricing].
 
 ![Scheduled Publishing tool view](https://user-images.githubusercontent.com/209129/159557062-6d3ea6d7-941e-472a-a7d4-7e229bf81780.png)
 
@@ -42,6 +42,7 @@ yarn add @sanity/scheduled-publishing@studio-v2
 ```
 
 Next, add `"@sanity/scheduled-publishing"` to `sanity.json` plugins array:
+
 ```json
 "plugins": [
   "@sanity/scheduled-publishing"
@@ -165,16 +166,17 @@ More information can be found on the [Scheduling API][scheduling-api] page.
 
 This repository is published under the [MIT](LICENSE) license.
 
-[document-actions]: https://www.sanity.io/docs/document-actions
-[document-badges]: https://www.sanity.io/docs/custom-document-badges
-[scheduled-publishing]: https://www.sanity.io/blog/publishing-scheduled
-[scheduling-api]: https://www.sanity.io/docs/scheduling-api
-[@vvo/dztb]: https://github.com/vvo/tzdb
-
 ## Developing this plugin
 
 ### Release new version
+
 Run ["CI & Release" workflow](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/actions).
 Make sure to select main or v3 branch and check "Release new version".
 
 Semantic release will only release on configured branches, so it is safe to run release on any branch.
+
+[document-actions]: https://www.sanity.io/docs/document-actions
+[document-badges]: https://www.sanity.io/docs/custom-document-badges
+[scheduling-api]: https://www.sanity.io/docs/scheduling-api
+[@vvo/dztb]: https://github.com/vvo/tzdb
+[pricing]: https://sanity.io/pricing
