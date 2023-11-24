@@ -54,8 +54,8 @@ export const DOCUMENT_HAS_ERRORS_TEXT =
 
 export const FEATURE_NOT_SUPPORTED_TEXT = (
   <>
-    Scheduled Publishing is only available on the{' '}
-    <a href="https://sanity.io/pricing">Team tier and above</a>. Please upgrade to enable access.
+    Scheduled Publishing is only available on{' '}
+    <a href="https://sanity.io/pricing">Growth or higher plans</a>. Please upgrade to enable access.
   </>
 )
 

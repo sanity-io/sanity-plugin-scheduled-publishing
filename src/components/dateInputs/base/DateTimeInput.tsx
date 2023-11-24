@@ -94,9 +94,6 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
           <LayerProvider zOffset={1000}>
             <Popover
               constrainSize
-              data-testid="date-input-dialog"
-              portal
-              floatingBoundary={portal.element}
               content={
                 <Box overflow="auto">
                   <FocusLock onDeactivation={handleDeactivation}>
@@ -111,10 +108,14 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
                   </FocusLock>
                 </Box>
               }
+              data-testid="date-input-dialog"
+              fallbackPlacements={['bottom', 'bottom-start', 'top-end', 'top', 'top-start']}
+              floatingBoundary={portal.element}
               open
               placement="bottom-end"
-              ref={setPopoverRef}
+              portal
               radius={2}
+              ref={setPopoverRef}
             >
               {suffix}
             </Popover>
