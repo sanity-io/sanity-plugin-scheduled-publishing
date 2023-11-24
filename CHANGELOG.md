@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.1...v1.2.2) (2023-11-24)
+
+### Bug Fixes
+
+- add fallback placements to datetime input popover ([5377de9](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/5377de9ca56f4c4b17c4947a593caf20c2d3673f))
+
 ## [1.2.1](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.0...v1.2.1) (2023-08-11)
 
 ### Bug Fixes
