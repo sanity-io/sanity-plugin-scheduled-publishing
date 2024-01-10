@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.2...v1.2.3) (2024-01-10)
+
+### Bug Fixes
+
+- **deps:** widen @sanity/ui peer dependency range ([9ad8380](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/9ad838035799ff8b796eb4aeb0b78e84a723e29b))
+
 ## [1.2.2](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.1...v1.2.2) (2023-11-24)
 
 ### Bug Fixes
