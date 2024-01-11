@@ -29,40 +29,42 @@ const ButtonTimeZone = (props: ButtonTimeZoneProps) => {
         }
         portal
       >
-        {/*
+        <div>
+          {/*
           If `useElementQueries` is enabled, dates will be conditionally toggled at different element
           breakpoints - provided this `<ButtonTimeZone>` is wrapped in a `<ButtonTimeZoneElementQuery>` component.
         */}
-        {useElementQueries ? (
-          <>
-            <Box className="button-small">
-              <Button
-                fontSize={1}
-                icon={EarthAmericasIcon}
-                mode="bleed"
-                onClick={dialogTimeZoneShow}
-                text={`${timeZone.abbreviation}`}
-              />
-            </Box>
-            <Box className="button-large">
-              <Button
-                fontSize={1}
-                icon={EarthAmericasIcon}
-                mode="bleed"
-                onClick={dialogTimeZoneShow}
-                text={`${timeZone.alternativeName} (${timeZone.namePretty})`}
-              />
-            </Box>
-          </>
-        ) : (
-          <Button
-            fontSize={1}
-            icon={EarthAmericasIcon}
-            mode="bleed"
-            onClick={dialogTimeZoneShow}
-            text={`${timeZone.alternativeName} (${timeZone.namePretty})`}
-          />
-        )}
+          {useElementQueries ? (
+            <>
+              <Box className="button-small">
+                <Button
+                  fontSize={1}
+                  icon={EarthAmericasIcon}
+                  mode="bleed"
+                  onClick={dialogTimeZoneShow}
+                  text={`${timeZone.abbreviation}`}
+                />
+              </Box>
+              <Box className="button-large">
+                <Button
+                  fontSize={1}
+                  icon={EarthAmericasIcon}
+                  mode="bleed"
+                  onClick={dialogTimeZoneShow}
+                  text={`${timeZone.alternativeName} (${timeZone.namePretty})`}
+                />
+              </Box>
+            </>
+          ) : (
+            <Button
+              fontSize={1}
+              icon={EarthAmericasIcon}
+              mode="bleed"
+              onClick={dialogTimeZoneShow}
+              text={`${timeZone.alternativeName} (${timeZone.namePretty})`}
+            />
+          )}
+        </div>
       </Tooltip>
     </>
   )
