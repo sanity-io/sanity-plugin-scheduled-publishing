@@ -1,7 +1,7 @@
 import {CheckmarkCircleIcon} from '@sanity/icons'
 import {Box, Button, Flex} from '@sanity/ui'
+import {useVirtualizer} from '@tanstack/react-virtual'
 import React, {useEffect, useMemo} from 'react'
-import {useVirtual} from 'react-virtual'
 import useScheduleOperation from '../../hooks/useScheduleOperation'
 import {Schedule, ScheduleSort} from '../../types'
 import {getLastExecuteDate} from '../../utils/scheduleUtils'
@@ -17,7 +17,11 @@ function getLocalizedDate(date: string) {
 
 const VirtualList = () => {
   const {activeSchedules, scheduleState, sortBy} = useSchedules()
-  const {virtualList, totalSize, containerRef} = useVirtualizedSchedules(activeSchedules, sortBy)
+  const {measureElement, virtualList, totalSize, containerRef} = useVirtualizedSchedules(
+    activeSchedules,
+    sortBy
+  )
+
   const {deleteSchedules} = useScheduleOperation()
 
   const handleClearSchedules = () => {
@@ -50,9 +54,9 @@ const VirtualList = () => {
           position: 'relative',
         }}
       >
-        {virtualList.map((item) => {
-          return <VirtualListItem key={item.key} item={item} />
-        })}
+        {virtualList.map((item) => (
+          <VirtualListItem key={item.key} item={item} measureElement={measureElement} />
+        ))}
       </Box>
       {/* Clear completed schedules */}
       {scheduleState === 'succeeded' && (
@@ -98,28 +102,26 @@ function useVirtualizedSchedules(activeSchedules: Schedule[], sortBy?: ScheduleS
     return items
   }, [activeSchedules, sortBy])
 
-  const {virtualItems, totalSize} = useVirtual({
-    size: listSourceItems.length,
-    parentRef: containerRef,
+  const virtualizer = useVirtualizer({
+    count: listSourceItems.length,
+    getScrollElement: () => containerRef.current,
+    estimateSize: () => 50,
     overscan: 5,
   })
 
-  const virtualList: ListItem[] = useMemo(
-    () =>
-      virtualItems.map((virtualRow) => {
-        const item = listSourceItems[virtualRow.index]
-        return {
-          content: item,
-          key: typeof item === 'string' ? item : item.id,
-          virtualRow,
-        }
-      }),
-    [virtualItems, listSourceItems]
-  )
+  const virtualList: ListItem[] = virtualizer.getVirtualItems().map((virtualRow) => {
+    const item = listSourceItems[virtualRow.index]
+    return {
+      content: item,
+      key: typeof item === 'string' ? item : item.id,
+      virtualRow,
+    }
+  })
 
   return {
-    virtualList,
-    totalSize,
     containerRef,
+    measureElement: virtualizer.measureElement,
+    totalSize: virtualizer.getTotalSize(),
+    virtualList,
   }
 }
