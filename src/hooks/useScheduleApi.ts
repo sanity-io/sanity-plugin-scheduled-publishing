@@ -1,4 +1,4 @@
-import {Schedule} from '../types'
+import {Schedule, ScheduleAction} from '../types'
 import {debugWithName} from '../utils/debug'
 import {useMemo} from 'react'
 import {SanityClient} from '@sanity/client'
@@ -13,8 +13,16 @@ export function useScheduleApi(): ReturnType<typeof createScheduleApi> {
 
 function createScheduleApi(client: SanityClient) {
   const {dataset, projectId} = client.config()
-  function _create({date, documentId}: {date: string; documentId: string}) {
-    debug('_create:', documentId)
+  function _create({
+    action,
+    date,
+    documentId,
+  }: {
+    action: ScheduleAction
+    date: string
+    documentId: string
+  }) {
+    debug('_create:', documentId, action)
 
     // Round date to nearest second (mutate)
     const roundedDate = new Date(date)
@@ -23,6 +31,7 @@ function createScheduleApi(client: SanityClient) {
 
     return client.request<Schedule>({
       body: {
+        action: action, // Include the action in the request body
         documents: [{documentId}],
         executeAt: roundedDate,
         name: roundedDate,
