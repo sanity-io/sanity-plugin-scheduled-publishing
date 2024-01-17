@@ -84,14 +84,24 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
     setDialogOpen(true)
   }, [])
 
+  const [actionType, setActionType] = useState<'publish' | 'unpublish'>('publish')
+
   const handleScheduleCreate = useCallback(() => {
     if (!formData?.date) {
       return
     }
 
     // Create schedule then close dialog
-    createSchedule({date: formData.date, documentId: id}).then(onComplete)
-  }, [onComplete, createSchedule, id, formData?.date])
+    createSchedule({
+      action: actionType,
+      date: formData.date,
+      documentId: id,
+    }).then(onComplete)
+  }, [onComplete, createSchedule, id, formData?.date, actionType])
+
+  const handleActionTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setActionType(event.target.checked ? 'unpublish' : 'publish')
+  }
 
   const title = hasExistingSchedules ? 'Edit Schedule' : 'Schedule'
 
@@ -139,7 +149,12 @@ export const ScheduleAction = (props: DocumentActionProps): DocumentActionDescri
             <Schedules schedules={schedules} />
           ) : (
             <EditScheduleForm onChange={onFormChange} value={formData}>
-              <NewScheduleInfo id={id} schemaType={type} />
+              <NewScheduleInfo
+                id={id}
+                schemaType={type}
+                onActionTypeChange={handleActionTypeChange}
+                actionType={actionType}
+              />
             </EditScheduleForm>
           )}
         </DocumentActionPropsProvider>
