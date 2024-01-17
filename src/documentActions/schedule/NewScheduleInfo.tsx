@@ -1,5 +1,5 @@
 import {Card, Flex, Stack, Text, Switch} from '@sanity/ui'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {usePublishedId} from '../../hooks/usePublishedId'
 import {useSchemaType} from '../../hooks/useSchemaType'
 import {useValidationStatus} from 'sanity'
@@ -16,6 +16,16 @@ interface Props {
 }
 
 export function NewScheduleInfo({id, schemaType, onActionTypeChange, actionType}: Props) {
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = `
+      input#actionTypeToggle {
+        --switch-bg-color: #6a7ea1;
+      }
+    `
+    document.head.appendChild(style)
+  }, [])
+
   return (
     <Stack space={4}>
       <Text size={1} weight="semibold">
