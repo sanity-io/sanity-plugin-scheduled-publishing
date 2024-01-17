@@ -5,6 +5,7 @@ import resolveDocumentActions from './documentActions'
 import resolveDocumentBadges from './documentBadges'
 import Tool from './tool/Tool'
 import {DocumentBannerInput} from './inputResolver'
+import './overrides.css'
 
 export {ScheduleAction} from './documentActions/schedule'
 export {ScheduledBadge} from './documentBadges/scheduled'
