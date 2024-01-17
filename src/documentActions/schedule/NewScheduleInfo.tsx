@@ -19,7 +19,7 @@ export function NewScheduleInfo({id, schemaType, onActionTypeChange, actionType}
   useEffect(() => {
     const style = document.createElement('style')
     style.textContent = `
-      input#actionTypeToggle {
+      input#actionTypeToggle + [data-name="representation"] {
         --switch-bg-color: #6a7ea1;
       }
     `
