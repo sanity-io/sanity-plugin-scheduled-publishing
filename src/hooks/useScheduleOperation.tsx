@@ -103,7 +103,7 @@ export default function useScheduleOperation() {
                 includeTimeZone: true,
                 prefix: action === 'publish' ? 'Publishing on ' : 'Unpublishing on ',
               })}
-              title={`Schedule ${action}d`}
+              title={`${action.charAt(0).toUpperCase() + action.slice(1)} scheduled`}
             />
           ),
           duration: 15000, // 15s
