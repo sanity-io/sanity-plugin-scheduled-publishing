@@ -21,8 +21,8 @@ const DialogHeader = (props: Props) => {
         To get around this, we include a pseudo-hidden input to ensure our tooltip-enabled button remains
         unfocused on initial mount.
         */}
-        <input style={{opacity: 0}} tabIndex={-1} type="button" />
-        <Box style={{position: 'absolute', right: '-1.5em'}}>
+        <input style={{opacity: 0, position: 'absolute', width: 0}} tabIndex={-1} type="button" />
+        <Box marginLeft={2} style={{marginTop: '-1em', marginBottom: '-1em'}}>
           <ButtonTimeZone useElementQueries />
         </Box>
       </Flex>

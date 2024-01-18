@@ -5,6 +5,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.3...v1.2.4) (2024-01-12)
+
+### Bug Fixes
+
+- ensure time zone button tooltips display correctly, update position in schedule headers ([44aa2c4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/44aa2c4d291202470caf0024420d5de363d22ae0))
+- migrate to react-virtual v3 ([e65c21f](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/e65c21f54240e434a06e6e5894393dec9c1e5bc3))
+- simplify and correctly render tool filter tab buttons ([4fb90bf](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/4fb90bfaa651db97ba1110d96b72129510f0eb5a))
+
+## [1.2.3](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.2...v1.2.3) (2024-01-10)
+
+### Bug Fixes
+
+- **deps:** widen @sanity/ui peer dependency range ([9ad8380](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/9ad838035799ff8b796eb4aeb0b78e84a723e29b))
+
 ## [1.2.2](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.1...v1.2.2) (2023-11-24)
 
 ### Bug Fixes

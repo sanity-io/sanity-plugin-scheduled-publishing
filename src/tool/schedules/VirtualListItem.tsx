@@ -1,9 +1,9 @@
-import {Schedule} from '../../types'
+import {Box, Card, Flex, Label} from '@sanity/ui'
+import {type Virtualizer, type VirtualItem} from '@tanstack/react-virtual'
 import React, {CSSProperties, useEffect, useMemo, useState} from 'react'
-import {Card, Flex, Label} from '@sanity/ui'
-import {ScheduleItem} from '../../components/scheduleItem'
-import {VirtualItem} from 'react-virtual'
 import {SanityDefaultPreview} from 'sanity'
+import {ScheduleItem} from '../../components/scheduleItem'
+import {Schedule} from '../../types'
 
 export interface ListItem {
   content: Schedule | string
@@ -13,13 +13,8 @@ export interface ListItem {
 
 interface Props {
   item: ListItem
+  measureElement: Virtualizer<HTMLDivElement, Element>['measureElement']
 }
-
-/** First month header is not as high, to reduce whitespace */
-const MONTH_HEADER_PX = 30
-
-/** Accounts for row height and spacing between rows */
-const ITEM_HEIGHT_PX = 59
 
 /** Putting this too low will result in 429 too many requests when scrolling in big lists */
 const SCHEDULE_RENDER_DELAY_MS = 200
@@ -27,6 +22,7 @@ const SCHEDULE_RENDER_DELAY_MS = 200
 export function VirtualListItem(props: Props) {
   const {
     item: {content, virtualRow},
+    measureElement,
   } = props
   const style: CSSProperties = useMemo(
     () => ({
@@ -39,24 +35,20 @@ export function VirtualListItem(props: Props) {
     [virtualRow]
   )
 
-  if (typeof content === 'string') {
-    return (
-      <div
-        ref={virtualRow.measureRef}
-        style={{
-          ...style,
-          height: virtualRow.index === 0 ? MONTH_HEADER_PX : MONTH_HEADER_PX * 2,
-        }}
-      >
-        <MonthHeading content={content} />
-      </div>
-    )
-  }
-
   return (
-    <div ref={virtualRow.measureRef} style={{...style, height: ITEM_HEIGHT_PX}}>
-      <DelayedScheduleItem schedule={content} />
-    </div>
+    <Box
+      data-index={virtualRow.index}
+      key={virtualRow.key}
+      paddingBottom={2}
+      ref={measureElement}
+      style={style}
+    >
+      {typeof content === 'string' ? (
+        <MonthHeading content={content} />
+      ) : (
+        <DelayedScheduleItem schedule={content} />
+      )}
+    </Box>
   )
 }
 
@@ -87,14 +79,7 @@ function DelayedScheduleItem({schedule}: {schedule: Schedule}) {
 
 function MonthHeading({content}: {content: string}) {
   return (
-    <Flex
-      align="flex-end"
-      paddingBottom={4}
-      style={{
-        bottom: 0,
-        position: 'absolute',
-      }}
-    >
+    <Flex align="flex-end" paddingBottom={2} paddingTop={4}>
       <Label muted size={1}>
         {content}
       </Label>

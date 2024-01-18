@@ -1,6 +1,6 @@
 import {useRouter} from 'sanity/router'
 import {CheckmarkIcon, CloseIcon, SelectIcon} from '@sanity/icons'
-import {Box, Button, Label, Menu, MenuButton, MenuItem, TabList} from '@sanity/ui'
+import {Box, Button, Flex, Label, Menu, MenuButton, MenuItem} from '@sanity/ui'
 import {format} from 'date-fns'
 import React from 'react'
 import {SCHEDULE_FILTERS, SCHEDULE_STATE_DICTIONARY} from '../../constants'
@@ -86,7 +86,7 @@ export const ScheduleFilters = (props: ScheduleFiltersProps) => {
         )}
 
         {scheduleState && (
-          <TabList space={2}>
+          <Flex gap={2}>
             {SCHEDULE_FILTERS.map((filter) => (
               <ScheduleFilter
                 key={filter}
@@ -95,7 +95,7 @@ export const ScheduleFilters = (props: ScheduleFiltersProps) => {
                 state={filter}
               />
             ))}
-          </TabList>
+          </Flex>
         )}
       </Box>
     </>
