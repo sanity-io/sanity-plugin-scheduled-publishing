@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.4...v1.3.0) (2024-01-30)
+
+### Features
+
+- add support for custom input date formatting ([e25285e](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/e25285e2f1d2e20d2064fec4aed080c2ee8931cd))
+
 ## [1.2.4](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.3...v1.2.4) (2024-01-12)
 
 ### Bug Fixes
