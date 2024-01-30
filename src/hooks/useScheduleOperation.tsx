@@ -2,7 +2,7 @@ import {useToast} from '@sanity/ui'
 import pluralize from 'pluralize'
 import React from 'react'
 import ToastDescription from '../components/toastDescription/ToastDescription'
-import {Schedule} from '../types'
+import {Schedule, ScheduleAction} from '../types'
 import getErrorMessage from '../utils/getErrorMessage'
 import useTimeZone from './useTimeZone'
 import {useScheduleApi} from './useScheduleApi'
@@ -70,20 +70,23 @@ export default function useScheduleOperation() {
   const api = useScheduleApi()
 
   async function createSchedule({
+    action,
     date,
     displayToast = true,
     documentId,
   }: {
+    action: ScheduleAction
     date: string
     displayToast?: boolean
     documentId: string
   }) {
     try {
-      const data = await api.create({date, documentId})
+      const data = await api.create({action, date, documentId})
 
       window.dispatchEvent(
         scheduleCustomEvent(ScheduleEvents.create, {
           detail: {
+            action,
             date,
             documentId,
           },
@@ -98,9 +101,9 @@ export default function useScheduleOperation() {
               body={formatDateTz({
                 date: new Date(data.executeAt),
                 includeTimeZone: true,
-                prefix: 'Publishing on ',
+                prefix: action === 'publish' ? 'Publishing on ' : 'Unpublishing on ',
               })}
-              title="Schedule created"
+              title={`${action.charAt(0).toUpperCase() + action.slice(1)} scheduled`}
             />
           ),
           duration: 15000, // 15s
@@ -112,7 +115,7 @@ export default function useScheduleOperation() {
         toast.push({
           closable: true,
           description: (
-            <ToastDescription body={getErrorMessage(err)} title="Unable to create schedule" />
+            <ToastDescription body={getErrorMessage(err)} title={`Unable to ${action} schedule`} />
           ),
           duration: 15000, // 15s
           status: 'error',

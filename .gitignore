@@ -54,5 +54,5 @@ jspm_packages
 yalc.lock
 
 # Compiled plugin
-lib
+#lib
 
