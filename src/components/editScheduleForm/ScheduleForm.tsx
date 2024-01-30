@@ -44,9 +44,6 @@ const ScheduleForm = (props: Props) => {
             options: {
               customValidation: handleCustomValidation,
               customValidationMessage: 'Date cannot be in the past.',
-              // date-fns format
-              dateFormat: `dd/MM/yyyy`,
-              timeFormat: 'HH:mm',
             },
             title: 'Date and time',
           }}

@@ -1,6 +1,6 @@
 import {BadgeTone} from '@sanity/ui'
 import React from 'react'
-import {ScheduleAction, ScheduleState} from './types'
+import {PluginOptions, ScheduleAction, ScheduleState} from './types'
 
 export const LOCAL_STORAGE_TZ_KEY = 'scheduled-publishing::time-zone'
 
@@ -76,3 +76,12 @@ export const DATE_FORMAT = {
   // Saturday, 1 October 2022, 10:00 PM
   LARGE: `iiii',' d MMMM yyyy',' p`,
 }
+
+export const DEFAULT_PLUGIN_OPTIONS: Required<PluginOptions> = {
+  // 25/12/2022 22:00
+  inputDateTimeFormat: 'dd/MM/yyyy HH:mm',
+}
+
+export const TOOL_NAME = 'schedules'
+
+export const TOOL_TITLE = 'Schedules'

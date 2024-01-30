@@ -73,21 +73,31 @@ export default defineConfig({
 })
 ```
 
-This will automatically:
+**This will automatically:**
 
-- Add a Schedule [document action][document-actions] to _all document types_
-- Display a Scheduled [document badge][document-badges] to _all document types_
-- Add the dedicated Schedules _tool_ in your navigation bar
+1. Add a Schedule [document action][document-actions] to all document schema types
+2. Display a Scheduled [document badge][document-badges] to all document schema types
+3. Add the dedicated Schedules tool in your navigation bar
 
-Please see [Custom setup](#custom-setup) for more fine grained control on limiting schedule buttons to specific document types and working with existing custom document actions or badges.
+### Customize input date formatting
 
-### Custom setup
+To change the date formatting used when creating and editing schedules, pass a [valid `date-fns` formatted token](https://date-fns.org/docs/format) as an option.
 
-This plugin also exports both the **Schedule document action** and **Scheduled badge** which you can import and compose as you see fit.
+```js
+  plugins: [
+    // Make sure to specify a time component if you're specifying a custom format!
+    scheduledPublishing({
+      // E.g. 12/25/2000 6:30 AM
+      inputDateTimeFormat: 'MM/dd/yyyy h:mm a',
+    })
+  ],
+```
 
-#### Manually configuring the Schedule document action
+If left unspecified, this plugin will default to `dd/MM/yyyy HH:mm`.
 
-This example assumes [you've customised your own document actions][document-actions] and would like to only show the Schedule button on `movie` documents only.
+### Configure the document action
+
+This example assumes [you've customized your document actions][document-actions] and would like to only show the Schedule button on `movie` documents only.
 
 The Schedule document action allows users to both create and edit existing schedules directly from the form editor. It is added to all document types by the plugin,
 so you should remove it from types that should NOT have it.
@@ -115,7 +125,7 @@ export default defineConfig({
 })
 ```
 
-#### Manually configuring the Scheduled document badge
+### Configure the document badge
 
 This example assumes [you've customised your own document badges][document-badges] and would like to only show the Scheduled badge on `movie` documents only.
 
@@ -192,33 +202,17 @@ The Studio V3 version differs from the v2 versions in a few ways:
   It is no longer necessary to compose actions and badges manually when there are other plugins that add those to studio.
 - This means that you now have to _remove_ the Schedule Action from types that _should not_ have it, as opposed to _add_ it for those that should like in v2.
 
-## License
-
-This repository is published under the [MIT](LICENSE) license.
-
 ## Develop & test
 
 This plugin uses [@sanity/plugin-kit](https://github.com/sanity-io/plugin-kit)
 with default configuration for build & watch scripts.
 
 See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
-on how to run this plugin with hotreload in the studio.
-
-## License
-
-MIT-licensed. See LICENSE.
-
-## Develop & test
-
-This plugin uses [@sanity/plugin-kit](https://github.com/sanity-io/plugin-kit)
-with default configuration for build & watch scripts.
-
-See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
-on how to run this plugin with hotreload in the studio.
+on how to run this plugin with hot-reload in the studio.
 
 ### Release new version
 
-Run ["CI & Release" workflow](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/actions/workflows/main.yml).
+Run the [CI & Release workflow](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/actions/workflows/main.yml).
 Make sure to select the main branch and check "Release new version".
 
 Semantic release will only release on configured branches, so it is safe to run release on any branch.
@@ -228,3 +222,7 @@ Semantic release will only release on configured branches, so it is safe to run 
 [scheduling-api]: https://www.sanity.io/docs/scheduling-api
 [@vvo/dztb]: https://github.com/vvo/tzdb
 [pricing]: https://www.sanity.io/pricing
+
+## License
+
+This repository is published under the [MIT](LICENSE) license.

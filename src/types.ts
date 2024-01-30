@@ -10,6 +10,17 @@ export interface NormalizedTimeZone {
   value: string
 }
 
+/**
+ * @public
+ */
+export interface PluginOptions {
+  /**
+   * Date format to use for input fields. This must be a valid `date-fns` {@link https://date-fns.org/docs/format formatted string}.
+   * @defaultValue 'dd/MM/yyyy HH:mm'
+   */
+  inputDateTimeFormat?: string
+}
+
 export interface Schedule {
   author: string
   action: ScheduleAction

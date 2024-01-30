@@ -24,9 +24,6 @@ Some changes have been made to make both `<DateTimeInput>` and its calendar comp
         options: {
           customValidation: handleCustomValidation,
           customValidationmessage: 'No schedules on weekends please',
-          // date-fns format
-          dateFormat: `d/MM/yyyy`,
-          timeFormat: 'HH:mm',
         },
         title: 'Date and time',
       }}

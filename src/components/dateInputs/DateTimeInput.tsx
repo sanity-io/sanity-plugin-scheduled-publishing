@@ -1,6 +1,7 @@
 import {getMinutes, isValid, parse, parseISO, setMinutes} from 'date-fns'
 import {formatInTimeZone} from 'date-fns-tz'
 import React, {useCallback} from 'react'
+import {useToolOptions} from '../../hooks/useToolOptions'
 import useTimeZone from '../../hooks/useTimeZone'
 import {CommonDateTimeInput} from './CommonDateTimeInput'
 import {CommonProps, ParseResult} from './types'
@@ -10,21 +11,14 @@ type ParsedOptions = {
   calendarTodayLabel: string
   customValidation: (selectedDate: Date) => boolean
   customValidationMessage?: string
-  dateFormat: string
-  timeFormat: string
   timeStep: number
 }
 type SchemaOptions = {
   calendarTodayLabel?: string
   customValidation?: (selectedDate: Date) => boolean
   customValidationMessage?: string
-  dateFormat?: string
-  timeFormat?: string
   timeStep?: number
 }
-const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd'
-const DEFAULT_TIME_FORMAT = 'HH:mm'
-
 export type Props = CommonProps & {
   onChange: (date: string | null) => void
   type: {
@@ -45,8 +39,6 @@ function parseOptions(options: SchemaOptions = {}): ParsedOptions {
       },
     customValidationMessage: options.customValidationMessage || 'Invalid date.',
     calendarTodayLabel: options.calendarTodayLabel || 'Today',
-    dateFormat: options.dateFormat || DEFAULT_DATE_FORMAT,
-    timeFormat: options.timeFormat || DEFAULT_TIME_FORMAT,
     timeStep: ('timeStep' in options && Number(options.timeStep)) || 1,
   }
 }
@@ -86,10 +78,11 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
   const {type, onChange, ...rest} = props
   const {title, description, placeholder} = type
 
+  const {inputDateTimeFormat} = useToolOptions()
+
   const {getCurrentZoneDate, timeZone} = useTimeZone()
 
-  const {customValidation, customValidationMessage, dateFormat, timeFormat, timeStep} =
-    parseOptions(type.options)
+  const {customValidation, customValidationMessage, timeStep} = parseOptions(type.options)
 
   // Returns date in UTC string
   const handleChange = useCallback(
@@ -105,19 +98,19 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
   )
 
   const formatInputValue = React.useCallback(
-    (date: Date) => formatInTimeZone(date, timeZone.name, `${dateFormat} ${timeFormat}`),
-    [dateFormat, timeFormat, timeZone.name]
+    (date: Date) => formatInTimeZone(date, timeZone.name, `${inputDateTimeFormat}`),
+    [inputDateTimeFormat, timeZone.name]
   )
 
   const parseInputValue = React.useCallback(
     (inputValue: string) => {
-      const parsed = parse(inputValue, `${dateFormat} ${timeFormat}`, getCurrentZoneDate())
+      const parsed = parse(inputValue, `${inputDateTimeFormat}`, getCurrentZoneDate())
 
       // Check is value is a valid date
       if (!isValid(parsed)) {
         return {
           isValid: false,
-          error: `Invalid date. Must be on the format "${dateFormat} ${timeFormat}"`,
+          error: `Invalid date. Must be in the format "${inputDateTimeFormat}"`,
         } as ParseResult
       }
 
@@ -134,7 +127,7 @@ export const DateTimeInput = React.forwardRef(function DateTimeInput(
         date: parsed,
       } as ParseResult
     },
-    [customValidationMessage, customValidation, dateFormat, getCurrentZoneDate, timeFormat]
+    [customValidation, customValidationMessage, getCurrentZoneDate, inputDateTimeFormat]
   )
 
   return (
