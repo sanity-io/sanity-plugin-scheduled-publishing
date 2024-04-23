@@ -1,5 +1,12 @@
 # Scheduled Publishing plugin for Sanity.io
 
+> [!IMPORTANT]
+> As of [v3.39.0](https://www.sanity.io/changelog/e6013ee5-8214-4e03-9593-f7b19124b8a3) of Sanity Studio, this plugin has been deprecated and the Scheduled Publishing functionality has been moved into the core studio package.
+> Read more and learn how to update your configuration in the [Sanity docs](https://www.sanity.io/docs/scheduled-publishing).
+>
+> Original README preserved below.
+
+---
 > This is a **Sanity Studio v3** plugin.
 > For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/tree/studio-v2).
 
