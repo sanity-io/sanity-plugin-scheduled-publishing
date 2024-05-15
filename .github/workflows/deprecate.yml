@@ -17,4 +17,5 @@ jobs:
         with:
           node-version: lts/*
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_DEPRECATE_TOKEN }}" > ~/.npmrc
-      - run: npm deprecate "@sanity/scheduled-publishing@1.x" "As of v3.39.0 of Sanity Studio, this plugin has been deprecated and the Scheduled Publishing functionality has been moved into the core studio package. Read more and learn how to update your configuration in the Sanity docs: https://www.sanity.io/docs/scheduled-publishing" || true
+      - run: >
+          npm deprecate "@sanity/scheduled-publishing@1.x" "As of v3.39.0 of Sanity Studio, this plugin has been deprecated and the Scheduled Publishing functionality has been moved into the core studio package. Read more and learn how to update your configuration in the Sanity docs: https://www.sanity.io/docs/scheduled-publishing" || true
