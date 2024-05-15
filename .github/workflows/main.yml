@@ -1,13 +1,6 @@
 ---
 name: CI & Release
 
-# Workflow name based on selected inputs. Fallback to default Github naming when expression evaluates to empty string
-run-name: >-
-  ${{
-    inputs.release && 'CI ➤ Publish to NPM' ||
-    'CI'
-  }}
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
