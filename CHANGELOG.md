@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.3.0...v1.4.0) (2024-05-15)
+
+### Features
+
+- deprecate plugin, create release ([a1ccbae](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/commit/a1ccbae61090148ef22a2a17f89a71433d258b5e))
+
 ## [1.3.0](https://github.com/sanity-io/sanity-plugin-scheduled-publishing/compare/v1.2.4...v1.3.0) (2024-01-30)
 
 ### Features
